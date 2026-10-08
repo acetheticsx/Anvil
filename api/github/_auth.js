@@ -100,12 +100,12 @@ function clearSession(res) {
   appendSetCookie(res, serializeCookie(COOKIE_NAME, '', { maxAge: 0 }));
 }
 
-function getSession(req) {
+function getSession(req, options = {}) {
   const value = parseCookies(req)[COOKIE_NAME];
   if (!value) return null;
   const session = decrypt(value);
   if (!session || !session.accessToken || !session.user?.login) return null;
-  if (session.expiresAt && Date.now() > session.expiresAt) return null;
+  if (!options.allowExpired && session.expiresAt && Date.now() > session.expiresAt) return null;
   return session;
 }
 

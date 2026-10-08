@@ -10,12 +10,11 @@ module.exports = async function disconnect(req, res) {
 
   const origin = req.headers.origin;
   const host = req.headers.host;
-  if (origin && host) {
-    try {
-      if (new URL(origin).host !== host) return res.status(403).json({ error: 'Invalid origin' });
-    } catch {
-      return res.status(403).json({ error: 'Invalid origin' });
-    }
+  if (!origin || !host) return res.status(403).json({ error: 'Origin required' });
+  try {
+    if (new URL(origin).host !== host) return res.status(403).json({ error: 'Invalid origin' });
+  } catch {
+    return res.status(403).json({ error: 'Invalid origin' });
   }
 
   clearSession(res);

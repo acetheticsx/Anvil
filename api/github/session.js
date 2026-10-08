@@ -19,9 +19,10 @@ async function refreshAccessToken(session) {
     grant_type: 'refresh_token',
     refresh_token: session.refreshToken
   });
-  const response = await fetch('https://github.com/login/oauth/access_token?' + params.toString(), {
+  const response = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
-    headers: { Accept: 'application/json', 'X-GitHub-Api-Version': '2022-11-28' }
+    headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded', 'X-GitHub-Api-Version': '2022-11-28' },
+    body: params.toString()
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok || !data.access_token) return null;
@@ -40,7 +41,7 @@ module.exports = async function session(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  let session = getSession(req);
+  let session = getSession(req, { allowExpired: true });
   if (!session) return res.status(401).json({ connected: false });
 
   if (session.expiresAt && Date.now() >= session.expiresAt) {

@@ -36,9 +36,10 @@ module.exports = async function callback(req, res) {
       redirect_uri: redirectUri
     });
 
-    const tokenResponse = await fetch('https://github.com/login/oauth/access_token?' + params.toString(), {
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
-      headers: { Accept: 'application/json', 'X-GitHub-Api-Version': '2022-11-28' }
+      headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded', 'X-GitHub-Api-Version': '2022-11-28' },
+      body: params.toString()
     });
     const tokenData = await tokenResponse.json().catch(() => ({}));
 

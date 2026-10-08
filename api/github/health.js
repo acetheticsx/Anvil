@@ -21,9 +21,10 @@ module.exports = async function health(req, res) {
       redirect_uri: redirectUri
     });
 
-    const response = await fetch('https://github.com/login/oauth/access_token?' + params.toString(), {
+    const response = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
-      headers: { Accept: 'application/json', 'X-GitHub-Api-Version': '2022-11-28' }
+      headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded', 'X-GitHub-Api-Version': '2022-11-28' },
+      body: params.toString()
     });
     const data = await response.json().catch(() => ({}));
 

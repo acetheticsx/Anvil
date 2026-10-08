@@ -4402,10 +4402,33 @@ git log --pretty=format:"%ad|%s" --date=short'
       $$(".stat-value, .intel-value").forEach(n => { const raw=n.textContent.trim().replaceAll(",",""); if (/^\d+$/.test(raw)) animateNumber(n,Number(raw)); });
     }
     function clearDataset() {
-      state.calendar = emptyCalendar(state.year); state.previousYearTotal=null; state.repositories=[]; state.activity=[]; state.commitEvents=[]; state.timeline=[]; state.releases=[]; state.releasesLoadedFor=""; state.releaseRequestId++; state.localCommits=[]; state.profile=null;
-      state.filters.activitySearch=""; state.filters.activityType=""; state.filters.repoSearch=""; state.filters.repoLanguage="";
-      [el.activitySearch,el.activityType,el.repoSearch,el.repoLanguage].forEach(n=>{if(n)n.value="";});
-      renderRepositories(); renderActivity(); renderTimeline(); renderReleases(); renderCalendar(); renderGitStats(); renderCommitTypes(); renderIntelligence(); renderPortfolioIntelligence();
+      state.requestId++;
+      state.releaseRequestId++;
+      state.calendar = emptyCalendar(state.year);
+      state.previousYearTotal = null;
+      state.repositories = [];
+      state.activity = [];
+      state.commitEvents = [];
+      state.timeline = [];
+      state.releases = [];
+      state.releasesLoadedFor = "";
+      state.localCommits = [];
+      state.profile = null;
+      state.filters.activitySearch = "";
+      state.filters.activityType = "";
+      state.filters.repoSearch = "";
+      state.filters.repoLanguage = "";
+      [el.activitySearch, el.activityType, el.repoSearch, el.repoLanguage].forEach((n) => { if (n) n.value = ""; });
+      setLoading(false);
+      renderRepositories();
+      renderActivity();
+      renderTimeline();
+      renderReleases();
+      renderCalendar();
+      renderGitStats();
+      renderCommitTypes();
+      renderIntelligence();
+      renderPortfolioIntelligence();
     }
 
     /* ============================================================
@@ -5189,7 +5212,6 @@ git log --pretty=format:"%ad|%s" --date=short'
     async function loadGithub() {
       const username = el.username.value.trim();
       const year = Number(el.year.value);
-      const requestId = ++state.requestId;
 
       if (!validUsername(username)) {
         status("Enter a valid GitHub username.", "error");
@@ -5213,6 +5235,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       setSource("github");
       clearDataset();
       state.calendar = emptyCalendar(year);
+      const requestId = ++state.requestId;
       setLoading(true);
       status(`Loading @${username}…`, "success");
 
@@ -5402,9 +5425,8 @@ git log --pretty=format:"%ad|%s" --date=short'
       for (const event of events) {
         if (!event || typeof event !== "object") continue;
 
-        const date = typeof event.created_at === "string"
-          ? event.created_at.slice(0, 10)
-          : "";
+        const timestamp = typeof event.created_at === "string" ? event.created_at : "";
+        const date = timestamp.slice(0, 10);
 
         if (!date) continue;
         if (year && !date.startsWith(`${year}-`)) continue;
@@ -5420,7 +5442,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
             if (!list.length) {
               activity.push({
-                date,
+                date, timestamp,
                 type: "Push",
                 message: `Pushed ${payload.size || 1} commit(s)`,
                 repo
@@ -5433,7 +5455,7 @@ git log --pretty=format:"%ad|%s" --date=short'
                   ? commit.message.split("\n")[0].trim() || "Commit"
                   : "Commit";
 
-              activity.push({ date, type: "Push", message, repo });
+              activity.push({ date, timestamp, type: "Push", message, repo });
               commits.push({ date, message });
             }
 
@@ -5442,7 +5464,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "CreateEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Create",
               message:
                 `Created ${payload.ref_type || "ref"} ` +
@@ -5453,7 +5475,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "DeleteEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Delete",
               message:
                 `Deleted ${payload.ref_type || "ref"} ` +
@@ -5464,7 +5486,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "PullRequestEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Pull request",
               message:
                 `${payload.action || "updated"} ` +
@@ -5476,7 +5498,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "PullRequestReviewEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Review",
               message:
                 `${payload.action || "reviewed"} ` +
@@ -5487,7 +5509,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "IssuesEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Issue",
               message:
                 `${payload.action || "updated"} ` +
@@ -5499,7 +5521,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "IssueCommentEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Comment",
               message:
                 `commented on #${payload.issue?.number ?? ""}`.trim(),
@@ -5509,7 +5531,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "WatchEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Star",
               message: "Starred repository",
               repo
@@ -5518,7 +5540,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "ForkEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Fork",
               message: "Forked repository",
               repo
@@ -5527,7 +5549,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "ReleaseEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Release",
               message:
                 `${payload.action || "published"} ` +
@@ -5538,7 +5560,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
           case "PublicEvent":
             activity.push({
-              date,
+              date, timestamp,
               type: "Public",
               message: "Made repository public",
               repo
@@ -5785,7 +5807,6 @@ git log --pretty=format:"%ad|%s" --date=short'
     ============================================================ */
 
     function renderRepositories() {
-      el.repoCount.textContent = number(state.repositories.length);
       el.repoTable.replaceChildren();
 
       if (!state.repositories.length) {
@@ -5807,6 +5828,10 @@ git log --pretty=format:"%ad|%s" --date=short'
         const haystack = `${repo.name || ""} ${repo.full_name || ""} ${repo.description || ""}`.toLowerCase();
         return (!search || haystack.includes(search)) && (!languageFilter || repo.language === languageFilter);
       });
+
+      el.repoCount.textContent = state.filters.repoSearch || state.filters.repoLanguage
+        ? `${number(filtered.length)} shown · ${number(state.repositories.length)} total`
+        : number(state.repositories.length);
 
       const sort = state.filters.repoSort;
       filtered.sort((a, b) => {
@@ -5875,7 +5900,6 @@ git log --pretty=format:"%ad|%s" --date=short'
     ============================================================ */
 
     function renderActivity() {
-      el.feedCount.textContent = `${state.activity.length} items`;
       el.activityFeed.replaceChildren();
 
       if (!state.activity.length) {
@@ -5894,9 +5918,15 @@ git log --pretty=format:"%ad|%s" --date=short'
         return (!search || haystack.includes(search)) && (!typeFilter || item.type === typeFilter);
       });
 
+      el.feedCount.textContent = state.filters.activitySearch || state.filters.activityType
+        ? `${number(filtered.length)} shown · ${number(state.activity.length)} total`
+        : `${number(state.activity.length)} items`;
+
       filtered.sort((a, b) => {
         const direction = state.filters.activitySort === "oldest" ? 1 : -1;
-        return direction * String(a.date || "").localeCompare(String(b.date || ""));
+        const aTime = String(a.timestamp || a.date || "");
+        const bTime = String(b.timestamp || b.date || "");
+        return direction * bTime.localeCompare(aTime);
       });
 
       if (!filtered.length) {
