@@ -1,0 +1,5441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+  <meta name="theme-color" content="#0d1117">
+  <meta
+    name="description"
+    content="Anvil — developer activity, Git history and project analytics."
+  >
+  <title>Anvil — Developer Activity</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <script
+    src="https://unpkg.com/lucide@latest"
+    defer
+  ></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+
+      --bg: #0d1117;
+      --bg-deep: #010409;
+      --surface: #161b22;
+      --surface-2: #1c2128;
+      --surface-3: #21262d;
+
+      --border: #30363d;
+      --border-muted: #21262d;
+
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --subtle: #6e7681;
+
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+
+      --green: #3fb950;
+      --green-hover: #56d364;
+      --red: #f85149;
+      --yellow: #d29922;
+      --purple: #bc8cff;
+
+      --heat-0: #161b22;
+      --heat-1: #0e4429;
+      --heat-2: #006d32;
+      --heat-3: #26a641;
+      --heat-4: #39d353;
+
+      --radius: 8px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, .25);
+
+      /* Theme-aware surfaces (previously hardcoded) */
+      --panel-bg: rgba(22, 27, 34, .88);
+      --overlay: rgba(1, 4, 9, .72);
+      --tooltip-bg: #24292f;
+      --tooltip-text: #ffffff;
+      --day-outline: rgba(230, 237, 243, .8);
+      --glow: rgba(56, 139, 253, .08);
+      --nav-active-bg: rgba(56, 139, 253, .12);
+      --on-primary: #ffffff;
+
+      --ok-text: #7ee787;
+      --ok-bg: rgba(46, 160, 67, .07);
+      --ok-border: rgba(63, 185, 80, .25);
+
+      --err-text: #ff7b72;
+      --err-bg: rgba(248, 81, 73, .07);
+      --err-border: rgba(248, 81, 73, .25);
+
+      --warn-text: #e3b341;
+      --warn-bg: rgba(210, 153, 34, .07);
+      --warn-border: rgba(210, 153, 34, .25);
+
+      --delta-up-text: #7ee787;
+      --delta-up-bg: rgba(63, 185, 80, .1);
+      --delta-down-text: #ff7b72;
+      --delta-down-bg: rgba(248, 81, 73, .1);
+
+      --font:
+        "Instrument Sans",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      --mono:
+        "JetBrains Mono",
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Consolas,
+        monospace;
+    }
+
+    [data-theme="light"] {
+      color-scheme: light;
+
+      --bg: #ffffff;
+      --bg-deep: #f6f8fa;
+      --surface: #f6f8fa;
+      --surface-2: #ffffff;
+      --surface-3: #eaeef2;
+
+      --border: #d0d7de;
+      --border-muted: #d8dee4;
+
+      --text: #1f2328;
+      --muted: #59636e;
+      --subtle: #6e7781;
+
+      --accent: #0969da;
+      --accent-hover: #0550ae;
+
+      --green: #1a7f37;
+      --green-hover: #116329;
+      --red: #cf222e;
+      --yellow: #9a6700;
+      --purple: #8250df;
+
+      --heat-0: #ebedf0;
+      --heat-1: #9be9a8;
+      --heat-2: #40c463;
+      --heat-3: #30a14e;
+      --heat-4: #216e39;
+
+      --shadow: 0 12px 40px rgba(31, 35, 40, .12);
+
+      --panel-bg: rgba(255, 255, 255, .92);
+      --overlay: rgba(31, 35, 40, .45);
+      --tooltip-bg: #1f2328;
+      --tooltip-text: #ffffff;
+      --day-outline: rgba(31, 35, 40, .75);
+      --glow: rgba(9, 105, 218, .06);
+      --nav-active-bg: rgba(9, 105, 218, .1);
+      --on-primary: #ffffff;
+
+      --ok-text: #1a7f37;
+      --ok-bg: rgba(26, 127, 55, .08);
+      --ok-border: rgba(26, 127, 55, .3);
+
+      --err-text: #cf222e;
+      --err-bg: rgba(207, 34, 46, .08);
+      --err-border: rgba(207, 34, 46, .3);
+
+      --warn-text: #9a6700;
+      --warn-bg: rgba(154, 103, 0, .08);
+      --warn-border: rgba(154, 103, 0, .3);
+
+      --delta-up-text: #1a7f37;
+      --delta-up-bg: rgba(26, 127, 55, .1);
+      --delta-down-text: #cf222e;
+      --delta-down-bg: rgba(207, 34, 46, .1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at 50% -15%,
+          var(--glow),
+          transparent 32%
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.5;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    svg {
+      flex: 0 0 auto;
+    }
+
+    .app {
+      width: min(1380px, 100%);
+      margin-inline: auto;
+      padding: 18px 16px 50px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    /* ============================================================
+       Sidebar
+       ============================================================ */
+
+    .sidebar {
+      position: sticky;
+      top: 18px;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 36px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-muted);
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .brand-mark svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .brand-name {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -.025em;
+    }
+
+    .brand-caption {
+      color: var(--subtle);
+      font-size: .65rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 12px 8px;
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      padding: 12px 9px 5px;
+      color: var(--subtle);
+      font: 600 .6rem var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav-button {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 36px;
+      padding: 7px 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .76rem;
+      font-weight: 550;
+      text-align: left;
+    }
+
+    .nav-button:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .nav-button.active {
+      background: var(--nav-active-bg);
+      color: var(--text);
+    }
+
+    .nav-button.active svg {
+      color: var(--accent);
+    }
+
+    .nav-button svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 10px;
+      border-top: 1px solid var(--border-muted);
+    }
+
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px;
+      color: var(--subtle);
+      font-size: .65rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px var(--ok-bg);
+    }
+
+    /* ============================================================
+       Main
+       ============================================================ */
+
+    .main {
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .page-title {
+      font-size: 1.2rem;
+      font-weight: 650;
+      letter-spacing: -.025em;
+    }
+
+    .page-subtitle {
+      margin-top: 2px;
+      color: var(--subtle);
+      font-size: .7rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .icon-button {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .icon-button:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .icon-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ============================================================
+       Panels
+       ============================================================ */
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .panel + .panel {
+      margin-top: 14px;
+    }
+
+    .panel-header {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: .82rem;
+      font-weight: 650;
+    }
+
+    .panel-meta {
+      color: var(--muted);
+      font: .64rem var(--mono);
+      white-space: nowrap;
+    }
+
+    .panel-body {
+      padding: 13px;
+    }
+
+    /* ============================================================
+       Profile
+       ============================================================ */
+
+    .profile {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-size: 1rem;
+      font-weight: 650;
+    }
+
+    .profile-login {
+      margin-top: 1px;
+      color: var(--muted);
+      font: .68rem var(--mono);
+    }
+
+    .profile-bio {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.45;
+    }
+
+    .profile-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .profile-stat {
+      min-width: 74px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-muted);
+      border-radius: 6px;
+      background: var(--bg-deep);
+      text-align: center;
+    }
+
+    .profile-stat strong {
+      display: block;
+      font-size: .85rem;
+    }
+
+    .profile-stat span {
+      color: var(--subtle);
+      font: .58rem var(--mono);
+    }
+
+    /* ============================================================
+       Search / source
+       ============================================================ */
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 105px auto;
+      gap: 7px;
+    }
+
+    .toolbar-extra {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--bg-deep);
+      color: var(--text);
+      font-size: .75rem;
+    }
+
+    .input,
+    .select {
+      height: 38px;
+      padding: 7px 10px;
+    }
+
+    .input {
+      font-family: var(--mono);
+    }
+
+    .textarea {
+      min-height: 160px;
+      padding: 10px;
+      resize: vertical;
+      font: .7rem/1.6 var(--mono);
+    }
+
+    .input::placeholder,
+    .textarea::placeholder {
+      color: var(--subtle);
+    }
+
+    .button {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: .75rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .button svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .button-primary {
+      border-color: transparent;
+      background: var(--green);
+      color: var(--on-primary);
+    }
+
+    .button-primary:hover {
+      background: var(--green-hover);
+    }
+
+    .button-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .button-secondary:hover {
+      background: var(--surface-3);
+    }
+
+    .button-danger {
+      background: transparent;
+      color: var(--red);
+    }
+
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    .source-tabs {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .source-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .source-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .73rem;
+      font-weight: 550;
+      white-space: nowrap;
+    }
+
+    .source-tab.active {
+      color: var(--text);
+      border-bottom-color: #fd8c73;
+    }
+
+    .source-tab svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .source-panel[hidden] {
+      display: none;
+    }
+
+    .status {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      margin-top: 9px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-muted);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: .68rem;
+    }
+
+    .status[hidden] {
+      display: none;
+    }
+
+    .status.success {
+      color: var(--ok-text);
+      background: var(--ok-bg);
+      border-color: var(--ok-border);
+    }
+
+    .status.error {
+      color: var(--err-text);
+      background: var(--err-bg);
+      border-color: var(--err-border);
+    }
+
+    .status.warning {
+      color: var(--warn-text);
+      background: var(--warn-bg);
+      border-color: var(--warn-border);
+    }
+
+    .hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--subtle);
+      font-size: .65rem;
+      line-height: 1.5;
+    }
+
+    .hint svg {
+      width: 13px;
+      height: 13px;
+      margin-top: 1px;
+    }
+
+    /* ============================================================
+       Advanced (token)
+       ============================================================ */
+
+    .advanced {
+      margin-top: 10px;
+      border: 1px solid var(--border-muted);
+      border-radius: 7px;
+      background: var(--bg-deep);
+      overflow: hidden;
+    }
+
+    .advanced > summary {
+      padding: 9px 10px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 600;
+      list-style: none;
+      user-select: none;
+    }
+
+    .advanced > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .advanced > summary::before {
+      content: "▸";
+      display: inline-block;
+      margin-right: 7px;
+      transition: transform .15s ease;
+    }
+
+    .advanced[open] > summary::before {
+      transform: rotate(90deg);
+    }
+
+    .advanced-body {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding: 0 10px 11px;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: .68rem;
+      cursor: pointer;
+    }
+
+    .checkbox input {
+      accent-color: var(--accent);
+    }
+
+    /* ============================================================
+       Dashboard cards
+       ============================================================ */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .stat-card {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: .65rem;
+      font-weight: 550;
+    }
+
+    .stat-value {
+      margin-top: 2px;
+      font-size: 1.4rem;
+      font-weight: 650;
+      letter-spacing: -.04em;
+    }
+
+    .stat-unit {
+      color: var(--subtle);
+      font: .62rem var(--mono);
+      letter-spacing: 0;
+    }
+
+    .stat-detail {
+      min-height: 15px;
+      margin-top: 2px;
+      color: var(--subtle);
+      font: .6rem var(--mono);
+    }
+
+    /* ============================================================
+       Two column sections
+       ============================================================ */
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+      gap: 14px;
+    }
+
+    .two-column > .panel {
+      margin-top: 0;
+    }
+
+    /* ============================================================
+       Calendar
+       ============================================================ */
+
+    .calendar-scroll {
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .calendar-shell {
+      display: grid;
+      grid-template-columns: 27px max-content;
+      gap: 7px;
+      width: max-content;
+      min-width: 100%;
+    }
+
+    .weekday-axis {
+      display: grid;
+      grid-template-rows: 17px repeat(7, 11px);
+      gap: 3px;
+    }
+
+    .weekday-axis span {
+      color: var(--subtle);
+      font: 9px/11px var(--mono);
+    }
+
+    .calendar-main {
+      width: max-content;
+    }
+
+    .month-axis {
+      position: relative;
+      height: 17px;
+    }
+
+    .month-label {
+      position: absolute;
+      top: 0;
+      color: var(--subtle);
+      font: 9px/13px var(--mono);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-rows: repeat(7, 11px);
+      grid-auto-flow: column;
+      grid-auto-columns: 11px;
+      gap: 3px;
+      width: max-content;
+    }
+
+    .day {
+      width: 11px;
+      height: 11px;
+      padding: 0;
+      border: 0;
+      border-radius: 2px;
+      background: var(--heat-0);
+      cursor: pointer;
+    }
+
+    .day:hover {
+      outline: 2px solid var(--day-outline);
+      outline-offset: 1px;
+    }
+
+    .day[data-level="1"] { background: var(--heat-1); }
+    .day[data-level="2"] { background: var(--heat-2); }
+    .day[data-level="3"] { background: var(--heat-3); }
+    .day[data-level="4"] { background: var(--heat-4); }
+
+    .placeholder {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .calendar-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 11px;
+      color: var(--muted);
+      font-size: .64rem;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-cell {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    .legend-cell[data-level="0"] { background: var(--heat-0); }
+    .legend-cell[data-level="1"] { background: var(--heat-1); }
+    .legend-cell[data-level="2"] { background: var(--heat-2); }
+    .legend-cell[data-level="3"] { background: var(--heat-3); }
+    .legend-cell[data-level="4"] { background: var(--heat-4); }
+
+    /* ============================================================
+       Charts
+       ============================================================ */
+
+    .chart {
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .bars {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(12px, 1fr));
+      align-items: end;
+      gap: 7px;
+      height: 150px;
+      padding-top: 15px;
+    }
+
+    .bar-column {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+
+    .bar-value {
+      color: var(--subtle);
+      font: 8px var(--mono);
+      opacity: 0;
+      transition: opacity .15s;
+    }
+
+    .bar-column:hover .bar-value {
+      opacity: 1;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 26px;
+      min-height: 2px;
+      border-radius: 3px 3px 1px 1px;
+      background: var(--green);
+    }
+
+    .bar-label {
+      color: var(--subtle);
+      font: 8px var(--mono);
+    }
+
+    .weekday-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .weekday-row {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr) 45px;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .weekday-name,
+    .weekday-value {
+      color: var(--muted);
+      font: 9px var(--mono);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .weekday-value {
+      text-align: right;
+    }
+
+    .progress {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--surface-3);
+    }
+
+    .progress > span {
+      display: block;
+      height: 100%;
+      min-width: 1px;
+      border-radius: inherit;
+      background: var(--green);
+    }
+
+    /* ============================================================
+       Repository table
+       ============================================================ */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .repo-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+
+    .repo-table th {
+      padding: 8px 9px;
+      color: var(--subtle);
+      font: 600 .6rem var(--mono);
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .repo-table td {
+      padding: 9px;
+      color: var(--muted);
+      font-size: .68rem;
+      border-bottom: 1px solid var(--border-muted);
+    }
+
+    .repo-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .repo-name {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .repo-name a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .repo-name a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .repo-lang {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .lang-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .empty {
+      padding: 30px 10px;
+      color: var(--subtle);
+      font-size: .72rem;
+      text-align: center;
+    }
+
+    /* ============================================================
+       Timeline
+       ============================================================ */
+
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 80px 13px minmax(0, 1fr);
+      gap: 9px;
+      min-height: 55px;
+    }
+
+    .timeline-date {
+      padding-top: 1px;
+      color: var(--subtle);
+      font: .62rem var(--mono);
+      text-align: right;
+    }
+
+    .timeline-line {
+      position: relative;
+    }
+
+    .timeline-line::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px var(--nav-active-bg);
+    }
+
+    .timeline-line::after {
+      content: "";
+      position: absolute;
+      top: 12px;
+      bottom: -4px;
+      left: 7px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item:last-child .timeline-line::after {
+      display: none;
+    }
+
+    .timeline-content {
+      padding-bottom: 13px;
+      min-width: 0;
+    }
+
+    .timeline-title {
+      color: var(--text);
+      font-size: .72rem;
+      font-weight: 600;
+    }
+
+    .timeline-description {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: .65rem;
+      overflow-wrap: anywhere;
+    }
+
+    /* ============================================================
+       Activity feed
+       ============================================================ */
+
+    .feed {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feed-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 15px;
+      align-items: baseline;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border-muted);
+    }
+
+    .feed-row:last-child {
+      border-bottom: 0;
+    }
+
+    .feed-message {
+      overflow: hidden;
+      color: var(--text);
+      font: .68rem/1.4 var(--mono);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .feed-meta {
+      display: flex;
+      gap: 7px;
+      color: var(--subtle);
+      font: .6rem var(--mono);
+      white-space: nowrap;
+    }
+
+    .repo-link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .repo-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ============================================================
+       Comparison
+       ============================================================ */
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .comparison-side {
+      padding: 12px;
+      border: 1px solid var(--border-muted);
+      border-radius: 7px;
+      background: var(--bg-deep);
+    }
+
+    .comparison-year {
+      color: var(--subtle);
+      font: .65rem var(--mono);
+    }
+
+    .comparison-number {
+      margin-top: 3px;
+      font-size: 1.4rem;
+      font-weight: 650;
+    }
+
+    .comparison-label {
+      color: var(--muted);
+      font-size: .65rem;
+    }
+
+    .comparison-arrow {
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+    }
+
+    .delta {
+      display: inline-flex;
+      margin-top: 5px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: var(--delta-up-bg);
+      color: var(--delta-up-text);
+      font: .6rem var(--mono);
+    }
+
+    .delta.down {
+      background: var(--delta-down-bg);
+      color: var(--delta-down-text);
+    }
+
+    /* ============================================================
+       About
+       ============================================================ */
+
+    .about {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .about-lead {
+      font-size: .84rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .about-text {
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.65;
+    }
+
+    .about-text code {
+      padding: 1px 5px;
+      border: 1px solid var(--border-muted);
+      border-radius: 4px;
+      background: var(--bg-deep);
+      font: .66rem var(--mono);
+      color: var(--text);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
+    }
+
+    .about-card {
+      padding: 11px;
+      border: 1px solid var(--border-muted);
+      border-radius: 7px;
+      background: var(--bg-deep);
+    }
+
+    .about-card strong {
+      display: block;
+      font-size: .73rem;
+    }
+
+    .about-card span {
+      color: var(--subtle);
+      font-size: .63rem;
+      line-height: 1.5;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .demo-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 13px;
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      background: var(--bg-deep);
+    }
+
+    .demo-banner-text strong {
+      display: block;
+      font-size: .76rem;
+    }
+
+    .demo-banner-text span {
+      color: var(--subtle);
+      font-size: .66rem;
+    }
+
+    /* ============================================================
+       Modal
+       ============================================================ */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      background: var(--overlay);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-backdrop[hidden] {
+      display: none;
+    }
+
+    .modal {
+      width: min(620px, 100%);
+      max-height: min(720px, 90vh);
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: .85rem;
+      font-weight: 650;
+    }
+
+    .modal-body {
+      padding: 13px;
+    }
+
+    .command-search {
+      margin-bottom: 8px;
+    }
+
+    .command-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .command {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      padding: 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .command[hidden] {
+      display: none;
+    }
+
+    .command:hover {
+      background: var(--surface-2);
+    }
+
+    .command-description {
+      color: var(--subtle);
+      font-size: .63rem;
+      display: block;
+    }
+
+    .kbd {
+      padding: 2px 5px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--subtle);
+      font: .58rem var(--mono);
+    }
+
+    /* ============================================================
+       Tooltip
+       ============================================================ */
+
+    .tooltip {
+      position: fixed;
+      z-index: 1000;
+      max-width: 280px;
+      padding: 7px 9px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--tooltip-bg);
+      color: var(--tooltip-text);
+      box-shadow: var(--shadow);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(3px);
+      transition: opacity .08s ease, transform .08s ease;
+      font: .62rem/1.4 var(--mono);
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       Utility
+       ============================================================ */
+
+    .hidden {
+      display: none !important;
+    }
+
+    .spinner {
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ============================================================
+       Anvil intelligence layer
+       ============================================================ */
+
+    .intelligence-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .intel-card {
+      min-width: 0;
+      padding: 11px;
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      background: var(--bg-deep);
+    }
+
+    .intel-label {
+      color: var(--subtle);
+      font: 600 .58rem var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .intel-value {
+      margin-top: 5px;
+      color: var(--text);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .intel-detail {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .62rem;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .intel-list {
+      display: grid;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .intel-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 7px 8px;
+      border: 1px solid var(--border-muted);
+      border-radius: 6px;
+      background: var(--surface-2);
+    }
+
+    .intel-row strong {
+      display: block;
+      color: var(--text);
+      font-size: .66rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .intel-row span {
+      color: var(--subtle);
+      font: .58rem var(--mono);
+      white-space: nowrap;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .filter-bar .input {
+      min-width: 180px;
+      flex: 1 1 220px;
+    }
+
+    .filter-bar select {
+      min-width: 150px;
+      flex: 0 1 180px;
+    }
+
+    .health-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 7px;
+      border: 1px solid var(--border-muted);
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--muted);
+      font: .58rem var(--mono);
+    }
+
+    .health-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    @media (max-width: 900px) {
+      .intelligence-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 500px) {
+      .intelligence-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================================
+       Responsive
+       ============================================================ */
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 190px minmax(0, 1fr);
+      }
+
+      .profile {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .profile-stats {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .app {
+        padding: 10px 10px 40px;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        min-height: auto;
+        margin-bottom: 12px;
+      }
+
+      .brand {
+        padding: 10px 12px;
+      }
+
+      .nav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 7px;
+        scrollbar-width: none;
+      }
+
+      .nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-section {
+        display: none;
+      }
+
+      .nav-button {
+        width: auto;
+        flex: 0 0 auto;
+      }
+
+      .sidebar-footer {
+        display: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+
+      .two-column > .panel {
+        margin-top: 14px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .toolbar-extra .button {
+        width: auto;
+        flex: 1 1 auto;
+      }
+
+      .profile {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .profile-stats {
+        grid-column: 1 / -1;
+      }
+
+      .profile-stat {
+        flex: 1;
+      }
+
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison-arrow {
+        transform: rotate(90deg);
+      }
+
+      .calendar-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stat-value {
+        font-size: 1.2rem;
+      }
+
+      .feed-row {
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+
+      .profile {
+        grid-template-columns: 1fr;
+      }
+
+      .avatar {
+        width: 52px;
+        height: 52px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @media print {
+      .sidebar,
+      .top-actions,
+      .panel:first-of-type,
+      .nav,
+      .command-list {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div class="layout">
+
+      <!-- ========================================================
+           SIDEBAR
+      ========================================================= -->
+
+      <aside class="sidebar">
+
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <i data-lucide="anvil"></i>
+          </div>
+
+          <div>
+            <div class="brand-name">Anvil</div>
+            <div class="brand-caption">Developer workspace</div>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Primary navigation">
+
+          <div class="nav-section">Workspace</div>
+
+          <button class="nav-button active" data-view="dashboard" type="button">
+            <i data-lucide="layout-dashboard"></i>
+            Dashboard
+          </button>
+
+          <button class="nav-button" data-view="activity" type="button">
+            <i data-lucide="activity"></i>
+            Activity
+          </button>
+
+          <button class="nav-button" data-view="repositories" type="button">
+            <i data-lucide="folder-git-2"></i>
+            Repositories
+          </button>
+
+          <button class="nav-button" data-view="timeline" type="button">
+            <i data-lucide="calendar-clock"></i>
+            Timeline
+          </button>
+
+          <div class="nav-section">Development</div>
+
+          <button class="nav-button" data-view="git" type="button">
+            <i data-lucide="git-branch"></i>
+            Git
+          </button>
+
+          <button class="nav-button" data-view="releases" type="button">
+            <i data-lucide="package"></i>
+            Releases
+          </button>
+
+          <button class="nav-button" data-view="reports" type="button">
+            <i data-lucide="file-bar-chart"></i>
+            Reports
+          </button>
+
+          <div class="nav-section">System</div>
+
+          <button class="nav-button" data-action="search" type="button">
+            <i data-lucide="search"></i>
+            Search
+            <span style="margin-left:auto" class="kbd">/</span>
+          </button>
+
+          <button class="nav-button" data-view="about" type="button">
+            <i data-lucide="info"></i>
+            About
+          </button>
+
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="connection-status">
+            <span class="status-dot"></span>
+            <span id="connectionText">Local data ready</span>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- ========================================================
+           MAIN
+      ========================================================= -->
+
+      <main class="main">
+
+        <header class="topbar">
+
+          <div>
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <p class="page-subtitle" id="pageSubtitle">
+              Development activity at a glance.
+            </p>
+          </div>
+
+          <div class="top-actions">
+
+            <button
+              class="icon-button"
+              id="commandButton"
+              type="button"
+              title="Command palette (/)"
+              aria-label="Open command palette"
+            >
+              <i data-lucide="command"></i>
+            </button>
+
+            <button
+              class="icon-button"
+              id="themeButton"
+              type="button"
+              title="Toggle theme"
+              aria-label="Toggle theme"
+            >
+              <i data-lucide="sun-moon"></i>
+            </button>
+
+          </div>
+
+        </header>
+
+        <!-- ======================================================
+             SOURCE PANEL
+        ======================================================= -->
+
+        <section class="panel">
+
+          <div class="panel-header">
+            <span class="panel-title">Activity source</span>
+            <span class="panel-meta" id="sourceMeta">GitHub</span>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="source-tabs" role="tablist">
+
+              <button
+                class="source-tab active"
+                id="githubTab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+              >
+                <i data-lucide="github"></i>
+                GitHub
+              </button>
+
+              <button
+                class="source-tab"
+                id="localTab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+              >
+                <i data-lucide="terminal"></i>
+                Local Git
+              </button>
+
+            </div>
+
+            <div id="githubSource">
+
+              <form id="githubForm">
+
+                <div class="toolbar">
+
+                  <input
+                    class="input"
+                    id="username"
+                    type="text"
+                    maxlength="39"
+                    autocomplete="username"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    placeholder="GitHub username, e.g. torvalds"
+                    required
+                  >
+
+                  <input
+                    class="input"
+                    id="year"
+                    type="number"
+                    min="2008"
+                    max="2100"
+                    step="1"
+                    aria-label="Year"
+                  >
+
+                  <button
+                    class="button button-primary"
+                    id="loadButton"
+                    type="submit"
+                  >
+                    <i data-lucide="refresh-cw"></i>
+                    Load profile
+                  </button>
+
+                </div>
+
+                <div class="toolbar-extra">
+
+                  <button
+                    class="button button-secondary"
+                    id="demoButton"
+                    type="button"
+                  >
+                    <i data-lucide="sparkles"></i>
+                    Try demo · @aceyash-dev
+                  </button>
+
+                </div>
+
+              </form>
+              <details class="advanced" id="tokenDetails">
+
+                <summary>Access token (optional)</summary>
+
+                <div class="advanced-body">
+
+                  <input
+                    class="input"
+                    id="token"
+                    type="password"
+                    autocomplete="off"
+                    spellcheck="false"
+                    placeholder="ghp_… or github_pat_…"
+                    aria-label="GitHub personal access token"
+                  >
+
+                  <label class="checkbox">
+                    <input type="checkbox" id="rememberToken">
+                    Remember on this device
+                  </label>
+
+                  <div>
+                    <button
+                      class="button button-secondary"
+                      id="clearToken"
+                      type="button"
+                    >
+                      <i data-lucide="eraser"></i>
+                      Clear token
+                    </button>
+                  </div>
+
+                  <p class="hint" style="margin:0">
+                    <i data-lucide="shield-check"></i>
+                    Sent only to <code>api.github.com</code>. Raises the
+                    rate limit from 60 to 5,000 requests/hour. Never sent
+                    to the third-party contributions API.
+                  </p>
+
+                </div>
+
+              </details>
+
+            </div>
+
+            <div id="localSource" hidden>
+
+              <textarea
+                class="textarea"
+                id="gitLog"
+                spellcheck="false"
+                placeholder='Paste git log output:
+
+git log --pretty=format:"%ad|%s" --date=short'
+              ></textarea>
+
+              <div style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:10px;
+                margin-top:8px;
+                flex-wrap:wrap;
+              ">
+
+                <span class="hint" style="margin:0">
+                  <i data-lucide="info"></i>
+                  Local mode requires no network access.
+                </span>
+
+                <button
+                  class="button button-primary"
+                  id="processGitButton"
+                  type="button"
+                >
+                  <i data-lucide="check"></i>
+                  Process Git log
+                </button>
+
+              </div>
+
+            </div>
+
+            <div
+              class="status"
+              id="status"
+              hidden
+              role="status"
+              aria-live="polite"
+            ></div>
+
+          </div>
+
+        </section>
+
+        <!-- ======================================================
+             PROFILE
+        ======================================================= -->
+
+        <section class="panel" id="profilePanel">
+
+          <div class="panel-body">
+
+            <div class="profile">
+
+              <img class="avatar" id="avatar" alt="" hidden>
+
+              <div
+                id="profileFallbackAvatar"
+                class="avatar"
+                style="display:grid;place-items:center;color:var(--muted);"
+              >
+                <i data-lucide="user"></i>
+              </div>
+
+              <div>
+
+                <div class="profile-name" id="profileName">
+                  No profile loaded
+                </div>
+
+                <div class="profile-login" id="profileLogin">
+                  Load a GitHub profile to begin.
+                </div>
+
+                <div class="profile-bio" id="profileBio">
+                  Anvil can also work entirely with local Git data.
+                </div>
+
+              </div>
+
+              <div class="profile-stats">
+
+                <div class="profile-stat">
+                  <strong id="followers">0</strong>
+                  <span>followers</span>
+                </div>
+
+                <div class="profile-stat">
+                  <strong id="repos">0</strong>
+                  <span>repos</span>
+                </div>
+
+                <div class="profile-stat">
+                  <strong id="stars">0</strong>
+                  <span>stars</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ======================================================
+             STATS
+        ======================================================= -->
+
+        <section class="stats-grid" style="margin-top:14px">
+
+          <article class="stat-card">
+            <div class="stat-label" id="totalLabel">Contributions</div>
+            <div class="stat-value" id="totalValue">0</div>
+            <div class="stat-detail" id="totalDetail">no dataset</div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-label">Active days</div>
+            <div class="stat-value" id="activeDays">0</div>
+            <div class="stat-detail">days with activity</div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-label">Longest streak</div>
+            <div class="stat-value">
+              <span id="longestStreak">0</span>
+              <span class="stat-unit">days</span>
+            </div>
+            <div class="stat-detail">consecutive activity</div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-label">Best day</div>
+            <div class="stat-value" id="bestDayValue">0</div>
+            <div class="stat-detail" id="bestDayDetail">no activity</div>
+          </article>
+
+        </section>
+
+        <!-- ======================================================
+             VIEWS
+        ======================================================= -->
+
+        <div id="views">
+
+          <!-- Dashboard -->
+          <section class="view" id="view-dashboard">
+
+          <section class="panel" aria-labelledby="intelTitle">
+            <div class="panel-header">
+              <span class="panel-title" id="intelTitle">Anvil Intelligence</span>
+              <span class="health-pill" id="intelHealth">Waiting for data</span>
+            </div>
+            <div class="panel-body">
+              <div class="intelligence-grid">
+                <article class="intel-card">
+                  <div class="intel-label">Momentum</div>
+                  <div class="intel-value" id="intelMomentum">—</div>
+                  <div class="intel-detail" id="intelMomentumDetail">Load data to calculate trend.</div>
+                </article>
+                <article class="intel-card">
+                  <div class="intel-label">Shipping</div>
+                  <div class="intel-value" id="intelShipping">—</div>
+                  <div class="intel-detail" id="intelShippingDetail">PRs, releases and activity.</div>
+                </article>
+                <article class="intel-card">
+                  <div class="intel-label">Consistency</div>
+                  <div class="intel-value" id="intelConsistency">—</div>
+                  <div class="intel-detail" id="intelConsistencyDetail">Active days relative to the period.</div>
+                </article>
+                <article class="intel-card">
+                  <div class="intel-label">Maintenance</div>
+                  <div class="intel-value" id="intelMaintenance">—</div>
+                  <div class="intel-detail" id="intelMaintenanceDetail">Repository attention signals.</div>
+                </article>
+              </div>
+              <div class="two-column" style="margin-top:12px">
+                <div>
+                  <div class="panel-header" style="padding:0 0 8px;border:0">
+                    <span class="panel-title">What changed</span>
+                  </div>
+                  <div class="intel-list" id="intelChanges"></div>
+                </div>
+                <div>
+                  <div class="panel-header" style="padding:0 0 8px;border:0">
+                    <span class="panel-title">Maintenance radar</span>
+                  </div>
+                  <div class="intel-list" id="intelRadar"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">Contribution calendar</span>
+                <span class="panel-meta" id="calendarRange">—</span>
+              </div>
+
+              <div class="panel-body">
+
+                <div
+                  class="calendar-scroll"
+                  tabindex="0"
+                  aria-label="Contribution calendar"
+                >
+
+                  <div class="calendar-shell">
+
+                    <div class="weekday-axis" aria-hidden="true">
+                      <span></span>
+                      <span>Sun</span>
+                      <span></span>
+                      <span>Tue</span>
+                      <span></span>
+                      <span>Thu</span>
+                      <span></span>
+                    </div>
+
+                    <div class="calendar-main">
+                      <div class="month-axis" id="monthAxis"></div>
+                      <div class="calendar-grid" id="calendar"></div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="calendar-footer">
+
+                  <span id="calendarSummary">No data loaded.</span>
+
+                  <div class="legend">
+                    <span>Less</span>
+                    <span class="legend-cell" data-level="0"></span>
+                    <span class="legend-cell" data-level="1"></span>
+                    <span class="legend-cell" data-level="2"></span>
+                    <span class="legend-cell" data-level="3"></span>
+                    <span class="legend-cell" data-level="4"></span>
+                    <span>More</span>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </section>
+
+            <div class="two-column" style="margin-top:14px">
+
+              <section class="panel">
+
+                <div class="panel-header">
+                  <span class="panel-title">Monthly activity</span>
+                  <span class="panel-meta" id="monthlyTotal">0</span>
+                </div>
+
+                <div class="panel-body">
+                  <div class="chart" id="monthlyChart"></div>
+                </div>
+
+              </section>
+
+              <section class="panel">
+
+                <div class="panel-header">
+                  <span class="panel-title">Activity by weekday</span>
+                </div>
+
+                <div class="panel-body">
+                  <div class="weekday-chart" id="weekdayChart"></div>
+                </div>
+
+              </section>
+
+            </div>
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">Year comparison</span>
+                <span class="panel-meta">selected year vs previous year</span>
+              </div>
+
+              <div class="panel-body">
+
+                <div class="comparison">
+
+                  <div class="comparison-side">
+                    <div class="comparison-year" id="previousYear">—</div>
+                    <div class="comparison-number" id="previousTotal">—</div>
+                    <div class="comparison-label">contributions</div>
+                  </div>
+
+                  <div class="comparison-arrow">
+                    <i data-lucide="arrow-right"></i>
+                  </div>
+
+                  <div class="comparison-side">
+                    <div class="comparison-year" id="currentYear">—</div>
+                    <div class="comparison-number" id="currentTotal">0</div>
+                    <div class="comparison-label">contributions</div>
+                    <span class="delta" id="comparisonDelta">—</span>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </section>
+
+          </section>
+
+          <!-- Activity -->
+          <section class="view hidden" id="view-activity">
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">Activity feed</span>
+                <span class="panel-meta" id="feedCount">0 items</span>
+              </div>
+
+              <div class="panel-body">
+                <div class="filter-bar" aria-label="Activity filters">
+                  <input class="input" id="activitySearch" type="search" placeholder="Search activity, repository, or event…" autocomplete="off">
+                  <select class="input" id="activityType" aria-label="Activity type">
+                    <option value="">All types</option>
+                  </select>
+                  <select class="input" id="activitySort" aria-label="Activity sort">
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                  </select>
+                </div>
+                <div class="feed" id="activityFeed">
+                  <div class="empty">No activity loaded.</div>
+                </div>
+              </div>
+
+            </section>
+
+          </section>
+
+          <!-- Repositories -->
+          <section class="view hidden" id="view-repositories">
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">Repositories</span>
+                <span class="panel-meta" id="repoCount">0</span>
+              </div>
+
+              <div class="panel-body">
+
+                <div class="filter-bar" aria-label="Repository filters">
+                  <input class="input" id="repoSearch" type="search" placeholder="Search repositories…" autocomplete="off">
+                  <select class="input" id="repoLanguage" aria-label="Repository language">
+                    <option value="">All languages</option>
+                  </select>
+                  <select class="input" id="repoSort" aria-label="Repository sort">
+                    <option value="updated">Recently updated</option>
+                    <option value="stars">Most stars</option>
+                    <option value="forks">Most forks</option>
+                    <option value="issues">Open issues</option>
+                    <option value="name">Name</option>
+                  </select>
+                </div>
+
+                <div class="table-wrap">
+
+                  <table class="repo-table">
+
+                    <thead>
+                      <tr>
+                        <th>Repository</th>
+                        <th>Language</th>
+                        <th>Stars</th>
+                        <th>Forks</th>
+                        <th>Updated</th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="repoTable">
+                      <tr>
+                        <td colspan="5" class="empty">
+                          No repositories loaded.
+                        </td>
+                      </tr>
+                    </tbody>
+
+                  </table>
+
+                </div>
+
+              </div>
+
+            </section>
+
+            <section class="panel" style="margin-top:14px">
+              <div class="panel-header">
+                <span class="panel-title">Portfolio intelligence</span>
+                <span class="health-pill" id="portfolioHealth">Waiting for data</span>
+              </div>
+              <div class="panel-body">
+                <div class="intelligence-grid">
+                  <article class="intel-card">
+                    <div class="intel-label">Portfolio health</div>
+                    <div class="intel-value" id="portfolioHealthDetail">—</div>
+                    <div class="intel-detail">Repository freshness, maintenance, and activity signals.</div>
+                  </article>
+                  <article class="intel-card">
+                    <div class="intel-label">Focus languages</div>
+                    <div class="intel-value" id="focusLanguages">—</div>
+                    <div class="intel-detail">Most represented languages in loaded repositories.</div>
+                  </article>
+                  <article class="intel-card">
+                    <div class="intel-label">Shipping signal</div>
+                    <div class="intel-value" id="shippingSignal">—</div>
+                    <div class="intel-detail" id="shippingSignalDetail">Releases and delivery activity.</div>
+                  </article>
+                  <article class="intel-card">
+                    <div class="intel-label">Data quality</div>
+                    <div class="intel-value" id="dataQuality">—</div>
+                    <div class="intel-detail" id="dataQualityDetail">Loaded source coverage.</div>
+                  </article>
+                </div>
+              </div>
+            </section>
+
+          </section>
+
+          <!-- Timeline -->
+          <section class="view hidden" id="view-timeline">
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">Developer timeline</span>
+                <span class="panel-meta" id="timelineCount">recent events</span>
+              </div>
+
+              <div class="panel-body">
+                <div class="timeline" id="timeline">
+                  <div class="empty">No timeline data loaded.</div>
+                </div>
+              </div>
+
+            </section>
+
+          </section>
+
+          <!-- Git -->
+          <section class="view hidden" id="view-git">
+
+            <div class="two-column">
+
+              <section class="panel">
+
+                <div class="panel-header">
+                  <span class="panel-title">Git statistics</span>
+                  <span class="panel-meta" id="gitSourceMeta">no dataset</span>
+                </div>
+
+                <div class="panel-body">
+
+                  <div class="stats-grid">
+
+                    <article class="stat-card">
+                      <div class="stat-label">Commits</div>
+                      <div class="stat-value" id="gitCommits">0</div>
+                    </article>
+
+                    <article class="stat-card">
+                      <div class="stat-label">Active days</div>
+                      <div class="stat-value" id="gitActiveDays">0</div>
+                    </article>
+
+                    <article class="stat-card">
+                      <div class="stat-label">Best day</div>
+                      <div class="stat-value" id="gitBestDay">0</div>
+                    </article>
+
+                    <article class="stat-card">
+                      <div class="stat-label">Longest streak</div>
+                      <div class="stat-value" id="gitStreak">0</div>
+                    </article>
+
+                  </div>
+
+                  <p class="hint">
+                    <i data-lucide="info"></i>
+                    GitHub mode analyses commits from recent public push
+                    events (last ~90 days). Paste a full <code>git log</code>
+                    in Local Git mode for complete history.
+                  </p>
+
+                </div>
+
+              </section>
+
+              <section class="panel">
+
+                <div class="panel-header">
+                  <span class="panel-title">Commit types</span>
+                </div>
+
+                <div class="panel-body">
+                  <div class="weekday-chart" id="commitTypes">
+                    <div class="empty">No Git log loaded.</div>
+                  </div>
+                </div>
+
+              </section>
+
+            </div>
+
+          </section>
+
+          <!-- Releases -->
+          <section class="view hidden" id="view-releases">
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">Releases &amp; versions</span>
+                <span class="panel-meta" id="releasesMeta">GitHub releases</span>
+              </div>
+
+              <div class="panel-body">
+                <div class="timeline" id="releases">
+                  <div class="empty">
+                    Load a GitHub profile to inspect repositories.
+                  </div>
+                </div>
+              </div>
+
+            </section>
+
+          </section>
+
+          <!-- Reports -->
+          <section class="view hidden" id="view-reports">
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">Reports</span>
+                <span class="panel-meta">portable data</span>
+              </div>
+
+              <div class="panel-body">
+
+                <div style="
+                  display:grid;
+                  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+                  gap:8px;
+                ">
+
+                  <button class="button button-secondary" id="exportJson" type="button">
+                    <i data-lucide="braces"></i>
+                    Export JSON
+                  </button>
+
+                  <button class="button button-secondary" id="exportCsv" type="button">
+                    <i data-lucide="table-2"></i>
+                    Export CSV
+                  </button>
+
+                  <button class="button button-secondary" id="exportMarkdown" type="button">
+                    <i data-lucide="file-text"></i>
+                    Export Markdown
+                  </button>
+
+                  <button class="button button-secondary" id="copySummary" type="button">
+                    <i data-lucide="clipboard"></i>
+                    Copy summary
+                  </button>
+
+                  <button class="button button-secondary" id="copyShare" type="button">
+                    <i data-lucide="link"></i>
+                    Copy share URL
+                  </button>
+
+                  <button class="button button-secondary" id="printReport" type="button">
+                    <i data-lucide="printer"></i>
+                    Print report
+                  </button>
+
+                </div>
+
+              </div>
+
+            </section>
+
+          </section>
+
+          <!-- About -->
+          <section class="view hidden" id="view-about">
+
+            <section class="panel">
+
+              <div class="panel-header">
+                <span class="panel-title">About Anvil</span>
+                <span class="panel-meta">demo project</span>
+              </div>
+
+              <div class="panel-body">
+
+                <div class="about">
+
+                  <p class="about-lead">
+                    Anvil is a single-file developer activity dashboard,
+                    coded by <strong>@aceyash-dev</strong> as a demo.
+                  </p>
+
+                  <p class="about-text">
+                    It has no backend, no build step and no tracking. Every
+                    request goes straight from your browser to the public
+                    GitHub API and the open
+                    <code>github-contributions-api</code>. Nothing is stored
+                    server-side. Preferences and an optional access token
+                    live in your own browser storage, and you can clear them
+                    at any time.
+                  </p>
+
+                  <div class="about-grid">
+
+                    <div class="about-card">
+                      <strong>GitHub mode</strong>
+                      <span>
+                        Profile, contributions, repositories, public events
+                        and releases.
+                      </span>
+                    </div>
+
+                    <div class="about-card">
+                      <strong>Local Git mode</strong>
+                      <span>
+                        Paste <code>git log</code> output and analyse it
+                        completely offline.
+                      </span>
+                    </div>
+
+                    <div class="about-card">
+                      <strong>Access token</strong>
+                      <span>
+                        Optional. Raises the API rate limit and unlocks
+                        private-repository metadata you can already see.
+                      </span>
+                    </div>
+
+                    <div class="about-card">
+                      <strong>Exports</strong>
+                      <span>
+                        JSON, CSV, share URLs and a print-friendly report.
+                      </span>
+                    </div>
+
+                  </div>
+
+                  <div class="demo-banner">
+
+                    <div class="demo-banner-text">
+                      <strong>Try the demo</strong>
+                      <span>
+                        Load the public profile of @aceyash-dev, the author
+                        of this page.
+                      </span>
+                    </div>
+
+                    <button
+                      class="button button-primary"
+                      id="aboutDemo"
+                      type="button"
+                    >
+                      <i data-lucide="sparkles"></i>
+                      Try demo · @aceyash-dev
+                    </button>
+
+                  </div>
+
+                  <p class="about-text">
+                    Built with vanilla JavaScript, the GitHub REST API and
+                    the open contributions API. No frameworks, no analytics,
+                    no cookies.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </section>
+
+          </section>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================================================
+       COMMAND PALETTE
+  =========================================================== -->
+
+  <div class="modal-backdrop" id="commandModal" hidden>
+
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="commandTitle"
+    >
+
+      <header class="modal-header">
+
+        <h2 class="modal-title" id="commandTitle">Command palette</h2>
+
+        <button
+          class="icon-button"
+          id="closeCommand"
+          type="button"
+          aria-label="Close"
+        >
+          <i data-lucide="x"></i>
+        </button>
+
+      </header>
+
+      <div class="modal-body">
+
+        <input
+          class="input command-search"
+          id="commandSearch"
+          type="search"
+          placeholder="Search commands..."
+          autocomplete="off"
+        >
+
+        <div class="command-list" id="commandList">
+
+          <button class="command" data-command="dashboard" type="button">
+            <span>
+              Dashboard
+              <span class="command-description">Open overview</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="activity" type="button">
+            <span>
+              Activity
+              <span class="command-description">View recent activity</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="repositories" type="button">
+            <span>
+              Repositories
+              <span class="command-description">Browse repositories</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="timeline" type="button">
+            <span>
+              Timeline
+              <span class="command-description">Chronological events</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="git" type="button">
+            <span>
+              Git analytics
+              <span class="command-description">Inspect commit data</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="releases" type="button">
+            <span>
+              Releases
+              <span class="command-description">Recent versions</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="reports" type="button">
+            <span>
+              Reports
+              <span class="command-description">Export and share</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="demo" type="button">
+            <span>
+              Try demo
+              <span class="command-description">Load @aceyash-dev</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="about" type="button">
+            <span>
+              About
+              <span class="command-description">About this project</span>
+            </span>
+          </button>
+
+          <button class="command" data-command="theme" type="button">
+            <span>
+              Toggle theme
+              <span class="command-description">Switch appearance</span>
+            </span>
+            <span class="kbd">T</span>
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="tooltip" id="tooltip" aria-hidden="true"></div>
+
+  <script>
+    "use strict";
+
+    /* ============================================================
+       CONFIG
+    ============================================================ */
+
+    const CONFIG = Object.freeze({
+      contributionApi:
+        "https://github-contributions-api.jogruber.de/v4/",
+
+      githubApi:
+        "https://api.github.com",
+
+      timeout:
+        15000,
+
+      minYear:
+        2008,
+
+      maxYear:
+        2100,
+
+      storage:
+        "anvil.preferences.v1",
+
+      tokenStorage:
+        "anvil.token.v1",
+
+      demoUser:
+        "aceyash-dev",
+
+      maxReleaseRepos:
+        8
+    });
+
+    /* ============================================================
+       STATE
+    ============================================================ */
+
+    const state = {
+      source: "github",
+      year: new Date().getFullYear(),
+      username: "",
+      token: "",
+      rememberToken: false,
+      calendar: new Map(),
+      previousYearTotal: null,
+      repositories: [],
+      activity: [],
+      commitEvents: [],
+      timeline: [],
+      releases: [],
+      releasesLoadedFor: "",
+      localCommits: [],
+      profile: null,
+      currentView: "dashboard",
+      theme: "dark",
+      requestId: 0,
+      filters: {
+        activitySearch: "",
+        activityType: "",
+        repoSearch: "",
+        repoLanguage: "",
+        repoSort: "updated",
+        activitySort: "newest"
+      },
+      analytics: {
+        lastCalculated: 0
+      }
+    };
+
+    /* ============================================================
+       DOM
+    ============================================================ */
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    const el = {
+      nav: $$(".nav-button[data-view]"),
+
+      pageTitle: $("#pageTitle"),
+      pageSubtitle: $("#pageSubtitle"),
+
+      githubTab: $("#githubTab"),
+      localTab: $("#localTab"),
+
+      githubSource: $("#githubSource"),
+      localSource: $("#localSource"),
+
+      githubForm: $("#githubForm"),
+      username: $("#username"),
+      year: $("#year"),
+      loadButton: $("#loadButton"),
+      demoButton: $("#demoButton"),
+
+      tokenDetails: $("#tokenDetails"),
+      token: $("#token"),
+      rememberToken: $("#rememberToken"),
+      clearToken: $("#clearToken"),
+
+      gitLog: $("#gitLog"),
+      processGitButton: $("#processGitButton"),
+
+      status: $("#status"),
+      sourceMeta: $("#sourceMeta"),
+      connectionText: $("#connectionText"),
+
+      profilePanel: $("#profilePanel"),
+      avatar: $("#avatar"),
+      fallbackAvatar: $("#profileFallbackAvatar"),
+      profileName: $("#profileName"),
+      profileLogin: $("#profileLogin"),
+      profileBio: $("#profileBio"),
+      followers: $("#followers"),
+      repos: $("#repos"),
+      stars: $("#stars"),
+
+      totalLabel: $("#totalLabel"),      totalValue: $("#totalValue"),
+      totalDetail: $("#totalDetail"),
+      activeDays: $("#activeDays"),
+      longestStreak: $("#longestStreak"),
+      bestDayValue: $("#bestDayValue"),
+      bestDayDetail: $("#bestDayDetail"),
+
+      calendar: $("#calendar"),
+      monthAxis: $("#monthAxis"),
+      calendarRange: $("#calendarRange"),
+      calendarSummary: $("#calendarSummary"),
+
+      monthlyChart: $("#monthlyChart"),
+      monthlyTotal: $("#monthlyTotal"),
+      weekdayChart: $("#weekdayChart"),
+
+      previousYear: $("#previousYear"),
+      previousTotal: $("#previousTotal"),
+      currentYear: $("#currentYear"),
+      currentTotal: $("#currentTotal"),
+      comparisonDelta: $("#comparisonDelta"),
+
+      activityFeed: $("#activityFeed"),
+      feedCount: $("#feedCount"),
+
+      repoCount: $("#repoCount"),
+      repoTable: $("#repoTable"),
+
+      timeline: $("#timeline"),
+      timelineCount: $("#timelineCount"),
+      releases: $("#releases"),
+      releasesMeta: $("#releasesMeta"),
+
+      gitCommits: $("#gitCommits"),
+      gitActiveDays: $("#gitActiveDays"),
+      gitBestDay: $("#gitBestDay"),
+      gitStreak: $("#gitStreak"),
+      gitSourceMeta: $("#gitSourceMeta"),
+      commitTypes: $("#commitTypes"),
+
+      commandButton: $("#commandButton"),
+      themeButton: $("#themeButton"),
+
+      commandModal: $("#commandModal"),
+      commandSearch: $("#commandSearch"),
+      commandList: $("#commandList"),
+      closeCommand: $("#closeCommand"),
+
+      exportJson: $("#exportJson"),
+      exportCsv: $("#exportCsv"),
+      copyShare: $("#copyShare"),
+      printReport: $("#printReport"),
+      aboutDemo: $("#aboutDemo"),
+
+      tooltip: $("#tooltip"),
+
+      intelHealth: $("#intelHealth"),
+      intelMomentum: $("#intelMomentum"),
+      intelMomentumDetail: $("#intelMomentumDetail"),
+      intelShipping: $("#intelShipping"),
+      intelShippingDetail: $("#intelShippingDetail"),
+      intelConsistency: $("#intelConsistency"),
+      intelConsistencyDetail: $("#intelConsistencyDetail"),
+      intelMaintenance: $("#intelMaintenance"),
+      intelMaintenanceDetail: $("#intelMaintenanceDetail"),
+      intelChanges: $("#intelChanges"),
+      intelRadar: $("#intelRadar"),
+      activitySearch: $("#activitySearch"),
+      activityType: $("#activityType"),
+      repoSearch: $("#repoSearch"),
+      repoLanguage: $("#repoLanguage"),
+      repoSort: $("#repoSort"),
+      activitySort: $("#activitySort"),
+
+      portfolioHealth: $("#portfolioHealth"),
+      portfolioHealthDetail: $("#portfolioHealthDetail"),
+      focusLanguages: $("#focusLanguages"),
+      shippingSignal: $("#shippingSignal"),
+      shippingSignalDetail: $("#shippingSignalDetail"),
+      dataQuality: $("#dataQuality"),
+      dataQualityDetail: $("#dataQualityDetail"),
+      exportMarkdown: $("#exportMarkdown"),
+      copySummary: $("#copySummary")
+    };
+
+    /* ============================================================
+       UTILITIES
+    ============================================================ */
+
+    function number(value) {
+      return Number(value || 0).toLocaleString();
+    }
+
+    function utcDate(year, month = 0, day = 1) {
+      return new Date(Date.UTC(year, month, day));
+    }
+
+    function key(date) {
+      return date.toISOString().slice(0, 10);
+    }
+
+    function parseKey(value) {
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+      if (!match) return null;
+      return utcDate(
+        Number(match[1]),
+        Number(match[2]) - 1,
+        Number(match[3])
+      );
+    }
+
+    function addDays(date, amount) {
+      const result = new Date(date);
+      result.setUTCDate(result.getUTCDate() + amount);
+      return result;
+    }
+
+    function validYear(year) {
+      return (
+        Number.isInteger(year) &&
+        year >= CONFIG.minYear &&
+        year <= CONFIG.maxYear
+      );
+    }
+
+    function validUsername(username) {
+      return /^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/
+        .test(username);
+    }
+
+    function formatDate(value, options = {}) {
+      const date = parseKey(value);
+      if (!date) return value;
+
+      return new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+        ...options
+      }).format(date);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeCsv(value) {
+      const string = String(value ?? "");
+      return `"${string.replaceAll('"', '""')}"`;
+    }
+
+    function safeHref(url) {
+      try {
+        const parsed = new URL(String(url));
+        return parsed.protocol === "https:" ? parsed.href : "";
+      } catch {
+        return "";
+      }
+    }
+
+    function download(content, filename, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+
+      anchor.href = url;
+      anchor.download = filename;
+
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function refreshIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    /* ============================================================
+       STORAGE
+    ============================================================ */
+
+    function savePreferences() {
+      try {
+        localStorage.setItem(
+          CONFIG.storage,
+          JSON.stringify({
+            username: state.username,
+            year: state.year,
+            theme: state.theme
+          })
+        );
+      } catch {
+        /* Storage can be disabled. */
+      }
+    }
+
+    function loadPreferences() {
+      try {
+        const raw = localStorage.getItem(CONFIG.storage);
+        if (!raw) return;
+
+        const saved = JSON.parse(raw);
+
+        if (typeof saved.username === "string") {
+          state.username = saved.username.slice(0, 39);
+          el.username.value = state.username;
+        }
+
+        if (Number.isInteger(saved.year) && validYear(saved.year)) {
+          state.year = saved.year;
+          el.year.value = saved.year;
+        }
+
+        if (saved.theme === "dark" || saved.theme === "light") {
+          state.theme = saved.theme;
+        }
+      } catch {
+        /* Ignore malformed preferences. */
+      }
+    }
+
+    function saveToken() {
+      try {
+        if (state.rememberToken && state.token) {
+          localStorage.setItem(CONFIG.tokenStorage, state.token);
+        } else {
+          localStorage.removeItem(CONFIG.tokenStorage);
+        }
+      } catch {
+        /* Storage can be disabled. */
+      }
+    }
+
+    function loadToken() {
+      try {
+        const saved = localStorage.getItem(CONFIG.tokenStorage);
+        if (!saved) return;
+
+        state.token = saved;
+        state.rememberToken = true;
+
+        el.token.value = saved;
+        el.rememberToken.checked = true;
+      } catch {
+        /* Ignore. */
+      }
+    }
+
+    /* ============================================================
+       THEME
+    ============================================================ */
+
+    function applyTheme() {
+      document.documentElement.dataset.theme = state.theme;
+
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) {
+        meta.setAttribute(
+          "content",
+          state.theme === "dark" ? "#0d1117" : "#ffffff"
+        );
+      }
+
+      savePreferences();
+    }
+
+    function toggleTheme() {
+      state.theme = state.theme === "dark" ? "light" : "dark";
+      applyTheme();
+    }
+
+    /* ============================================================
+       STATUS
+    ============================================================ */
+
+    function status(message, type = "success") {
+      if (!message) {
+        el.status.hidden = true;
+        el.status.textContent = "";
+        return;
+      }
+
+      el.status.hidden = false;
+      el.status.className = `status ${type}`;
+      el.status.textContent = message;
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+
+    const viewMeta = {
+      dashboard: [
+        "Dashboard",
+        "Development activity at a glance."
+      ],
+
+      activity: [
+        "Activity",
+        "Recent public GitHub events and local commits."
+      ],
+
+      repositories: [
+        "Repositories",
+        "Projects associated with the loaded profile."
+      ],
+
+      timeline: [
+        "Timeline",
+        "A chronological view of development activity."
+      ],
+
+      git: [
+        "Git",
+        "Commit history and analytics."
+      ],
+
+      releases: [
+        "Releases",
+        "Recent releases and versions."
+      ],
+
+      reports: [
+        "Reports",
+        "Export and share Anvil data."
+      ],
+
+      about: [
+        "About",
+        "What Anvil is and how it works."
+      ]
+    };
+
+    function showView(view) {
+      if (!viewMeta[view]) return;
+
+      state.currentView = view;
+
+      el.nav.forEach((button) => {
+        button.classList.toggle(
+          "active",
+          button.dataset.view === view
+        );
+      });
+
+      $$(".view").forEach((section) => {
+        section.classList.toggle(
+          "hidden",
+          section.id !== `view-${view}`
+        );
+      });
+
+      el.pageTitle.textContent = viewMeta[view][0];
+      el.pageSubtitle.textContent = viewMeta[view][1];
+
+      if (view === "releases") {
+        loadReleases().catch(() => {});
+      }
+
+      if (view === "timeline") {
+        renderTimeline();
+      }
+
+      if (view === "git") {
+        renderGitStats();
+        renderCommitTypes();
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* ============================================================
+       SOURCE
+    ============================================================ */
+
+    function setSource(source) {
+      state.source = source;
+
+      const github = source === "github";
+
+      el.githubTab.classList.toggle("active", github);
+      el.localTab.classList.toggle("active", !github);
+
+      el.githubTab.setAttribute("aria-selected", String(github));
+      el.localTab.setAttribute("aria-selected", String(!github));
+
+      el.githubSource.hidden = !github;
+      el.localSource.hidden = github;
+
+      el.sourceMeta.textContent = github ? "GitHub" : "Local Git";
+
+      updateLabels();
+    }
+
+    /* ============================================================
+       CALENDAR
+    ============================================================ */
+
+    function emptyCalendar(year) {
+      const map = new Map();
+      const start = utcDate(year, 0, 1);
+      const end = utcDate(year, 11, 31);
+
+      for (let date = start; date <= end; date = addDays(date, 1)) {
+        map.set(key(date), 0);
+      }
+
+      return map;
+    }
+
+    function totalCalendar() {
+      let total = 0;
+      for (const value of state.calendar.values()) total += value;
+      return total;
+    }
+
+    function maxCalendar() {
+      let max = 0;
+      for (const value of state.calendar.values()) {
+        max = Math.max(max, value);
+      }
+      return max;
+    }
+
+    function activityLevel(value, maximum) {
+      if (!value) return 0;
+      if (maximum <= 4) return Math.min(value, 4);
+
+      const ratio = value / maximum;
+      if (ratio <= .25) return 1;
+      if (ratio <= .5) return 2;
+      if (ratio <= .75) return 3;
+      return 4;
+    }
+
+    function renderCalendar() {
+      el.calendar.replaceChildren();
+      el.monthAxis.replaceChildren();
+
+      const year = state.year;
+      const first = utcDate(year, 0, 1);
+      const leading = first.getUTCDay();
+
+      const days = Math.round(
+        (utcDate(year + 1, 0, 1) - first) / 86400000
+      );
+
+      const weeks = Math.ceil((leading + days) / 7);
+      const maximum = maxCalendar();
+
+      el.calendar.style.gridTemplateColumns =
+        `repeat(${weeks}, 11px)`;
+
+      for (let index = 0; index < weeks * 7; index++) {
+        const dayIndex = index - leading;
+
+        if (dayIndex < 0 || dayIndex >= days) {
+          const placeholder = document.createElement("span");
+          placeholder.className = "day placeholder";
+          el.calendar.appendChild(placeholder);
+          continue;
+        }
+
+        const date = addDays(first, dayIndex);
+        const dateKey = key(date);
+        const count = state.calendar.get(dateKey) || 0;
+
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "day";
+        cell.dataset.level = String(activityLevel(count, maximum));
+        cell.dataset.date = dateKey;
+        cell.dataset.count = String(count);
+
+        const noun = state.source === "local"
+          ? "commit"
+          : "contribution";
+
+        cell.setAttribute(
+          "aria-label",
+          `${formatDate(dateKey)}: ${number(count)} ${noun}${count === 1 ? "" : "s"}`
+        );
+
+        cell.addEventListener("mouseenter", tooltipShow);
+        cell.addEventListener("mousemove", tooltipMove);
+        cell.addEventListener("mouseleave", tooltipHide);
+        cell.addEventListener("focus", tooltipShow);
+        cell.addEventListener("blur", tooltipHide);
+
+        el.calendar.appendChild(cell);
+      }
+
+      renderMonths(year, leading, weeks);
+
+      el.calendarRange.textContent = String(year);
+
+      el.calendarSummary.textContent =
+        `${number(totalCalendar())} ${
+          state.source === "local" ? "commits" : "contributions"
+        } · peak ${number(maximum)}`;
+
+      renderMonthlyChart();
+      renderWeekdayChart();
+      calculateStats();
+    }
+
+    function renderMonths(year, leading, weeks) {
+      for (let month = 0; month < 12; month++) {
+        const date = utcDate(year, month, 1);
+
+        const day = Math.floor(
+          (date - utcDate(year, 0, 1)) / 86400000
+        );
+
+        const column = Math.floor((day + leading) / 7);
+        if (column >= weeks) continue;
+
+        const label = document.createElement("span");
+        label.className = "month-label";
+
+        label.textContent = date.toLocaleString(undefined, {
+          month: "short",
+          timeZone: "UTC"
+        });
+
+        label.style.left = `${column * 14}px`;
+
+        el.monthAxis.appendChild(label);
+      }
+    }
+
+    /* ============================================================
+       STATS
+    ============================================================ */
+
+    function calculateStats() {
+      const entries = [...state.calendar.entries()]
+        .sort(([a], [b]) => a.localeCompare(b));
+
+      let total = 0;
+      let active = 0;
+      let longest = 0;
+      let running = 0;
+      let best = 0;
+      let bestDate = null;
+
+      for (const [date, value] of entries) {
+        total += value;
+
+        if (value > 0) {
+          active++;
+          running++;
+          longest = Math.max(longest, running);
+        } else {
+          running = 0;
+        }
+
+        if (value > best) {
+          best = value;
+          bestDate = date;
+        }
+      }
+
+      el.totalValue.textContent = number(total);
+      el.activeDays.textContent = number(active);
+      el.longestStreak.textContent = number(longest);
+      el.bestDayValue.textContent = number(best);
+
+      el.bestDayDetail.textContent = bestDate
+        ? formatDate(bestDate)
+        : "no activity";
+
+      el.totalDetail.textContent = `in ${state.year}`;
+
+      renderComparison();
+    }
+
+    function updateLabels() {
+      const local = state.source === "local";
+
+      el.totalLabel.textContent = local ? "Commits" : "Contributions";
+
+      if (local) {
+        el.gitSourceMeta.textContent = state.localCommits.length
+          ? "local git log"
+          : "no dataset";
+      } else {
+        el.gitSourceMeta.textContent = state.commitEvents.length
+          ? "GitHub push events"
+          : "no dataset";
+      }
+
+      el.connectionText.textContent = local
+        ? "Local data ready"
+        : (state.token ? "Authenticated" : "Local data ready");
+    }
+
+    /* ============================================================
+       MONTHLY
+    ============================================================ */
+
+    function monthlyTotals() {
+      const totals = Array(12).fill(0);
+
+      for (const [date, value] of state.calendar.entries()) {
+        const parsed = parseKey(date);
+        if (parsed) totals[parsed.getUTCMonth()] += value;
+      }
+
+      return totals;
+    }
+
+    function renderMonthlyChart() {
+      const totals = monthlyTotals();
+      const maximum = Math.max(1, ...totals);
+      const total = totals.reduce((sum, value) => sum + value, 0);
+
+      el.monthlyTotal.textContent = `${number(total)} total`;
+
+      el.monthlyChart.innerHTML =
+        `
+          <div class="bars">
+            ${totals.map((value, index) => {
+              const monthName = new Date(
+                Date.UTC(state.year, index, 1)
+              ).toLocaleString(undefined, {
+                month: "long",
+                timeZone: "UTC"
+              });
+
+              const shortName = new Date(
+                Date.UTC(state.year, index, 1)
+              ).toLocaleString(undefined, {
+                month: "short",
+                timeZone: "UTC"
+              });
+
+              return `
+                <div class="bar-column">
+                  <span class="bar-value">${number(value)}</span>
+
+                  <div
+                    class="bar"
+                    style="height:${Math.max(2, (value / maximum) * 125)}px"
+                    title="${escapeHtml(monthName)}: ${number(value)}"
+                  ></div>
+
+                  <span class="bar-label">${escapeHtml(shortName)}</span>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
+    }
+
+    /* ============================================================
+       WEEKDAY
+    ============================================================ */
+
+    function weekdayTotals() {
+      const totals = Array(7).fill(0);
+
+      for (const [date, value] of state.calendar.entries()) {
+        const parsed = parseKey(date);
+        if (parsed) totals[parsed.getUTCDay()] += value;
+      }
+
+      return totals;
+    }
+
+    function renderWeekdayChart() {
+      const totals = weekdayTotals();
+      const maximum = Math.max(1, ...totals);
+
+      const names = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+      el.weekdayChart.innerHTML = totals
+        .map((value, index) => `
+          <div class="weekday-row">
+            <span class="weekday-name">${names[index]}</span>
+
+            <div class="progress">
+              <span style="width:${(value / maximum) * 100}%"></span>
+            </div>
+
+            <span class="weekday-value">${number(value)}</span>
+          </div>
+        `)
+        .join("");
+    }
+
+    /* ============================================================
+       PROFILE
+    ============================================================ */
+
+    function renderProfile(profile) {
+      state.profile = profile;
+      if (!profile) return;
+
+      el.profileName.textContent =
+        profile.name || profile.login || "GitHub user";
+
+      el.profileLogin.textContent = profile.login
+        ? `@${profile.login}`
+        : "";
+
+      el.profileBio.textContent =
+        profile.bio || "No public bio.";
+
+      el.followers.textContent = number(profile.followers);
+      el.repos.textContent = number(profile.public_repos);
+      el.stars.textContent = number(profile.total_stars || 0);
+
+      if (profile.avatar_url) {
+        el.avatar.src = profile.avatar_url;
+        el.avatar.alt = `${profile.login || "User"} avatar`;
+        el.avatar.hidden = false;
+        el.fallbackAvatar.style.display = "none";
+      }
+    }
+
+    /* ============================================================
+       HTTP
+    ============================================================ */
+
+    async function request(url, options = {}) {
+      const controller = new AbortController();
+
+      const timer = setTimeout(
+        () => controller.abort(),
+        CONFIG.timeout
+      );
+
+      const isGithub = url.startsWith(CONFIG.githubApi);
+
+      const headers = {
+        Accept: isGithub
+          ? "application/vnd.github+json"
+          : "application/json",
+        ...(options.headers || {})
+      };
+
+      // Never leak the token to third-party endpoints.
+      if (state.token && isGithub) {
+        headers.Authorization = `Bearer ${state.token}`;
+      }
+
+      try {
+        return await fetch(url, {
+          ...options,
+          headers,
+          signal: controller.signal
+        });
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    async function ensureOk(response, label) {
+      if (response.ok) return response;
+
+      const status = response.status;
+
+      if (status === 401) {
+        throw new Error(
+          "GitHub rejected the access token (401). Check or clear it."
+        );
+      }
+
+      if (status === 404) {
+        throw new Error(`${label} not found (404).`);
+      }
+
+      if (status === 403 || status === 429) {
+        const remaining = response.headers.get("x-ratelimit-remaining");
+
+        if (remaining === "0") {
+          const reset = Number(
+            response.headers.get("x-ratelimit-reset") || 0
+          );
+
+          const time = reset
+            ? new Date(reset * 1000).toLocaleTimeString()
+            : "shortly";
+
+          throw new Error(
+            `GitHub API rate limit reached. Resets around ${time}. ` +
+            `Add an access token to raise the limit.`
+          );
+        }
+
+        throw new Error(`${label} request was blocked (${status}).`);
+      }
+
+      throw new Error(`${label} request failed (${status}).`);
+    }
+
+    async function fetchOptional(url, label) {
+      try {
+        const response = await request(url);
+
+        if (!response.ok) {
+          return { ok: false, status: response.status, data: null, label };
+        }
+
+        return { ok: true, status: response.status, data: await response.json(), label };
+      } catch (error) {
+        return {
+          ok: false,
+          status: 0,
+          data: null,
+          label,
+          error
+        };
+      }
+    }
+
+    /* ============================================================
+       GITHUB LOADING
+    ============================================================ */
+
+    async function loadGithub() {
+      const username = el.username.value.trim();
+      const year = Number(el.year.value);
+      const requestId = ++state.requestId;
+
+      if (!validUsername(username)) {
+        status("Enter a valid GitHub username.", "error");
+        el.username.focus();
+        return;
+      }
+
+      if (!validYear(year)) {
+        status(
+          `Choose a year between ${CONFIG.minYear} and ${CONFIG.maxYear}.`,
+          "error"
+        );
+        el.year.focus();
+        return;
+      }
+
+      state.username = username;
+      state.year = year;
+      savePreferences();
+
+      state.calendar = emptyCalendar(year);
+      state.previousYearTotal = null;
+      state.activity = [];
+      state.commitEvents = [];
+      state.repositories = [];
+      state.timeline = [];
+      state.releases = [];
+      state.releasesLoadedFor = "";
+      state.profile = null;
+
+      setSource("github");
+      setLoading(true);
+      status(`Loading @${username}…`, "success");
+
+      try {
+        const profileResponse = await request(
+          `${CONFIG.githubApi}/users/${encodeURIComponent(username)}`
+        );
+
+        await ensureOk(profileResponse, "GitHub profile");
+
+        const profile = await profileResponse.json();
+
+        if (requestId !== state.requestId) return;
+
+        const [contribRes, previousRes, repoRes, eventRes] =
+          await Promise.all([
+            fetchOptional(
+              `${CONFIG.contributionApi}${encodeURIComponent(username)}?y=${year}`,
+              "contributions"
+            ),
+
+            fetchOptional(
+              `${CONFIG.contributionApi}${encodeURIComponent(username)}?y=${year - 1}`,
+              "previous year"
+            ),
+
+            fetchOptional(
+              `${CONFIG.githubApi}/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`,
+              "repositories"
+            ),
+
+            fetchOptional(
+              `${CONFIG.githubApi}/users/${encodeURIComponent(username)}/events/public?per_page=100`,
+              "events"
+            )
+          ]);
+
+        if (requestId !== state.requestId) return;
+
+        /* ---- Contributions ------------------------------------ */
+
+        const contributionData = contribRes.ok ? contribRes.data : null;
+
+        if (
+          contributionData &&
+          Array.isArray(contributionData.contributions)
+        ) {
+          for (const item of contributionData.contributions) {
+            if (
+              item &&
+              typeof item.date === "string" &&
+              item.date.startsWith(`${year}-`)
+            ) {
+              state.calendar.set(
+                item.date,
+                Math.max(0, Number(item.count) || 0)
+              );
+            }
+          }
+        }
+
+        /* ---- Previous year ------------------------------------ */
+
+        if (
+          previousRes.ok &&
+          previousRes.data &&
+          Array.isArray(previousRes.data.contributions)
+        ) {
+          let sum = 0;
+
+          for (const item of previousRes.data.contributions) {
+            sum += Math.max(0, Number(item?.count) || 0);
+          }
+
+          state.previousYearTotal = sum;
+        }
+
+        /* ---- Repositories ------------------------------------- */
+
+        state.repositories =
+          repoRes.ok && Array.isArray(repoRes.data)
+            ? repoRes.data
+            : [];
+
+        /* ---- Events ------------------------------------------- */
+
+        const parsed = parseGithubEvents(
+          eventRes.ok ? eventRes.data : [],
+          year
+        );
+
+        state.activity = parsed.activity;
+        state.commitEvents = parsed.commits;
+
+        /* ---- Render ------------------------------------------- */
+
+        profile.total_stars = state.repositories.reduce(
+          (sum, repo) => sum + Number(repo.stargazers_count || 0),
+          0
+        );
+
+        renderProfile(profile);
+        renderRepositories();
+        renderActivity();
+        renderTimeline();
+        renderCalendar();
+        renderGitStats();
+        renderCommitTypes();
+        populateActivityTypes();
+        populateRepoLanguages();
+        renderIntelligence();
+        renderPortfolioIntelligence();
+        updateLabels();
+
+        /* ---- Status ------------------------------------------- */
+
+        const warnings = [];
+        if (!contribRes.ok) warnings.push("contribution calendar");
+        if (!repoRes.ok) warnings.push("repositories");
+        if (!eventRes.ok) warnings.push("activity feed");
+
+        if (warnings.length) {
+          status(
+            `Loaded @${username} for ${year}, but could not fetch: ` +
+            `${warnings.join(", ")}.`,
+            "warning"
+          );
+        } else {
+          status(
+            `Loaded ${number(totalCalendar())} contributions and ` +
+            `${number(state.repositories.length)} repositories for ` +
+            `@${username} in ${year}.`,
+            "success"
+          );        }
+
+        // Releases load in the background; failure is non-fatal.
+        loadReleases(true).catch(() => {});
+
+      } catch (error) {
+        if (requestId !== state.requestId) return;
+
+        state.calendar = emptyCalendar(state.year);
+
+        renderCalendar();
+        renderGitStats();
+        renderCommitTypes();
+        updateLabels();
+
+        status(
+          error?.name === "AbortError"
+            ? "Request timed out. GitHub may be slow or unreachable."
+            : (error?.message || "Unable to load GitHub data."),
+          "error"
+        );
+      } finally {
+        if (requestId === state.requestId) setLoading(false);
+      }
+    }
+
+    function setLoading(loading) {
+      el.loadButton.disabled = loading;
+
+      if (loading) {
+        el.loadButton.innerHTML =
+          `<i data-lucide="loader-circle" class="spinner"></i>Loading…`;
+      } else {
+        el.loadButton.innerHTML =
+          `<i data-lucide="refresh-cw"></i>Load profile`;
+      }
+
+      refreshIcons();
+    }
+
+    /* ============================================================
+       EVENT PARSING
+    ============================================================ */
+
+    function parseGithubEvents(events, year) {
+      const activity = [];
+      const commits = [];
+
+      if (!Array.isArray(events)) {
+        return { activity, commits };
+      }
+
+      for (const event of events) {
+        if (!event || typeof event !== "object") continue;
+
+        const date = typeof event.created_at === "string"
+          ? event.created_at.slice(0, 10)
+          : "";
+
+        if (!date) continue;
+        if (year && !date.startsWith(`${year}-`)) continue;
+
+        const repo = event.repo?.name || "";
+        const payload = event.payload || {};
+
+        switch (event.type) {
+          case "PushEvent": {
+            const list = Array.isArray(payload.commits)
+              ? payload.commits
+              : [];
+
+            if (!list.length) {
+              activity.push({
+                date,
+                type: "Push",
+                message: `Pushed ${payload.size || 1} commit(s)`,
+                repo
+              });
+            }
+
+            for (const commit of list) {
+              const message =
+                typeof commit?.message === "string"
+                  ? commit.message.split("\n")[0].trim() || "Commit"
+                  : "Commit";
+
+              activity.push({ date, type: "Push", message, repo });
+              commits.push({ date, message });
+            }
+
+            break;
+          }
+
+          case "CreateEvent":
+            activity.push({
+              date,
+              type: "Create",
+              message:
+                `Created ${payload.ref_type || "ref"} ` +
+                `${payload.ref || ""}`.trim(),
+              repo
+            });
+            break;
+
+          case "DeleteEvent":
+            activity.push({
+              date,
+              type: "Delete",
+              message:
+                `Deleted ${payload.ref_type || "ref"} ` +
+                `${payload.ref || ""}`.trim(),
+              repo
+            });
+            break;
+
+          case "PullRequestEvent":
+            activity.push({
+              date,
+              type: "Pull request",
+              message:
+                `${payload.action || "updated"} ` +
+                `#${payload.number ?? ""} ` +
+                `${payload.pull_request?.title || ""}`.trim(),
+              repo
+            });
+            break;
+
+          case "PullRequestReviewEvent":
+            activity.push({
+              date,
+              type: "Review",
+              message:
+                `${payload.action || "reviewed"} ` +
+                `#${payload.pull_request?.number ?? ""}`.trim(),
+              repo
+            });
+            break;
+
+          case "IssuesEvent":
+            activity.push({
+              date,
+              type: "Issue",
+              message:
+                `${payload.action || "updated"} ` +
+                `#${payload.issue?.number ?? ""} ` +
+                `${payload.issue?.title || ""}`.trim(),
+              repo
+            });
+            break;
+
+          case "IssueCommentEvent":
+            activity.push({
+              date,
+              type: "Comment",
+              message:
+                `commented on #${payload.issue?.number ?? ""}`.trim(),
+              repo
+            });
+            break;
+
+          case "WatchEvent":
+            activity.push({
+              date,
+              type: "Star",
+              message: "Starred repository",
+              repo
+            });
+            break;
+
+          case "ForkEvent":
+            activity.push({
+              date,
+              type: "Fork",
+              message: "Forked repository",
+              repo
+            });
+            break;
+
+          case "ReleaseEvent":
+            activity.push({
+              date,
+              type: "Release",
+              message:
+                `${payload.action || "published"} ` +
+                `${payload.release?.tag_name || ""}`.trim(),
+              repo
+            });
+            break;
+
+          case "PublicEvent":
+            activity.push({
+              date,
+              type: "Public",
+              message: "Made repository public",
+              repo
+            });
+            break;
+
+          default:
+            break;
+        }
+      }
+
+      activity.sort((a, b) => b.date.localeCompare(a.date));
+
+      return {
+        activity: activity.slice(0, 200),
+        commits
+      };
+    }
+
+    /* ============================================================
+       INTELLIGENCE
+    ============================================================ */
+
+    function activeDaysForMap(map) {
+      return [...map.values()].filter((value) => value > 0).length;
+    }
+
+    function longestStreakForMap(map) {
+      let best = 0;
+      let running = 0;
+      const dates = [...map.keys()].sort();
+      let previous = null;
+
+      for (const date of dates) {
+        if ((map.get(date) || 0) <= 0) {
+          running = 0;
+          previous = date;
+          continue;
+        }
+
+        if (previous && dateDiffDays(previous, date) === 1) {
+          running += 1;
+        } else {
+          running = 1;
+        }
+
+        best = Math.max(best, running);
+        previous = date;
+      }
+
+      return best;
+    }
+
+    function dateDiffDays(a, b) {
+      const first = parseKey(a);
+      const second = parseKey(b);
+      if (!first || !second) return Infinity;
+      return Math.round((second - first) / 86400000);
+    }
+
+    function repoAgeDays(repo) {
+      const source = repo?.pushed_at || repo?.updated_at || repo?.created_at;
+      if (!source) return Infinity;
+      const time = new Date(source).getTime();
+      if (!Number.isFinite(time)) return Infinity;
+      return Math.max(0, Math.floor((Date.now() - time) / 86400000));
+    }
+
+    function renderIntelligence() {
+      const commits = currentCommits();
+      const activeDays = activeDaysForMap(state.calendar);
+      const total = totalCalendar();
+      const periodDays = Math.max(1, state.calendar.size);
+      const consistency = Math.round((activeDays / periodDays) * 100);
+      const releases = state.releases.length;
+      const prEvents = state.activity.filter((item) => item.type === "Pull request").length;
+      const issueEvents = state.activity.filter((item) => item.type === "Issue").length;
+
+      const repoAges = state.repositories.map(repoAgeDays).filter(Number.isFinite);
+      const staleRepos = state.repositories.filter((repo) => !repo.archived && repoAgeDays(repo) >= 90);
+      const archived = state.repositories.filter((repo) => repo.archived);
+
+      const sortedDays = [...state.calendar.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+      const split = Math.max(1, Math.floor(sortedDays.length / 2));
+      const firstHalf = sortedDays.slice(0, split).reduce((sum, [, value]) => sum + value, 0);
+      const secondHalf = sortedDays.slice(split).reduce((sum, [, value]) => sum + value, 0);
+      const momentum = firstHalf === 0
+        ? (secondHalf > 0 ? 100 : 0)
+        : Math.round(((secondHalf - firstHalf) / firstHalf) * 100);
+
+      const shipping = Math.min(100, Math.round(
+        Math.min(1, (prEvents + releases * 2) / Math.max(1, commits.length || total || 1)) * 100 +
+        Math.min(50, releases * 8)
+      ));
+      const maintenance = Math.min(100, Math.round(
+        staleRepos.length * 12 + archived.length * 4 + Math.min(30, repoAges.reduce((sum, age) => sum + Math.min(age, 30), 0) / Math.max(1, repoAges.length))
+      ));
+
+      el.intelMomentum.textContent = `${momentum >= 0 ? "+" : ""}${momentum}%`;
+      el.intelMomentumDetail.textContent = `${number(firstHalf)} → ${number(secondHalf)} contributions across the selected period.`;
+      el.intelShipping.textContent = `${shipping}/100`;
+      el.intelShippingDetail.textContent = `${number(prEvents)} PR events · ${number(releases)} releases · ${number(issueEvents)} issue events.`;
+      el.intelConsistency.textContent = `${consistency}%`;
+      el.intelConsistencyDetail.textContent = `${number(activeDays)} active days · longest streak ${number(longestStreakForMap(state.calendar))}.`;
+      el.intelMaintenance.textContent = `${maintenance}/100`;
+      el.intelMaintenanceDetail.textContent = `${number(staleRepos.length)} stale repos · ${number(archived.length)} archived.`;
+
+      const overall = Math.max(0, Math.min(100, Math.round((Math.max(0, momentum + 100) / 2 + shipping + consistency + (100 - maintenance)) / 4)));
+      el.intelHealth.textContent = overall >= 75 ? "Healthy" : overall >= 50 ? "Needs attention" : "Low signal";
+
+      const changes = [];
+      const recent = [...state.activity].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
+      for (const item of recent) changes.push(`${item.type}: ${item.message}`);
+      if (!changes.length && state.repositories.length) changes.push(`${state.repositories.length} repositories loaded.`);
+      if (!changes.length) changes.push("Load GitHub data to build development intelligence.");
+
+      el.intelChanges.replaceChildren();
+      for (const text of changes) {
+        const row = document.createElement("div");
+        row.className = "intel-row";
+        const strong = document.createElement("strong");
+        strong.textContent = text;
+        const span = document.createElement("span");
+        span.textContent = "event";
+        row.append(strong, span);
+        el.intelChanges.appendChild(row);
+      }
+
+      const radar = [];
+      staleRepos.slice(0, 5).forEach((repo) => radar.push(`${repo.name}: ${repoAgeDays(repo)}d since update`));
+      if (archived.length) radar.push(`${archived.length} archived repositories`);
+      if (!radar.length) radar.push("No obvious maintenance hotspots in loaded repository metadata.");
+
+      el.intelRadar.replaceChildren();
+      for (const text of radar) {
+        const row = document.createElement("div");
+        row.className = "intel-row";
+        const strong = document.createElement("strong");
+        strong.textContent = text;
+        const span = document.createElement("span");
+        span.textContent = "radar";
+        row.append(strong, span);
+        el.intelRadar.appendChild(row);
+      }
+
+      state.analytics.lastCalculated = Date.now();
+    }
+
+    function populateActivityTypes() {
+      const current = state.filters.activityType;
+      const types = [...new Set(state.activity.map((item) => item.type).filter(Boolean))].sort();
+      el.activityType.replaceChildren();
+      const all = document.createElement("option");
+      all.value = "";
+      all.textContent = "All types";
+      el.activityType.appendChild(all);
+      for (const type of types) {
+        const option = document.createElement("option");
+        option.value = type;
+        option.textContent = type;
+        el.activityType.appendChild(option);
+      }
+      el.activityType.value = types.includes(current) ? current : "";
+      state.filters.activityType = el.activityType.value;
+    }
+
+    function populateRepoLanguages() {
+      const current = state.filters.repoLanguage;
+      const languages = [...new Set(state.repositories.map((repo) => repo.language).filter(Boolean))].sort();
+      el.repoLanguage.replaceChildren();
+      const all = document.createElement("option");
+      all.value = "";
+      all.textContent = "All languages";
+      el.repoLanguage.appendChild(all);
+      for (const language of languages) {
+        const option = document.createElement("option");
+        option.value = language;
+        option.textContent = language;
+        el.repoLanguage.appendChild(option);
+      }
+      el.repoLanguage.value = languages.includes(current) ? current : "";
+      state.filters.repoLanguage = el.repoLanguage.value;
+    }
+
+    /* ============================================================
+       REPOSITORIES
+    ============================================================ */
+
+    function renderRepositories() {
+      el.repoCount.textContent = number(state.repositories.length);
+      el.repoTable.replaceChildren();
+
+      if (!state.repositories.length) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 5;
+        cell.className = "empty";
+        cell.textContent = "No repositories available.";
+
+        row.appendChild(cell);
+        el.repoTable.appendChild(row);
+        return;
+      }
+
+      const search = state.filters.repoSearch.toLowerCase();
+      const languageFilter = state.filters.repoLanguage;
+      const filtered = state.repositories.filter((repo) => {
+        const haystack = `${repo.name || ""} ${repo.full_name || ""} ${repo.description || ""}`.toLowerCase();
+        return (!search || haystack.includes(search)) && (!languageFilter || repo.language === languageFilter);
+      });
+
+      const sort = state.filters.repoSort;
+      filtered.sort((a, b) => {
+        if (sort === "name") return String(a.name || "").localeCompare(String(b.name || ""));
+        if (sort === "stars") return Number(b.stargazers_count || 0) - Number(a.stargazers_count || 0);
+        if (sort === "forks") return Number(b.forks_count || 0) - Number(a.forks_count || 0);
+        if (sort === "issues") return Number(b.open_issues_count || 0) - Number(a.open_issues_count || 0);
+        return String(b.updated_at || b.pushed_at || "").localeCompare(String(a.updated_at || a.pushed_at || ""));
+      });
+
+      if (!filtered.length) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 5;
+        cell.className = "empty";
+        cell.textContent = "No repositories match the current filters.";
+        row.appendChild(cell);
+        el.repoTable.appendChild(row);
+        return;
+      }
+
+      for (const repo of filtered.slice(0, 100)) {
+        const row = document.createElement("tr");
+
+        const name = document.createElement("td");
+        name.className = "repo-name";
+
+        const href = safeHref(repo.html_url);
+
+        if (href) {
+          const link = document.createElement("a");
+          link.href = href;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = repo.name || "Unnamed";
+          name.appendChild(link);
+        } else {
+          name.textContent = repo.name || "Unnamed";
+        }
+
+        const language = document.createElement("td");
+        language.innerHTML =
+          `<span class="repo-lang">` +
+          `<span class="lang-dot"></span>` +
+          `${escapeHtml(repo.language || "Unknown")}` +
+          `</span>`;
+
+        const stars = document.createElement("td");
+        stars.textContent = number(repo.stargazers_count);
+
+        const forks = document.createElement("td");
+        forks.textContent = number(repo.forks_count);
+
+        const updated = document.createElement("td");
+        updated.textContent = repo.updated_at
+          ? new Date(repo.updated_at).toLocaleDateString()
+          : "—";
+
+        row.append(name, language, stars, forks, updated);
+        el.repoTable.appendChild(row);
+      }
+    }
+
+    /* ============================================================
+       ACTIVITY
+    ============================================================ */
+
+    function renderActivity() {
+      el.feedCount.textContent = `${state.activity.length} items`;
+      el.activityFeed.replaceChildren();
+
+      if (!state.activity.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent =
+          "No recent public activity available for this period.";
+        el.activityFeed.appendChild(empty);
+        return;
+      }
+
+      const search = state.filters.activitySearch.toLowerCase();
+      const typeFilter = state.filters.activityType;
+      const filtered = state.activity.filter((item) => {
+        const haystack = `${item.message || ""} ${item.repo || ""} ${item.type || ""}`.toLowerCase();
+        return (!search || haystack.includes(search)) && (!typeFilter || item.type === typeFilter);
+      });
+
+      filtered.sort((a, b) => {
+        const direction = state.filters.activitySort === "oldest" ? 1 : -1;
+        return direction * String(a.date || "").localeCompare(String(b.date || ""));
+      });
+
+      if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No activity matches the current filters.";
+        el.activityFeed.appendChild(empty);
+        return;
+      }
+
+      for (const item of filtered) {
+        const row = document.createElement("article");
+        row.className = "feed-row";
+
+        const message = document.createElement("div");
+        message.className = "feed-message";
+        message.textContent = item.message;
+        message.title = `${item.type || "Activity"} · ${item.message}`;
+
+        const meta = document.createElement("div");
+        meta.className = "feed-meta";
+
+        const date = document.createElement("span");
+        date.textContent = item.date;
+        meta.appendChild(date);
+
+        if (item.repo) {
+          const repo = document.createElement("span");
+          repo.className = "repo-link";
+          repo.textContent = item.repo;
+          meta.appendChild(repo);
+        }
+
+        row.append(message, meta);
+        el.activityFeed.appendChild(row);
+      }
+    }
+
+    /* ============================================================
+       TIMELINE
+    ============================================================ */
+
+    function buildTimeline() {
+      const items = [];
+
+      const push = (date, title, description) => {
+        if (!date) return;
+
+        const iso = String(date).slice(0, 10);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+
+        items.push({ date: iso, title, description: description || "" });
+      };
+
+      if (state.profile?.created_at) {
+        push(
+          state.profile.created_at,
+          "GitHub account created",
+          `@${state.profile.login || ""}`
+        );
+      }
+
+      const recentRepos = [...state.repositories]
+        .sort((a, b) =>
+          String(b.created_at || "").localeCompare(String(a.created_at || ""))
+        )
+        .slice(0, 8);
+
+      for (const repo of recentRepos) {
+        push(
+          repo.created_at,
+          "Repository created",
+          repo.full_name || repo.name || ""
+        );
+      }
+
+      for (const release of state.releases) {
+        push(
+          release.date,
+          `Release ${release.tag || release.name || ""}`.trim(),
+          release.repo || ""
+        );
+      }
+
+      for (const item of state.activity.slice(0, 25)) {
+        push(
+          item.date,
+          item.type || "Activity",
+          `${item.repo ? item.repo + " · " : ""}${item.message}`
+        );
+      }
+
+      for (const commit of state.localCommits.slice(0, 25)) {
+        push(commit.date, "Local commit", commit.message);
+      }
+
+      const seen = new Set();
+
+      return items
+        .filter((item) => {
+          const id = `${item.date}|${item.title}|${item.description}`;
+          if (seen.has(id)) return false;
+          seen.add(id);
+          return true;
+        })
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 50);
+    }
+
+    function renderTimeline() {
+      const events = buildTimeline();
+
+      el.timelineCount.textContent = events.length
+        ? `${events.length} events`
+        : "recent events";
+
+      el.timeline.replaceChildren();
+
+      if (!events.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent =
+          "No timeline data yet. Load a GitHub profile or paste a git log.";
+        el.timeline.appendChild(empty);
+        return;
+      }
+
+      for (const event of events) {
+        const item = document.createElement("div");
+        item.className = "timeline-item";
+
+        item.innerHTML =
+          `<div class="timeline-date">${escapeHtml(event.date)}</div>` +
+          `<div class="timeline-line"></div>` +
+          `<div class="timeline-content">` +
+            `<div class="timeline-title">${escapeHtml(event.title)}</div>` +
+            `<div class="timeline-description">${escapeHtml(event.description)}</div>` +
+          `</div>`;
+
+        el.timeline.appendChild(item);
+      }
+    }
+
+    /* ============================================================
+       GIT LOG
+    ============================================================ */
+
+    function processGitLog() {
+      const raw = el.gitLog.value.trim();
+      const year = Number(el.year.value);
+
+      if (!raw) {
+        status("Paste a Git log first.", "error");
+        el.gitLog.focus();
+        return;
+      }
+
+      if (!validYear(year)) {
+        status("Choose a valid year first.", "error");
+        el.year.focus();
+        return;
+      }
+
+      state.source = "local";
+      state.year = year;
+      state.calendar = emptyCalendar(year);
+      state.localCommits = [];
+      state.previousYearTotal = null;
+      state.releases = [];
+      state.releasesLoadedFor = "";
+
+      const lines = raw.split(/\r?\n/);
+      let parsed = 0;
+
+      for (const line of lines) {
+        const separator = line.indexOf("|");
+        if (separator === -1) continue;
+
+        const date = line.slice(0, separator).trim();
+        const message = line.slice(separator + 1).trim() || "Commit";
+
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;
+        if (!date.startsWith(`${year}-`)) continue;
+        if (!state.calendar.has(date)) continue;
+
+        state.calendar.set(date, state.calendar.get(date) + 1);
+        state.localCommits.push({ date, message });
+        parsed++;
+      }
+
+      renderCalendar();
+      renderGitStats();
+      renderCommitTypes();
+      renderTimeline();
+      populateActivityTypes();
+      populateRepoLanguages();
+      renderIntelligence();
+      renderPortfolioIntelligence();
+      updateLabels();
+
+      status(
+        parsed
+          ? `Processed ${number(parsed)} commits for ${year}.`
+          : `No commits found for ${year}. Check the date range of your log.`,
+        parsed ? "success" : "warning"
+      );
+    }
+
+    /* ============================================================
+       GIT ANALYTICS
+    ============================================================ */
+
+    function currentCommits() {
+      return state.source === "local"
+        ? state.localCommits
+        : state.commitEvents;
+    }
+
+    function commitCalendar() {
+      const map = new Map();
+
+      for (const commit of currentCommits()) {
+        if (!commit || !commit.date) continue;
+        map.set(commit.date, (map.get(commit.date) || 0) + 1);
+      }
+
+      return map;
+    }
+
+    function renderGitStats() {
+      const commits = currentCommits();
+      const map = commitCalendar();
+
+      const active = activeDaysForMap(state.calendar);
+      const best = Math.max(0, ...map.values());
+      const longest = longestStreakForMap(state.calendar);
+
+      el.gitCommits.textContent = number(commits.length);
+      el.gitActiveDays.textContent = number(active);
+      el.gitBestDay.textContent = number(best);
+      el.gitStreak.textContent = number(longest);
+    }
+
+    function renderCommitTypes() {
+      const commits = currentCommits();
+      const types = {};
+
+      for (const commit of commits) {
+        const match = /^([a-z]+)(?:\(.+?\))?!?:/i.exec(
+          commit.message || ""
+        );
+
+        const type = match ? match[1].toLowerCase() : "other";
+
+        types[type] = (types[type] || 0) + 1;
+      }
+
+      const entries = Object.entries(types).sort((a, b) => {
+        if (a[0] === "other") return 1;
+        if (b[0] === "other") return -1;
+        return b[1] - a[1];
+      });
+
+      if (!entries.length) {
+        el.commitTypes.innerHTML =
+          `<div class="empty">No commit data available.</div>`;
+        return;
+      }
+
+      const maximum = entries[0][1];
+
+      el.commitTypes.innerHTML = entries
+        .slice(0, 12)
+        .map(([type, value]) => `
+          <div class="weekday-row">
+            <span class="weekday-name" title="${escapeHtml(type)}">
+              ${escapeHtml(type)}
+            </span>
+
+            <div class="progress">
+              <span style="width:${(value / maximum) * 100}%"></span>
+            </div>
+
+            <span class="weekday-value">${number(value)}</span>
+          </div>
+        `)
+        .join("");
+    }
+
+    /* ============================================================
+       COMPARISON
+    ============================================================ */
+
+    function renderComparison() {
+      const previous = state.year - 1;
+
+      el.previousYear.textContent = String(previous);
+      el.currentYear.textContent = String(state.year);
+
+      const current = totalCalendar();
+
+      el.currentTotal.textContent = number(current);
+
+      const prev = state.previousYearTotal;
+
+      if (prev === null || prev === undefined) {
+        el.previousTotal.textContent = "—";
+        el.comparisonDelta.textContent = state.source === "local"
+          ? "not available for local data"
+          : "previous year unavailable";
+        el.comparisonDelta.className = "delta";
+        return;
+      }
+
+      el.previousTotal.textContent = number(prev);
+
+      if (prev === 0 && current === 0) {
+        el.comparisonDelta.textContent = "no activity in either year";
+        el.comparisonDelta.className = "delta";
+        return;
+      }
+
+      if (prev === 0) {
+        el.comparisonDelta.textContent = "no baseline last year";
+        el.comparisonDelta.className = "delta";
+        return;
+      }
+
+      const percent = Math.round(((current - prev) / prev) * 100);
+      const sign = percent > 0 ? "+" : "";
+
+      el.comparisonDelta.textContent = `${sign}${percent}% vs ${previous}`;
+      el.comparisonDelta.className = percent < 0 ? "delta down" : "delta";
+    }
+
+    /* ============================================================
+       RELEASES
+    ============================================================ */
+
+    async function loadReleases(force = false) {
+      if (!state.repositories.length) {
+        state.releasesLoadedFor = "";
+        renderReleases();
+        return;
+      }
+
+      const cacheKey = state.username || "local";
+
+      if (!force && state.releasesLoadedFor === cacheKey) return;
+
+      state.releasesLoadedFor = cacheKey;
+
+      el.releasesMeta.textContent = "loading…";
+      el.releases.innerHTML =
+        `<div class="empty">Loading releases…</div>`;
+
+      const candidates = [...state.repositories]
+        .filter((repo) => repo && !repo.archived && repo.full_name)
+        .sort((a, b) =>
+          String(b.pushed_at || "").localeCompare(String(a.pushed_at || ""))
+        )
+        .slice(0, CONFIG.maxReleaseRepos);
+
+      const results = [];
+
+      for (const repo of candidates) {
+        try {
+          const response = await request(
+            `${CONFIG.githubApi}/repos/${repo.full_name}/releases?per_page=5`
+          );
+
+          if (!response.ok) continue;
+
+          const releases = await response.json();
+          if (!Array.isArray(releases)) continue;
+
+          for (const release of releases) {
+            results.push({
+              repo: repo.full_name,
+              name: release.name || release.tag_name || "Release",
+              tag: release.tag_name || "",
+              date: release.published_at || release.created_at || "",
+              url: release.html_url || repo.html_url || ""
+            });
+          }
+        } catch {
+          /* Individual repository failures do not break the page. */
+        }
+      }
+
+      results.sort((a, b) =>
+        String(b.date).localeCompare(String(a.date))
+      );
+
+      state.releases = results.slice(0, 40);
+
+      renderReleases();
+      renderTimeline();
+      renderPortfolioIntelligence();
+    }
+
+    function renderReleases() {
+      el.releases.replaceChildren();
+
+      if (!state.repositories.length) {
+        el.releasesMeta.textContent = "GitHub releases";
+        el.releases.innerHTML =
+          `<div class="empty">Load a GitHub profile to inspect repositories.</div>`;
+        return;
+      }
+
+      el.releasesMeta.textContent = state.releases.length
+        ? `${state.releases.length} found`
+        : "none found";
+
+      if (!state.releases.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent =
+          "No public releases found in the most recently updated repositories.";
+        el.releases.appendChild(empty);
+        return;
+      }
+
+      for (const release of state.releases) {
+        const item = document.createElement("div");
+        item.className = "timeline-item";
+
+        const date = release.date
+          ? new Date(release.date).toLocaleDateString()
+          : "—";
+
+        const href = safeHref(release.url);
+
+        const title = href
+          ? `<a class="repo-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(release.name)}</a>`
+          : escapeHtml(release.name);
+
+        item.innerHTML =
+          `<div class="timeline-date">${escapeHtml(date)}</div>` +
+          `<div class="timeline-line"></div>` +
+          `<div class="timeline-content">` +
+            `<div class="timeline-title">${title}</div>` +
+            `<div class="timeline-description">` +
+              `${escapeHtml(release.repo)} · ${escapeHtml(release.tag)}` +
+            `</div>` +
+          `</div>`;
+
+        el.releases.appendChild(item);
+      }
+    }
+
+    /* ============================================================
+       EXPORT
+    ============================================================ */
+
+    function exportJson() {
+      const payload = {
+        application: "Anvil",
+        version: "1.1.0",
+        generatedAt: new Date().toISOString(),
+        source: state.source,
+        username: state.username,
+        year: state.year,
+        profile: state.profile,
+
+        statistics: {
+          total: totalCalendar(),
+          activeDays: [...state.calendar.values()]
+            .filter((value) => value > 0).length,
+          longestStreak: calculateLongestStreak(),
+          bestDay: maxCalendar(),
+          previousYearTotal: state.previousYearTotal,
+          repositoryCount: state.repositories.length,
+          releaseCount: state.releases.length
+        },
+
+        calendar: Object.fromEntries(state.calendar),
+
+        repositories: state.repositories.map((repo) => ({
+          name: repo.name,
+          fullName: repo.full_name,
+          language: repo.language,
+          stars: repo.stargazers_count,
+          forks: repo.forks_count,
+          updatedAt: repo.updated_at
+        })),
+
+        releases: state.releases,
+
+        activity: state.activity.slice(0, 200)
+      };
+
+      download(
+        JSON.stringify(payload, null, 2),
+        `anvil-${state.year}.json`,
+        "application/json"
+      );
+    }
+
+    function exportCsv() {
+      const rows = [["date", "count"]];
+
+      for (const [date, count] of state.calendar.entries()) {
+        rows.push([date, count]);
+      }
+      const csv = rows
+        .map((row) => row.map(escapeCsv).join(","))
+        .join("\n");
+
+      download(
+        csv,
+        `anvil-${state.year}.csv`,
+        "text/csv;charset=utf-8"
+      );
+    }
+
+    function buildReportSummary() {
+      const total = totalCalendar();
+      const active = activeDaysForMap(state.calendar);
+      const streak = longestStreakForMap(state.calendar);
+      const best = maxCalendar();
+      const topRepos = [...state.repositories]
+        .sort((a, b) => Number(b.stargazers_count || 0) - Number(a.stargazers_count || 0))
+        .slice(0, 5);
+
+      return [
+        `# Anvil report · ${state.username ? `@${state.username}` : "Local Git"}`,
+        ``,
+        `- Year: ${state.year}`,
+        `- Contributions: ${total}`,
+        `- Active days: ${active}`,
+        `- Longest streak: ${streak} days`,
+        `- Best day: ${best}`,
+        `- Repositories: ${state.repositories.length}`,
+        `- Releases loaded: ${state.releases.length}`,
+        ``,
+        `## Top repositories`,
+        ...(topRepos.length ? topRepos.map((repo) => `- ${repo.full_name || repo.name}: ${Number(repo.stargazers_count || 0)} stars, ${Number(repo.forks_count || 0)} forks`) : ["- No repositories loaded."]),
+        ``,
+        `Generated by Anvil on ${new Date().toISOString()}.`
+      ].join("\n");
+    }
+
+    function exportMarkdown() {
+      download(buildReportSummary(), `anvil-${state.year}.md`, "text/markdown;charset=utf-8");
+    }
+
+    async function copySummary() {
+      try {
+        await navigator.clipboard.writeText(buildReportSummary());
+        status("Report summary copied to clipboard.", "success");
+      } catch {
+        status("Clipboard access is unavailable. Use Export Markdown instead.", "error");
+      }
+    }
+
+    async function copyShareUrl() {
+      const url = new URL(window.location.href);
+
+      if (state.username) {
+        url.searchParams.set("user", state.username);
+      }
+
+      url.searchParams.set("year", String(state.year));
+
+      try {
+        await navigator.clipboard.writeText(url.toString());
+        status("Share URL copied to clipboard.", "success");
+      } catch {
+        status(
+          "Clipboard access is unavailable. Copy the address bar instead.",
+          "error"
+        );
+      }
+    }
+
+    /* ============================================================
+       URL STATE
+    ============================================================ */
+
+    function loadUrlState() {
+      const params = new URLSearchParams(window.location.search);
+
+      const user = params.get("user");
+      const year = Number(params.get("year"));
+
+      if (user && validUsername(user)) {
+        state.username = user;
+        el.username.value = user;
+      }
+
+      if (validYear(year)) {
+        state.year = year;
+        el.year.value = year;
+      }
+    }
+
+    /* ============================================================
+       DEMO
+    ============================================================ */
+
+    function runDemo() {
+      el.username.value = CONFIG.demoUser;
+      el.year.value = String(new Date().getFullYear());
+      setSource("github");
+      showView("dashboard");
+      loadGithub();
+    }
+
+    /* ============================================================
+       COMMAND PALETTE
+    ============================================================ */
+
+    let lastFocused = null;
+
+    function openCommand() {
+      lastFocused = document.activeElement;
+
+      el.commandModal.hidden = false;
+      document.body.classList.add("modal-open");
+
+      el.commandSearch.value = "";
+      filterCommands();
+
+      requestAnimationFrame(() => el.commandSearch.focus());
+    }
+
+    function closeCommand() {
+      if (el.commandModal.hidden) return;
+
+      el.commandModal.hidden = true;
+      document.body.classList.remove("modal-open");
+
+      if (lastFocused && typeof lastFocused.focus === "function") {
+        lastFocused.focus();
+      }
+    }
+
+    function filterCommands() {
+      const query = el.commandSearch.value.trim().toLowerCase();
+
+      $$(".command").forEach((command) => {
+        command.hidden = !command.textContent
+          .toLowerCase()
+          .includes(query);
+      });
+    }
+
+    function runCommand(command) {
+      if (command === "theme") {
+        toggleTheme();
+        return;
+      }
+
+      if (command === "demo") {
+        runDemo();
+        return;
+      }
+
+      showView(command);
+    }
+
+    /* ============================================================
+       TOOLTIP
+    ============================================================ */
+
+    function tooltipShow(event) {
+      const target = event.currentTarget;
+
+      const count = Number(target.dataset.count);
+      const date = target.dataset.date;
+
+      const noun = state.source === "local" ? "commit" : "contribution";
+
+      el.tooltip.textContent =
+        `${formatDate(date)} · ${number(count)} ${noun}${count === 1 ? "" : "s"}`;
+
+      el.tooltip.classList.add("visible");
+
+      tooltipMove(event);
+    }
+
+    function tooltipMove(event) {
+      const gap = 12;
+      const padding = 10;
+
+      let x = event.clientX + gap;
+      let y = event.clientY + gap;
+
+      const rect = el.tooltip.getBoundingClientRect();
+
+      if (x + rect.width > window.innerWidth - padding) {
+        x = event.clientX - rect.width - gap;
+      }
+
+      if (y + rect.height > window.innerHeight - padding) {
+        y = event.clientY - rect.height - gap;
+      }
+
+      el.tooltip.style.left = `${Math.max(padding, x)}px`;
+      el.tooltip.style.top = `${Math.max(padding, y)}px`;
+    }
+
+    function tooltipHide() {
+      el.tooltip.classList.remove("visible");
+    }
+
+    /* ============================================================
+       EVENTS
+    ============================================================ */
+
+    el.nav.forEach((button) => {
+      button.addEventListener("click", () => {
+        showView(button.dataset.view);
+      });
+    });
+
+    $$('.nav-button[data-action="search"]').forEach((button) => {
+      button.addEventListener("click", openCommand);
+    });
+
+    el.githubTab.addEventListener("click", () => setSource("github"));
+    el.localTab.addEventListener("click", () => setSource("local"));
+
+    el.githubForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      loadGithub();
+    });
+
+    el.demoButton.addEventListener("click", runDemo);
+    el.aboutDemo.addEventListener("click", runDemo);
+
+    el.processGitButton.addEventListener("click", processGitLog);
+
+    el.token.addEventListener("input", () => {
+      state.token = el.token.value.trim();
+      if (state.rememberToken) saveToken();
+      updateLabels();
+    });
+
+    el.rememberToken.addEventListener("change", () => {
+      state.rememberToken = el.rememberToken.checked;
+      saveToken();
+    });
+
+    el.clearToken.addEventListener("click", () => {
+      el.token.value = "";
+      el.rememberToken.checked = false;
+
+      state.token = "";
+      state.rememberToken = false;
+
+      saveToken();
+      updateLabels();
+
+      status("Access token cleared from this browser.", "success");
+    });
+
+    el.themeButton.addEventListener("click", toggleTheme);
+    el.commandButton.addEventListener("click", openCommand);
+    el.closeCommand.addEventListener("click", closeCommand);
+
+    el.commandSearch.addEventListener("input", filterCommands);
+
+    el.commandModal.addEventListener("click", (event) => {
+      if (event.target === el.commandModal) closeCommand();
+    });
+
+    $$(".command").forEach((button) => {
+      button.addEventListener("click", () => {
+        runCommand(button.dataset.command);
+        closeCommand();
+      });
+    });
+
+    el.exportJson.addEventListener("click", exportJson);
+    el.exportCsv.addEventListener("click", exportCsv);
+    el.exportMarkdown.addEventListener("click", exportMarkdown);
+    el.copySummary.addEventListener("click", copySummary);
+    el.copyShare.addEventListener("click", copyShareUrl);
+    el.printReport.addEventListener("click", () => window.print());
+
+    el.activitySearch.addEventListener("input", () => {
+      state.filters.activitySearch = el.activitySearch.value.trim();
+      renderActivity();
+    });
+
+    el.activityType.addEventListener("change", () => {
+      state.filters.activityType = el.activityType.value;
+      renderActivity();
+    });
+
+    el.repoSearch.addEventListener("input", () => {
+      state.filters.repoSearch = el.repoSearch.value.trim();
+      renderRepositories();
+    });
+
+    el.repoLanguage.addEventListener("change", () => {
+      state.filters.repoLanguage = el.repoLanguage.value;
+      renderRepositories();
+    });
+
+    el.repoSort.addEventListener("change", () => {
+      state.filters.repoSort = el.repoSort.value;
+      renderRepositories();
+    });
+
+    el.activitySort.addEventListener("change", () => {
+      state.filters.activitySort = el.activitySort.value;
+      renderActivity();
+    });
+
+    el.year.addEventListener("change", () => {
+      const year = Number(el.year.value);
+
+      if (!validYear(year)) {
+        el.year.value = String(state.year);
+        status(
+          `Choose a year between ${CONFIG.minYear} and ${CONFIG.maxYear}.`,
+          "error"
+        );
+        return;
+      }
+
+      if (year === state.year) return;
+
+      state.year = year;
+      savePreferences();
+
+      if (state.source === "local" && el.gitLog.value.trim()) {
+        processGitLog();
+        return;
+      }
+
+      if (state.source === "github" && state.username) {
+        loadGithub();
+        return;
+      }
+
+      state.calendar = emptyCalendar(year);
+      state.previousYearTotal = null;
+      renderCalendar();
+      renderGitStats();
+      renderCommitTypes();
+      renderIntelligence();
+    });
+
+    window.addEventListener("keydown", (event) => {
+      const tag = document.activeElement?.tagName;
+
+      const typing =
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        document.activeElement?.isContentEditable;
+
+      if (event.key === "/" && !typing) {
+        event.preventDefault();
+        openCommand();
+        return;
+      }
+
+      if (
+        (event.key === "t" || event.key === "T") &&
+        !typing &&
+        !event.metaKey &&
+        !event.ctrlKey &&
+        !event.altKey
+      ) {
+        toggleTheme();
+        return;
+      }
+
+      if (event.key === "Escape") {
+        closeCommand();
+        tooltipHide();
+      }
+
+      // Simple focus trap for the command palette.
+      if (event.key === "Tab" && !el.commandModal.hidden) {
+        const focusables = [
+          el.commandSearch,
+          el.closeCommand,
+          ...$$(".command").filter((c) => !c.hidden)
+        ];
+
+        if (!focusables.length) return;
+
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    window.addEventListener("resize", tooltipHide, { passive: true });
+
+    /* ============================================================
+       INITIALIZATION
+    ============================================================ */
+
+    function initialize() {
+      state.year = new Date().getFullYear();
+      el.year.value = String(state.year);
+
+      loadPreferences();
+      loadUrlState();
+      loadToken();
+
+      applyTheme();
+      setSource("github");
+
+      state.calendar = emptyCalendar(state.year);
+
+      updateLabels();
+      renderCalendar();
+      renderRepositories();
+      renderActivity();
+      renderTimeline();
+      renderGitStats();
+      renderCommitTypes();
+      populateActivityTypes();
+      populateRepoLanguages();
+      renderIntelligence();
+
+      refreshIcons();
+
+      const params = new URLSearchParams(window.location.search);
+
+      if (params.get("user") && validUsername(params.get("user"))) {
+        loadGithub();
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initialize, { once: true });
+    } else {
+      initialize();
+    }
+
+    // Lucide loads deferred; re-run icon creation once it is ready.
+    window.addEventListener("load", refreshIcons, { once: true });
+  </script>
+
+</body>
+</html>
