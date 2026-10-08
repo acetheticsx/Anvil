@@ -5063,7 +5063,7 @@ git log --pretty=format:"%ad|%s" --date=short'
         );
       });
 
-      $(".view").forEach((section) => {
+      $$(".view").forEach((section) => {
         const active = section.id === "view-" + view;
         section.classList.toggle("hidden", !active);
         section.classList.remove("view-cascade-enter");
