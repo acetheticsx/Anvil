@@ -5577,10 +5577,7 @@ git log --pretty=format:"%ad|%s" --date=short'
     }
     function toggleRail() { state.railExpanded = !state.railExpanded; applyRail(); savePreferences(); }
     function updateRailBadges() {
-      const setBadge = (node, value) => { if (!node) return; const count = Number(value) || 0; node.textContent = count > 99 ? "99+" : count ? String(count) : ""; node.hidden = count === 0; };
-      setBadge(el.navActivityCount, state.activity.length);
-      setBadge(el.navRepoCount, state.repositories.length);
-      setBadge(el.navReleaseCount, state.releases.length);
+      
       if (el.railWorkspaceState) el.railWorkspaceState.textContent = state.source === "github" ? (state.githubAppConnected ? "GitHub connected" : "GitHub data") : "Local Git data";
       if (el.railAccountHint) el.railAccountHint.textContent = state.githubAppConnected ? `@${state.githubAppUser?.login || state.username || "connected"}` : "Not connected";
     }
