@@ -3366,7 +3366,27 @@
       }
     }
 
-  </style>
+  
+
+    /* Anvil Rail v2 */
+    .layout { grid-template-columns: 232px minmax(0, 1fr); gap: 20px; width: min(1440px, 100%); }
+    .sidebar { width: 232px; height: calc(100vh - 32px); min-height: 0; top: 16px; padding: 10px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); overflow: hidden; transition: width .24s cubic-bezier(.2,.8,.2,1); }
+    .brand { width: 100%; height: 48px; min-height: 48px; margin: 0 0 8px; padding: 6px; border: 0; border-bottom: 1px solid var(--border); border-radius: 8px; justify-content: flex-start; }
+    .brand-mark { flex: 0 0 36px; width: 36px; height: 36px; padding: 4px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg-deep); cursor: pointer; }
+    .brand-mark:hover { border-color: var(--accent); background: var(--surface-2); transform: scale(1.03); }
+    .brand-copy { min-width: 0; overflow: hidden; } .brand-name { font-size: .88rem; } .brand-caption { font-size: .61rem; }
+    .rail-version { margin-left: auto; padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; color: var(--subtle); font: 500 .56rem var(--font); }
+    .rail-workspace { display: flex; align-items: center; gap: 9px; min-height: 44px; margin: 2px 0 8px; padding: 7px 8px; border: 1px solid var(--border-muted); border-radius: 8px; background: var(--bg-deep); }
+    .workspace-mark { display: grid; place-items: center; width: 27px; height: 27px; flex: 0 0 27px; border-radius: 7px; background: var(--nav-active-bg); color: var(--accent); } .workspace-mark svg, .workspace-chevron { width: 14px; height: 14px; } .workspace-copy { min-width: 0; display: grid; } .workspace-copy strong { font-size: .66rem; } .workspace-copy small { color: var(--subtle); font-size: .57rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .workspace-chevron { margin-left: auto; color: var(--subtle); }
+    .nav { flex: 1 1 auto; min-height: 0; gap: 2px; padding: 3px 0; overflow-y: auto; } .nav-section { display: flex; align-items: center; height: 24px; min-height: 24px; margin: 7px 4px 2px; padding: 4px 7px; color: var(--subtle); font-size: .58rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; } .nav-section:first-child { margin-top: 1px; }
+    .nav-button, .nav-button.active { width: 100%; min-height: 40px; margin: 0; padding: 8px 9px; justify-content: flex-start; border-radius: 8px; gap: 10px; font-size: .72rem; overflow: hidden; } .nav-button:hover { transform: translateX(1px); } .nav-button.active { background: var(--nav-active-bg); box-shadow: inset 2px 0 0 var(--accent); } .nav-button.active svg { fill: currentColor; color: var(--accent); stroke-width: 2.5; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 20%, transparent)); }
+    .nav-label { max-width: 150px; opacity: 1; transform: none; font-weight: 600; } .nav-shortcut { margin-left: auto; opacity: 1; } .nav-badge { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: auto; padding: 0 5px; border-radius: 999px; background: var(--surface-3); color: var(--muted); font: 600 .56rem var(--font); font-variant-numeric: tabular-nums; } .nav-badge[hidden] { display: none; }
+    .rail-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px 0 6px; border-top: 1px solid var(--border); } .rail-action { display: grid; place-items: center; min-height: 34px; border: 0; border-radius: 7px; background: transparent; color: var(--muted); cursor: pointer; } .rail-action:hover { background: var(--surface-2); color: var(--text); } .rail-action svg { width: 15px; height: 15px; }
+    .sidebar-footer { display: block; padding: 7px 0 0; border-top: 0; } .connection-status { width: 100%; min-height: 46px; display: flex; align-items: center; gap: 9px; padding: 7px 8px; border: 1px solid var(--border-muted); border-radius: 8px; background: var(--bg-deep); color: var(--text); cursor: pointer; text-align: left; } .connection-status:hover { border-color: var(--border); background: var(--surface-2); } .connection-copy { min-width: 0; display: grid; gap: 0; overflow: hidden; } .connection-copy strong, .connection-copy small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .connection-copy strong { font-size: .61rem; } .connection-copy small { color: var(--subtle); font-size: .56rem; } .connection-status > svg { width: 13px; height: 13px; margin-left: auto; color: var(--subtle); }
+    .sidebar[data-expanded="false"] { width: 76px; } .sidebar[data-expanded="false"] .brand { justify-content: center; } .sidebar[data-expanded="false"] .brand-copy, .sidebar[data-expanded="false"] .rail-version, .sidebar[data-expanded="false"] .rail-workspace, .sidebar[data-expanded="false"] .nav-section, .sidebar[data-expanded="false"] .nav-label, .sidebar[data-expanded="false"] .nav-shortcut, .sidebar[data-expanded="false"] .nav-badge, .sidebar[data-expanded="false"] .connection-copy, .sidebar[data-expanded="false"] .connection-status > svg { max-width: 0; opacity: 0; pointer-events: none; overflow: hidden; } .sidebar[data-expanded="false"] .nav-button { width: 52px; margin-inline: auto; justify-content: center; padding: 9px; } .sidebar[data-expanded="false"] .nav-button.active { width: 52px; padding: 9px; justify-content: center; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent); } .sidebar[data-expanded="false"] .nav-button:hover::after { content: attr(data-tooltip); position: absolute; left: calc(100% + 10px); top: 50%; z-index: 1200; transform: translateY(-50%); padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--tooltip-bg); color: var(--tooltip-text); box-shadow: var(--shadow); font-size: .65rem; white-space: nowrap; pointer-events: none; } .sidebar[data-expanded="false"] .rail-actions { grid-template-columns: 1fr; } .sidebar[data-expanded="false"] .rail-action { width: 52px; margin-inline: auto; } .sidebar[data-expanded="false"] .connection-status { justify-content: center; padding: 0; }
+    @media (max-width: 900px) { .layout { display: block; width: 100%; } .sidebar, .sidebar[data-expanded="false"] { position: fixed; z-index: 400; top: auto; bottom: 10px; left: 50%; transform: translateX(-50%); width: min(680px, calc(100vw - 16px)); height: 58px; max-width: calc(100vw - 16px); min-height: 0; flex-direction: row; padding: 5px; border-radius: 16px; } .brand, .rail-workspace, .rail-actions, .sidebar-footer { display: none; } .nav, .sidebar[data-expanded="false"] .nav { flex-direction: row; align-items: stretch; justify-content: flex-start; gap: 3px; padding: 0; overflow-x: auto; overflow-y: hidden; } .nav-section { display: none !important; } .nav-button, .nav-button.active, .sidebar[data-expanded="false"] .nav-button, .sidebar[data-expanded="false"] .nav-button.active { width: auto; min-width: 44px; min-height: 46px; margin: 0; padding: 7px 9px; justify-content: center; box-shadow: none; } .nav-button.active .nav-label, .sidebar[data-expanded="false"] .nav-button.active .nav-label { max-width: 90px; opacity: 1; pointer-events: auto; } .main { padding: 0 0 78px; } .site-footer { padding-left: 0; } }
+
+</style>
 </head>
 
 <body>
@@ -3379,82 +3399,40 @@
            SIDEBAR
       ========================================================= -->
 
-      <aside class="sidebar">
-
+      <aside class="sidebar" id="sidebar" data-expanded="true">
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true">
-            <img src="/icon.svg" alt="" width="27" height="27">
-          </div>
-
-          <div>
-            <div class="brand-name">Anvil</div>
-            <div class="brand-caption">Developer workspace</div>
-          </div>
+          <button class="brand-mark" id="railToggle" type="button" aria-label="Collapse navigation" title="Collapse navigation"><img src="/icon.svg" alt="" width="27" height="27"></button>
+          <div class="brand-copy"><div class="brand-name">Anvil</div><div class="brand-caption">Developer workspace</div></div>
+          <span class="rail-version">1.1</span>
         </div>
-
+        <div class="rail-workspace" aria-label="Current workspace">
+          <span class="workspace-mark"><i data-lucide="layers-3"></i></span>
+          <span class="workspace-copy"><strong>Workspace</strong><small id="railWorkspaceState">GitHub data</small></span>
+          <i class="workspace-chevron" data-lucide="chevrons-up-down"></i>
+        </div>
         <nav class="nav" aria-label="Primary navigation">
-
-          <div class="nav-section">Workspace</div>
-
-          <button class="nav-button active" data-view="dashboard" type="button">
-            <i data-lucide="layout-dashboard"></i>
-            <span class="nav-label">Dashboard</span>
-          </button>
-
-          <button class="nav-button" data-view="activity" type="button">
-            <i data-lucide="activity"></i>
-            <span class="nav-label">Activity</span>
-          </button>
-
-          <button class="nav-button" data-view="repositories" type="button">
-            <i data-lucide="folder-git-2"></i>
-            <span class="nav-label">Repositories</span>
-          </button>
-
-          <button class="nav-button" data-view="timeline" type="button">
-            <i data-lucide="calendar-clock"></i>
-            <span class="nav-label">Timeline</span>
-          </button>
-
-          <div class="nav-section">Development</div>
-
-          <button class="nav-button" data-view="git" type="button">
-            <i data-lucide="git-branch"></i>
-            <span class="nav-label">Git</span>
-          </button>
-
-          <button class="nav-button" data-view="releases" type="button">
-            <i data-lucide="package"></i>
-            <span class="nav-label">Releases</span>
-          </button>
-
-          <button class="nav-button" data-view="reports" type="button">
-            <i data-lucide="file-bar-chart"></i>
-            <span class="nav-label">Reports</span>
-          </button>
-
-          <div class="nav-section">System</div>
-
-          <button class="nav-button" data-action="search" type="button">
-            <i data-lucide="search"></i>
-            <span class="nav-label">Search</span>
-            <span class="nav-shortcut kbd">/</span>
-          </button>
-
-          <button class="nav-button" data-view="about" type="button">
-            <i data-lucide="info"></i>
-            <span class="nav-label">About</span>
-          </button>
-
+          <div class="nav-section">Overview</div>
+          <button class="nav-button active" data-view="dashboard" type="button" aria-current="page" aria-label="Dashboard" data-tooltip="Dashboard"><i data-lucide="layout-dashboard"></i><span class="nav-label">Dashboard</span></button>
+          <button class="nav-button" data-view="activity" type="button" aria-label="Activity" data-tooltip="Activity"><i data-lucide="activity"></i><span class="nav-label">Activity</span><span class="nav-badge" id="navActivityCount" hidden></span></button>
+          <button class="nav-button" data-view="repositories" type="button" aria-label="Repositories" data-tooltip="Repositories"><i data-lucide="folder-git-2"></i><span class="nav-label">Repositories</span><span class="nav-badge" id="navRepoCount" hidden></span></button>
+          <button class="nav-button" data-view="timeline" type="button" aria-label="Timeline" data-tooltip="Timeline"><i data-lucide="calendar-clock"></i><span class="nav-label">Timeline</span></button>
+          <div class="nav-section">Engineering</div>
+          <button class="nav-button" data-view="git" type="button" aria-label="Git" data-tooltip="Git"><i data-lucide="git-branch"></i><span class="nav-label">Git</span></button>
+          <button class="nav-button" data-view="releases" type="button" aria-label="Releases" data-tooltip="Releases"><i data-lucide="package"></i><span class="nav-label">Releases</span><span class="nav-badge" id="navReleaseCount" hidden></span></button>
+          <button class="nav-button" data-view="reports" type="button" aria-label="Reports" data-tooltip="Reports"><i data-lucide="file-bar-chart"></i><span class="nav-label">Reports</span></button>
+          <div class="nav-section">Tools</div>
+          <button class="nav-button" data-action="search" type="button" aria-label="Search" data-tooltip="Search"><i data-lucide="search"></i><span class="nav-label">Search</span><span class="nav-shortcut kbd">/</span></button>
+          <button class="nav-button" data-view="about" type="button" aria-label="About" data-tooltip="About"><i data-lucide="info"></i><span class="nav-label">About</span></button>
         </nav>
-        <div class="sidebar-footer">
-          <div class="connection-status">
-            <span class="status-dot"></span>
-            <span id="connectionText">Local data ready</span>
-          </div>
+        <div class="rail-actions" aria-label="Quick actions">
+          <button class="rail-action" id="railSync" type="button" aria-label="Sync GitHub data" title="Sync GitHub data"><i data-lucide="refresh-cw"></i></button>
+          <button class="rail-action" id="railTheme" type="button" aria-label="Toggle theme" title="Toggle theme"><i data-lucide="sun"></i></button>
+          <button class="rail-action" id="railCommand" type="button" aria-label="Open command palette" title="Command palette"><i data-lucide="command"></i></button>
         </div>
-
-      </aside>
+        <div class="sidebar-footer">
+          <button class="connection-status" id="railAccount" type="button" aria-label="GitHub account status" title="GitHub account status"><span class="status-dot"></span><span class="connection-copy"><strong id="connectionText">Local data ready</strong><small id="railAccountHint">Not connected</small></span><i data-lucide="chevron-right"></i></button>
+        </div>
+      </aside>>
 
       <!-- ========================================================
            MAIN
@@ -4559,6 +4537,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       profile: null,
       currentView: "dashboard",
       theme: "dark",
+      railExpanded: true,
       requestId: 0,
       filters: {
         activitySearch: "",
@@ -4582,6 +4561,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
     const el = {
       nav: $$(".nav-button[data-view]"),
+      sidebar: $("#sidebar"), railToggle: $("#railToggle"), railSync: $("#railSync"), railTheme: $("#railTheme"), railCommand: $("#railCommand"), railAccount: $("#railAccount"), railWorkspaceState: $("#railWorkspaceState"), railAccountHint: $("#railAccountHint"), navActivityCount: $("#navActivityCount"), navRepoCount: $("#navRepoCount"), navReleaseCount: $("#navReleaseCount"),
 
       pageTitle: $("#pageTitle"),
       pageSubtitle: $("#pageSubtitle"),
@@ -4895,7 +4875,8 @@ git log --pretty=format:"%ad|%s" --date=short'
           JSON.stringify({
             username: state.username,
             year: state.year,
-            theme: state.theme
+            theme: state.theme,
+            railExpanded: state.railExpanded
           })
         );
       } catch {
@@ -4923,6 +4904,7 @@ git log --pretty=format:"%ad|%s" --date=short'
         if (saved.theme === "dark" || saved.theme === "light") {
           state.theme = saved.theme;
         }
+        if (typeof saved.railExpanded === "boolean") state.railExpanded = saved.railExpanded;
       } catch {
         /* Ignore malformed preferences. */
       }
@@ -5005,7 +4987,27 @@ git log --pretty=format:"%ad|%s" --date=short'
       typeStatus(message, type);
     }
 
-    /* ============================================================
+    /* =========================================================    /* ============================================================
+       SIDE RAIL
+       ============================================================ */
+    function applyRail() {
+      if (!el.sidebar) return;
+      el.sidebar.dataset.expanded = String(state.railExpanded);
+      const label = state.railExpanded ? "Collapse navigation" : "Expand navigation";
+      el.railToggle?.setAttribute("aria-label", label);
+      el.railToggle?.setAttribute("title", label);
+    }
+    function toggleRail() { state.railExpanded = !state.railExpanded; applyRail(); savePreferences(); }
+    function updateRailBadges() {
+      const setBadge = (node, value) => { if (!node) return; const count = Number(value) || 0; node.textContent = count > 99 ? "99+" : count ? String(count) : ""; node.hidden = count === 0; };
+      setBadge(el.navActivityCount, state.activity.length);
+      setBadge(el.navRepoCount, state.repositories.length);
+      setBadge(el.navReleaseCount, state.releases.length);
+      if (el.railWorkspaceState) el.railWorkspaceState.textContent = state.source === "github" ? (state.githubAppConnected ? "GitHub connected" : "GitHub data") : "Local Git data";
+      if (el.railAccountHint) el.railAccountHint.textContent = state.githubAppConnected ? `@${state.githubAppUser?.login || state.username || "connected"}` : "Not connected";
+    }
+
+===
        NAVIGATION
     ============================================================ */
 
@@ -5057,10 +5059,10 @@ git log --pretty=format:"%ad|%s" --date=short'
       state.currentView = view;
 
       el.nav.forEach((button) => {
-        button.classList.toggle(
-          "active",
-          button.dataset.view === view
-        );
+        const active = button.dataset.view === view;
+        button.classList.toggle("active", active);
+        if (active) button.setAttribute("aria-current", "page");
+        else button.removeAttribute("aria-current");
       });
 
       $$(".view").forEach((section) => {
@@ -5072,6 +5074,8 @@ git log --pretty=format:"%ad|%s" --date=short'
           section.classList.add("view-cascade-enter");
         }
       });
+
+      updateRailBadges();
 
       el.pageTitle.textContent = viewMeta[view][0];
       el.pageSubtitle.textContent = viewMeta[view][1];
@@ -7133,6 +7137,11 @@ git log --pretty=format:"%ad|%s" --date=short'
         showView(button.dataset.view);
       });
     });
+    el.railToggle?.addEventListener("click", toggleRail);
+    el.railSync?.addEventListener("click", () => { refreshGithubApp(); if (state.username && state.source === "github") loadGithub(true); });
+    el.railTheme?.addEventListener("click", toggleTheme);
+    el.railCommand?.addEventListener("click", openCommand);
+    el.railAccount?.addEventListener("click", () => { showView("dashboard"); (document.getElementById("githubConnectedSummary") || document.getElementById("connectGithubApp"))?.scrollIntoView({ behavior: "smooth", block: "start" }); });
 
     $$('.nav-button[data-action="search"]').forEach((button) => {
       button.addEventListener("click", openCommand);
@@ -7374,6 +7383,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       el.year.value = String(state.year);
 
       loadPreferences();
+      applyRail();
       loadUrlState();
       loadToken();
       initializeCookieBanner();
@@ -7398,6 +7408,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       renderGithubAppState();
       renderGithubAppData(null);
       renderConnectedAccountSummary(null);
+      updateRailBadges();
       handleGithubAuthResult();
       refreshGithubApp();
 
