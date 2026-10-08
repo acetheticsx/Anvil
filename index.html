@@ -1349,25 +1349,33 @@
       gap: 8px;
     }
 
-    .about-card {
-      padding: 11px;
-      border: 1px solid var(--border-muted);
-      border-radius: 7px;
-      background: var(--bg-deep);
-    }
-
-    .about-card strong {
-      display: block;
-      font-size: .73rem;
-    }
-
-    .about-card span {
-      color: var(--subtle);
-      font-size: .63rem;
-      line-height: 1.5;
-      display: block;
-      margin-top: 2px;
-    }
+    .about-card { position: relative; padding: 12px; border: 1px solid var(--border-muted); border-radius: 8px; background: var(--bg-deep); }
+    .about-card > svg { width: 16px; height: 16px; margin-bottom: 8px; color: var(--accent); }
+    .about-card strong { display: block; font-size: .73rem; }
+    .about-card span { color: var(--subtle); font-size: .63rem; line-height: 1.55; display: block; margin-top: 3px; }
+    .about-hero { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 14px; align-items: center; padding: 18px; border: 1px solid var(--border); border-radius: 10px; background: linear-gradient(135deg, var(--surface-2), var(--bg-deep)); }
+    .about-hero-mark { display: grid; place-items: center; width: 56px; height: 56px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+    .about-kicker { color: var(--accent); font: 600 .62rem var(--font); letter-spacing: .08em; text-transform: uppercase; }
+    .about-hero h2 { margin-top: 2px; font-size: 1.15rem; letter-spacing: -.025em; }
+    .about-hero p { margin-top: 5px; max-width: 760px; color: var(--muted); font-size: .72rem; line-height: 1.6; }
+    .about-section { display: grid; gap: 9px; }
+    .about-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .about-section-heading > span { font-size: .78rem; font-weight: 650; }
+    .about-section-heading small { color: var(--subtle); font-size: .61rem; }
+    .about-grid-wide { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    .about-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
+    .about-detail-grid > div { padding: 11px; border: 1px solid var(--border-muted); border-radius: 8px; background: var(--bg-deep); }
+    .about-detail-grid strong { font-size: .7rem; }
+    .about-detail-grid p { margin-top: 4px; color: var(--muted); font-size: .64rem; line-height: 1.6; }
+    .about-tech { display: flex; flex-wrap: wrap; gap: 6px; }
+    .about-tech span { padding: 5px 8px; border: 1px solid var(--border-muted); border-radius: 999px; background: var(--bg-deep); color: var(--muted); font-size: .61rem; }
+    .about-note { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 9px; padding: 12px; border: 1px solid var(--ok-border); border-radius: 8px; background: var(--ok-bg); color: var(--ok-text); }
+    .about-note > svg { width: 16px; height: 16px; margin-top: 1px; }
+    .about-note strong { font-size: .7rem; }
+    .about-note p { margin-top: 3px; color: var(--muted); font-size: .64rem; line-height: 1.6; }
+    .about-links { display: flex; flex-wrap: wrap; gap: 8px 14px; padding-top: 2px; }
+    .about-links a { font-size: .65rem; text-decoration: none; }
+    .about-links a:hover { text-decoration: underline; }
 
     .demo-banner {
       display: flex;
@@ -4161,97 +4169,53 @@ git log --pretty=format:"%ad|%s" --date=short'
 
                 <div class="about">
 
-                  <p class="about-lead">
-                    Anvil is a single-file developer activity dashboard,
-                    coded by <strong>@aceyash-dev</strong> as a demo.
-                  </p>
-
-                  <p class="about-text">
-                    Anvil is a lightweight client with optional server-side
-                    GitHub App authentication. Public GitHub data and the
-                    <code>github-contributions-api</code> are fetched as needed.
-                    GitHub App sessions use secure server-side cookies; an
-                    optional personal access token is kept only for the current
-                    browser session and is never persisted to local storage.
-                  </p>
-
-                  <div class="about-grid">
-
-                    <div class="about-card">
-                      <strong>GitHub mode</strong>
-                      <span>
-                        Profile, contributions, repositories, public events
-                        and releases.
-                      </span>
-                    </div>
-
-                    <div class="about-card">
-                      <strong>Local Git mode</strong>
-                      <span>
-                        Paste <code>git log</code> output and analyse it
-                        completely offline.
-                      </span>
-                    </div>
-
-                    <div class="about-card">
-                      <strong>Access token</strong>
-                      <span>
-                        Optional. Raises the GitHub API rate limit for browser-side
-                        requests. GitHub App access is handled separately.
-                      </span>
-                    </div>
-
-                    <div class="about-card">
-                      <strong>Exports</strong>
-                      <span>
-                        JSON, CSV, share URLs and a print-friendly report.
-                      </span>
-                    </div>
-
+                  <div class="about-hero">
+                    <div class="about-hero-mark" aria-hidden="true"><img src="/icon.svg" alt="" width="28" height="28"></div>
+                    <div><span class="about-kicker">Developer workspace</span><h2>Understand the work behind the commits.</h2><p>Anvil brings GitHub activity, repository context, releases and local Git history into one focused workspace.</p></div>
                   </div>
 
-                  <div class="demo-banner">
-
-                    <div class="demo-banner-text">
-                      <strong>Try the demo</strong>
-                      <span>
-                        Load the public profile of @aceyash-dev, the author
-                        of this page.
-                      </span>
+                  <div class="about-section">
+                    <div class="about-section-heading"><span>What Anvil does</span><small>One workspace, several useful views</small></div>
+                    <div class="about-grid about-grid-wide">
+                      <div class="about-card"><i data-lucide="activity" aria-hidden="true"></i><strong>Activity</strong><span>Explore contribution patterns, public events and local commits over time.</span></div>
+                      <div class="about-card"><i data-lucide="folder-git-2" aria-hidden="true"></i><strong>Repositories</strong><span>Inspect projects, languages, stars, forks and recent repository activity.</span></div>
+                      <div class="about-card"><i data-lucide="git-branch" aria-hidden="true"></i><strong>Git intelligence</strong><span>Turn pasted <code>git log</code> output into commit and streak analytics without a server.</span></div>
+                      <div class="about-card"><i data-lucide="package" aria-hidden="true"></i><strong>Releases</strong><span>Surface recent releases from the repositories Anvil has loaded.</span></div>
+                      <div class="about-card"><i data-lucide="file-chart-column" aria-hidden="true"></i><strong>Reports</strong><span>Export structured JSON, CSV and Markdown summaries or print a report.</span></div>
+                      <div class="about-card"><i data-lucide="search" aria-hidden="true"></i><strong>Search</strong><span>Use the command palette to move around the workspace without hunting through menus.</span></div>
                     </div>
-
-                    <button
-                      class="button button-primary"
-                      id="aboutDemo"
-                      type="button"
-                    >
-                      <i data-lucide="sparkles"></i>
-                      Try demo · @aceyash-dev
-                    </button>
-
                   </div>
+
+                  <div class="about-section">
+                    <div class="about-section-heading"><span>Data and privacy</span><small>Designed to keep credentials out of the UI</small></div>
+                    <div class="about-detail-grid">
+                      <div><strong>GitHub App</strong><p>When connected, OAuth credentials are held server-side in an encrypted session cookie. The access token is not exposed to browser JavaScript.</p></div>
+                      <div><strong>Local Git</strong><p>Paste a Git log and analyse it in the browser. The local analysis path does not require GitHub authentication.</p></div>
+                      <div><strong>Personal access token</strong><p>Optional browser-side authentication for GitHub API requests. Anvil keeps it in browser storage according to the selected preference and sends it only to GitHub.</p></div>
+                      <div><strong>No advertising analytics</strong><p>Anvil does not use advertising or analytics cookies. Necessary authentication cookies and browser preferences are documented in the privacy and cookie policies.</p></div>
+                    </div>
+                  </div>
+
+                  <div class="about-section">
+                    <div class="about-section-heading"><span>How it is built</span><small>Small surface area, ordinary web technologies</small></div>
+                    <div class="about-tech"><span>Vanilla JavaScript</span><span>GitHub REST API</span><span>Contributions API</span><span>Serverless API routes</span><span>Responsive HTML/CSS</span><span>Vercel deployment</span></div>
+                  </div>
+
+                  <div class="about-note">
+                    <i data-lucide="shield-check" aria-hidden="true"></i>
+                    <div><strong>Built to be useful before it is clever</strong><p>Anvil favours readable data, explicit states and resilient fallbacks over a dashboard full of decorative machinery. Humanity has suffered enough from dashboards that need dashboards to explain the dashboards.</p></div>
+                  </div>
+
+                  <div class="demo-banner"><div class="demo-banner-text"><strong>Try the demo</strong><span>Load <code>@aceyash-dev</code> and inspect a real public GitHub dataset.</span></div><button class="button button-primary" id="aboutDemo" type="button"><i data-lucide="sparkles"></i>Try demo</button></div>
 
                   <section class="about-faq" aria-labelledby="faqTitle">
-                    <h2 id="faqTitle">Anvil in plain language</h2>
-                    <details open>
-                      <summary>What is Anvil?</summary>
-                      <p>Anvil is a developer workspace that turns GitHub activity, repositories, releases and Git history into a focused view of project health and development activity.</p>
-                    </details>
-                    <details>
-                      <summary>What happens when I connect GitHub?</summary>
-                      <p>Anvil uses a server-side GitHub App session. The OAuth access token stays on the server and is not exposed to browser JavaScript. When connected, Anvil automatically loads the authorized GitHub account into the workspace.</p>
-                    </details>
-                    <details>
-                      <summary>Does Anvil use analytics or advertising cookies?</summary>
-                      <p>No. Anvil does not use advertising or analytics cookies. Authentication uses strictly necessary session cookies, while local preferences and an optional personal access token use browser storage as described in the privacy and cookie policies.</p>
-                    </details>
+                    <h2 id="faqTitle">Common questions</h2>
+                    <details open><summary>What is Anvil?</summary><p>Anvil is a developer workspace that turns GitHub activity, repositories, releases and Git history into a focused view of development activity.</p></details>
+                    <details><summary>What happens when I connect GitHub?</summary><p>Anvil uses a server-side GitHub App session. The OAuth access token stays on the server and is not exposed to browser JavaScript. The connected account is then loaded into the workspace.</p></details>
+                    <details><summary>Can I use Anvil without GitHub?</summary><p>Yes. Local Git mode can analyse pasted <code>git log</code> output without GitHub authentication.</p></details>
                   </section>
 
-                  <p class="about-text">
-                    Built with vanilla JavaScript, the GitHub REST API and
-                    the open contributions API. Anvil is designed to keep the
-                    interface fast, understandable and privacy-conscious.
-                  </p>
+                  <div class="about-links"><a href="/privacy.html">Privacy</a><a href="/cookies.html">Cookies</a><a href="/security.html">Security</a><a href="/terms.html">Terms</a><a href="https://github.com/acetheticsx/Anvil" target="_blank" rel="noopener noreferrer">Source on GitHub</a></div>
 
                 </div>
 
@@ -5401,11 +5365,17 @@ git log --pretty=format:"%ad|%s" --date=short'
         return;
       }
       const user = data.user;
+      const avatarUrl = safeHref(user.avatar_url || user.avatarUrl);
       const fragment = document.createDocumentFragment();
       const avatar = document.createElement("img");
       avatar.className = "github-connected-avatar";
-      avatar.width = 42; avatar.height = 42; avatar.alt = "";
-      avatar.src = safeHref(user.avatar_url) || "/icon.svg";
+      avatar.width = 42; avatar.height = 42;
+      avatar.alt = user.login ? user.login + " GitHub avatar" : "GitHub avatar";
+      avatar.src = avatarUrl || "/icon.svg";
+      avatar.onerror = () => {
+        avatar.onerror = null;
+        avatar.src = "/icon.svg";
+      };
       const copy = document.createElement("div");
       copy.className = "github-connected-copy";
       const title = document.createElement("strong");
