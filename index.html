@@ -3740,6 +3740,199 @@
       .nav-button, .nav-button svg, .source-tab svg { transition: none !important; animation: none !important; }
     }
 
+
+    /* ============================================================
+       Anvil navigation v4: settings-style icon rail
+       ============================================================ */
+    .sidebar,
+    .sidebar[data-expanded="false"] {
+      width: 82px !important;
+      max-width: 82px !important;
+    }
+
+    .nav {
+      align-items: center !important;
+      gap: 5px !important;
+      padding: 4px 0 !important;
+    }
+
+    .nav-section {
+      display: none !important;
+    }
+
+    .nav-button,
+    .nav-button.active,
+    .nav-button:not(.active) {
+      position: relative !important;
+      width: 58px !important;
+      min-width: 58px !important;
+      min-height: 50px !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      display: grid !important;
+      place-items: center !important;
+      border-radius: 10px !important;
+      justify-content: center !important;
+      gap: 0 !important;
+      overflow: visible !important;
+      color: var(--muted) !important;
+      transition: background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease !important;
+    }
+
+    .nav-button:hover {
+      transform: none !important;
+      background: var(--surface-2) !important;
+      color: var(--text) !important;
+    }
+
+    .nav-button.active {
+      background: var(--nav-active-bg) !important;
+      color: var(--accent) !important;
+      box-shadow: inset -3px 0 0 var(--accent), 0 1px 0 color-mix(in srgb, var(--accent) 10%, transparent) !important;
+    }
+
+    .nav-button.active::before {
+      content: "" !important;
+      position: absolute !important;
+      right: -1px !important;
+      top: 11px !important;
+      bottom: 11px !important;
+      width: 3px !important;
+      border-radius: 3px 0 0 3px !important;
+      background: var(--accent) !important;
+      box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 35%, transparent) !important;
+    }
+
+    .nav-button .nav-label,
+    .nav-button .nav-shortcut,
+    .nav-button .nav-badge {
+      display: none !important;
+    }
+
+    .nav-button svg {
+      width: 21px !important;
+      height: 21px !important;
+      margin: 0 !important;
+      flex: none !important;
+      stroke-width: 1.9 !important;
+      color: currentColor !important;
+      fill: none !important;
+      transition: transform .28s cubic-bezier(.2,.8,.2,1), color .2s ease, fill .2s ease, stroke-width .2s ease !important;
+    }
+
+    .nav-button.active svg {
+      fill: currentColor !important;
+      stroke-width: 2.15 !important;
+      transform: scale(1.04) !important;
+    }
+
+    .nav-button.nav-icon-switch svg {
+      animation: anvilNavIconSwitch .32s cubic-bezier(.2,.8,.2,1) !important;
+    }
+
+    .nav-button:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: calc(100% + 10px);
+      top: 50%;
+      z-index: 1200;
+      transform: translateY(-50%);
+      padding: 7px 9px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--tooltip-bg);
+      color: var(--tooltip-text);
+      box-shadow: var(--shadow);
+      font-size: .66rem;
+      font-weight: 600;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .rail-actions {
+      grid-template-columns: 1fr !important;
+      gap: 4px !important;
+      padding-top: 8px !important;
+    }
+
+    .rail-action {
+      width: 42px !important;
+      min-height: 34px !important;
+      margin: 0 auto !important;
+    }
+
+    @media (max-width: 900px) {
+      .main { padding-right: 72px !important; }
+
+      .sidebar,
+      .sidebar[data-expanded="false"] {
+        width: 58px !important;
+        max-width: 58px !important;
+        right: 7px !important;
+        top: 8px !important;
+        bottom: 8px !important;
+        padding: 6px 4px !important;
+      }
+
+      .nav {
+        gap: 4px !important;
+      }
+
+      .nav-button,
+      .nav-button.active,
+      .nav-button:not(.active) {
+        width: 48px !important;
+        min-width: 48px !important;
+        min-height: 46px !important;
+        border-radius: 9px !important;
+      }
+
+      .nav-button svg {
+        width: 19px !important;
+        height: 19px !important;
+      }
+
+      .nav-button.active::before {
+        top: 10px !important;
+        bottom: 10px !important;
+      }
+
+      .rail-actions { display: none !important; }
+    }
+
+    @media (max-width: 560px) {
+      .main { padding-right: 64px !important; }
+
+      .sidebar,
+      .sidebar[data-expanded="false"] {
+        width: 52px !important;
+        max-width: 52px !important;
+        right: 5px !important;
+        padding-inline: 3px !important;
+      }
+
+      .nav-button,
+      .nav-button.active,
+      .nav-button:not(.active) {
+        width: 44px !important;
+        min-width: 44px !important;
+        min-height: 43px !important;
+      }
+
+      .nav-button svg {
+        width: 18px !important;
+        height: 18px !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-button,
+      .nav-button svg {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
 </style>
 </head>
 
@@ -3766,17 +3959,16 @@
         </div>
         <nav class="nav" aria-label="Primary navigation">
           <div class="nav-section">Overview</div>
-          <button class="nav-button active" data-view="dashboard" type="button" aria-current="page" aria-label="Dashboard" data-tooltip="Dashboard"><i data-lucide="layout-dashboard"></i><span class="nav-label">Dashboard</span></button>
-          <button class="nav-button" data-view="activity" type="button" aria-label="Activity" data-tooltip="Activity"><i data-lucide="activity"></i><span class="nav-label">Activity</span><span class="nav-badge" id="navActivityCount" hidden></span></button>
-          <button class="nav-button" data-view="repositories" type="button" aria-label="Repositories" data-tooltip="Repositories"><i data-lucide="folder-git-2"></i><span class="nav-label">Repositories</span><span class="nav-badge" id="navRepoCount" hidden></span></button>
-          <button class="nav-button" data-view="timeline" type="button" aria-label="Timeline" data-tooltip="Timeline"><i data-lucide="calendar-clock"></i><span class="nav-label">Timeline</span></button>
+          <button class="nav-button active" data-view="dashboard" type="button" aria-current="page" aria-label="Dashboard" data-tooltip="Dashboard"><i data-lucide="layout-dashboard"></i></button>
+          <button class="nav-button" data-view="activity" type="button" aria-label="Activity" data-tooltip="Activity"><i data-lucide="activity"></i></button>
+          <button class="nav-button" data-view="repositories" type="button" aria-label="Repositories" data-tooltip="Repositories"><i data-lucide="folder-git-2"></i></button>
+          <button class="nav-button" data-view="timeline" type="button" aria-label="Timeline" data-tooltip="Timeline"><i data-lucide="calendar-clock"></i></button>
           <div class="nav-section">Engineering</div>
-          <button class="nav-button" data-view="git" type="button" aria-label="Git" data-tooltip="Git"><i data-lucide="git-branch"></i><span class="nav-label">Git</span></button>
-          <button class="nav-button" data-view="releases" type="button" aria-label="Releases" data-tooltip="Releases"><i data-lucide="package"></i><span class="nav-label">Releases</span><span class="nav-badge" id="navReleaseCount" hidden></span></button>
-          <button class="nav-button" data-view="reports" type="button" aria-label="Reports" data-tooltip="Reports"><i data-lucide="file-bar-chart"></i><span class="nav-label">Reports</span></button>
+          <button class="nav-button" data-view="git" type="button" aria-label="Git" data-tooltip="Git"><i data-lucide="git-branch"></i></button>
+          <button class="nav-button" data-view="releases" type="button" aria-label="Releases" data-tooltip="Releases"><i data-lucide="package"></i></button>
+          <button class="nav-button" data-view="reports" type="button" aria-label="Reports" data-tooltip="Reports"><i data-lucide="file-bar-chart"></i></button>
           <div class="nav-section">Tools</div>
-          <button class="nav-button" data-action="search" type="button" aria-label="Search" data-tooltip="Search"><i data-lucide="search"></i><span class="nav-label">Search</span><span class="nav-shortcut kbd">/</span></button>
-          <button class="nav-button" data-view="about" type="button" aria-label="About" data-tooltip="About"><i data-lucide="info"></i><span class="nav-label">About</span></button>
+          <button class="nav-button" data-view="about" type="button" aria-label="About" data-tooltip="About"><i data-lucide="info"></i></button>
         </nav>
         <div class="rail-actions" aria-label="Quick actions">
           <button class="rail-action" id="railSync" type="button" aria-label="Sync GitHub data" title="Sync GitHub data"><i data-lucide="refresh-cw"></i></button>
