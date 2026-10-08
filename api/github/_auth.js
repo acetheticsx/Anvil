@@ -71,7 +71,13 @@ function parseCookies(req) {
   for (const pair of raw.split(';')) {
     const index = pair.indexOf('=');
     if (index < 0) continue;
-    cookies[pair.slice(0, index).trim()] = decodeURIComponent(pair.slice(index + 1).trim());
+    const name = pair.slice(0, index).trim();
+    const value = pair.slice(index + 1).trim();
+    try {
+      cookies[name] = decodeURIComponent(value);
+    } catch {
+      cookies[name] = value;
+    }
   }
   return cookies;
 }
