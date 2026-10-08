@@ -3933,6 +3933,12 @@
       }
     }
 
+
+/* Smart workspace */
+.nav-button.active::before,.nav-button.active::after{position:absolute;top:50%;transform:translateY(-50%);color:var(--accent);font:600 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;opacity:.95;pointer-events:none}
+.nav-button.active::before{content:"[";left:7px}.nav-button.active::after{content:"]";right:7px}.nav-button.active{position:relative}
+.smart-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.smart-card{border:1px solid var(--border);background:var(--panel);border-radius:12px;padding:14px;min-width:0}.smart-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.smart-value{font-size:24px;font-weight:750;letter-spacing:-.03em}.smart-detail{font-size:12px;color:var(--muted);line-height:1.45;margin-top:4px}.smart-track{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:9px}.smart-track span{display:block;height:100%;width:0;background:var(--accent);border-radius:inherit;transition:width .45s ease}.smart-list{display:grid;gap:7px}.smart-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:9px;align-items:start;padding:9px 0;border-top:1px solid var(--border)}.smart-row:first-child{border-top:0;padding-top:0}.smart-row strong{font-size:13px;line-height:1.35}.smart-row small{display:block;color:var(--muted);font-size:11px;line-height:1.4;margin-top:2px}.smart-icon{width:27px;height:27px;display:grid;place-items:center;border:1px solid var(--border);border-radius:8px;color:var(--accent)}.smart-icon svg{width:15px;height:15px}.smart-severity{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.smart-severity.warn{color:#d29922}.smart-severity.good{color:#3fb950}.smart-severity.info{color:var(--accent)}.smart-actions{display:flex;flex-wrap:wrap;gap:7px}.workspace-strip{display:flex;gap:7px;overflow:auto;padding-bottom:2px}.workspace-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--panel);border-radius:999px;padding:7px 10px;color:var(--text);font:inherit;font-size:12px;white-space:nowrap;cursor:pointer}.workspace-chip.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 20%,transparent)}.route-view{padding-bottom:30px}.route-hero{border:1px solid var(--border);background:var(--panel);border-radius:14px;padding:18px;margin-bottom:12px}.route-kicker{font:600 11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.09em;color:var(--accent)}.route-title{margin:7px 0 5px;font-size:25px;letter-spacing:-.035em}.route-copy{margin:0;color:var(--muted);line-height:1.55}.debug-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.audit-code{font:11px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);white-space:pre-wrap;word-break:break-word}@media(max-width:900px){.smart-grid,.debug-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.smart-grid,.debug-grid{grid-template-columns:1fr}.nav-button.active::before{left:5px}.nav-button.active::after{right:5px}}@media(prefers-reduced-motion:reduce){.smart-track span{transition:none}}
+
 </style>
 </head>
 
@@ -4496,6 +4502,8 @@ git log --pretty=format:"%ad|%s" --date=short'
 
             </section>
 
+            <section class="panel" style="margin-top:14px" aria-labelledby="pulseTitle"><div class="panel-header"><span class="panel-title" id="pulseTitle">Project Pulse</span><span class="health-pill" id="pulseHealth">Waiting for data</span></div><div class="panel-body"><div class="smart-grid"><article class="smart-card"><div class="smart-label">Health</div><div class="smart-value" id="pulseScore">—</div><div class="smart-track"><span id="pulseScoreBar"></span></div><div class="smart-detail" id="pulseScoreDetail">Load data to score the workspace.</div></article><article class="smart-card"><div class="smart-label">Delivery</div><div class="smart-value" id="pulseDelivery">—</div><div class="smart-detail" id="pulseDeliveryDetail">Deployments and CI signals.</div></article><article class="smart-card"><div class="smart-label">Maintenance</div><div class="smart-value" id="pulseMaintenance">—</div><div class="smart-detail" id="pulseMaintenanceDetail">Repository attention signals.</div></article><article class="smart-card"><div class="smart-label">Data quality</div><div class="smart-value" id="pulseQuality">—</div><div class="smart-detail" id="pulseQualityDetail">Source coverage.</div></article></div></div></section><div class="two-column" style="margin-top:14px"><section class="panel"><div class="panel-header"><span class="panel-title">What needs attention</span><span class="panel-meta" id="attentionMeta">derived from loaded data</span></div><div class="panel-body"><div class="smart-list" id="attentionList"></div></div></section><section class="panel"><div class="panel-header"><span class="panel-title">Project spaces</span><span class="panel-meta">local workspace memory</span></div><div class="panel-body"><div class="workspace-strip" id="workspaceStrip"></div><div class="smart-actions" style="margin-top:10px"><button class="button button-secondary" id="saveWorkspace" type="button"><i data-lucide="bookmark-plus"></i>Save current</button><button class="button button-secondary" id="clearWorkspaces" type="button"><i data-lucide="trash-2"></i>Clear saved</button></div><p class="hint" style="margin:9px 0 0"><i data-lucide="info"></i>Saved spaces contain only username, year and source. No tokens.</p></div></section></div><div class="two-column" style="margin-top:14px"><section class="panel"><div class="panel-header"><span class="panel-title">Delivery intelligence</span><span class="panel-meta" id="deliveryMeta">waiting for GitHub data</span></div><div class="panel-body"><div class="smart-list" id="deliveryList"></div></div></section><section class="panel"><div class="panel-header"><span class="panel-title">Security posture</span><span class="panel-meta" id="securityMeta">metadata-based checks</span></div><div class="panel-body"><div class="smart-list" id="securityList"></div></div></section></div><section class="panel" style="margin-top:14px"><div class="panel-header"><span class="panel-title">Insights</span><span class="panel-meta">observation → evidence → action</span></div><div class="panel-body"><div class="smart-list" id="insightList"></div></div></section>
+
           </section>
 
           <!-- Activity -->
@@ -4870,6 +4878,8 @@ git log --pretty=format:"%ad|%s" --date=short'
 
         </div>
 
+          <section class="route-view" id="routeView" hidden><div class="route-hero"><div class="route-kicker" id="routeKicker">ANVIL</div><h2 class="route-title" id="routeTitle">Diagnostics</h2><p class="route-copy" id="routeCopy">Runtime diagnostics and project integrity checks.</p></div><div id="routeBody"></div></section>
+
       </main>
 
     </div>
@@ -5008,6 +5018,10 @@ git log --pretty=format:"%ad|%s" --date=short'
             </span>
           </button>
 
+          <button class="command" data-command="audit" type="button"><span>Audit workspace<span class="command-description">Run UI, runtime and integrity checks</span></span></button>
+          <button class="command" data-command="debug" type="button"><span>Debug console<span class="command-description">Inspect runtime state and errors</span></span></button>
+          <button class="command" data-command="insights" type="button"><span>Focus insights<span class="command-description">Open derived intelligence</span></span></button>
+          <button class="command" data-command="delivery" type="button"><span>Delivery intelligence<span class="command-description">Inspect CI and deployment signals</span></span></button>
           <button class="command" data-command="theme" type="button">
             <span>
               Toggle theme
@@ -5107,7 +5121,10 @@ git log --pretty=format:"%ad|%s" --date=short'
       },
       analytics: {
         lastCalculated: 0
-      }
+      },
+      engineering: { deployments: [], workflows: [], checkedAt: 0, security: [] },
+      projectSpaces: [],
+      debug: { errors: [], warnings: [], startedAt: Date.now() }
     };
 
     /* ============================================================
@@ -5258,7 +5275,8 @@ git log --pretty=format:"%ad|%s" --date=short'
       dataQuality: $("#dataQuality"),
       dataQualityDetail: $("#dataQualityDetail"),
       exportMarkdown: $("#exportMarkdown"),
-      copySummary: $("#copySummary")
+      copySummary: $("#copySummary"),
+      pulseHealth: $("#pulseHealth"), pulseScore: $("#pulseScore"), pulseScoreBar: $("#pulseScoreBar"), pulseScoreDetail: $("#pulseScoreDetail"), pulseDelivery: $("#pulseDelivery"), pulseDeliveryDetail: $("#pulseDeliveryDetail"), pulseMaintenance: $("#pulseMaintenance"), pulseMaintenanceDetail: $("#pulseMaintenanceDetail"), pulseQuality: $("#pulseQuality"), pulseQualityDetail: $("#pulseQualityDetail"), attentionMeta: $("#attentionMeta"), attentionList: $("#attentionList"), workspaceStrip: $("#workspaceStrip"), saveWorkspace: $("#saveWorkspace"), clearWorkspaces: $("#clearWorkspaces"), deliveryMeta: $("#deliveryMeta"), deliveryList: $("#deliveryList"), securityMeta: $("#securityMeta"), securityList: $("#securityList"), insightList: $("#insightList"), routeView: $("#routeView"), routeKicker: $("#routeKicker"), routeTitle: $("#routeTitle"), routeCopy: $("#routeCopy"), routeBody: $("#routeBody")
     };
 
     /* ============================================================
@@ -5418,8 +5436,10 @@ git log --pretty=format:"%ad|%s" --date=short'
       renderCalendar();
       renderGitStats();
       renderCommitTypes();
+      state.engineering.deployments=[];state.engineering.workflows=[];state.engineering.security=[];state.engineering.checkedAt=0;
       renderIntelligence();
       renderPortfolioIntelligence();
+      renderSmartWorkspace();
     }
 
     /* ============================================================
@@ -5614,6 +5634,7 @@ git log --pretty=format:"%ad|%s" --date=short'
     function showView(view) {
       if (!viewMeta[view]) return;
 
+      clearRoute();
       state.currentView = view;
 
       el.nav.forEach((button) => {
@@ -5661,6 +5682,7 @@ git log --pretty=format:"%ad|%s" --date=short'
         renderGitStats();
         renderCommitTypes();
       }
+      if (view === "dashboard") renderSmartWorkspace();
 
       window.scrollTo({ top: 0, behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ? "auto" : "smooth" });
     }
@@ -6442,6 +6464,7 @@ git log --pretty=format:"%ad|%s" --date=short'
         populateRepoLanguages();
         renderIntelligence();
         renderPortfolioIntelligence();
+        renderSmartWorkspace();
         updateLabels();
 
         /* ---- Status ------------------------------------------- */
@@ -6467,7 +6490,8 @@ git log --pretty=format:"%ad|%s" --date=short'
         }
 
         // Releases load in the background; failure is non-fatal.
-        loadReleases(true, requestId).catch(() => {});
+        loadReleases(true, requestId).catch(e => rememberDebug("warning",e));
+        loadEngineeringSignals(requestId).catch(e => rememberDebug("warning",e));
 
       } catch (error) {
         if (requestId !== state.requestId) return;
@@ -7449,7 +7473,7 @@ git log --pretty=format:"%ad|%s" --date=short'
     function exportJson() {
       const payload = {
         application: "Anvil",
-        version: "1.1.0",
+        version: "1.2.0",
         generatedAt: new Date().toISOString(),
         source: state.source,
         username: state.username,
@@ -7568,6 +7592,31 @@ git log --pretty=format:"%ad|%s" --date=short'
       }
     }
 
+
+    /* SMART WORKSPACE */
+    function rememberDebug(kind,error){const message=error?.message||String(error||"Unknown error");const target=kind==="error"?state.debug.errors:state.debug.warnings;target.push({message,at:new Date().toISOString()});if(target.length>25)target.splice(0,target.length-25)}
+    function clampScore(v){return Math.max(0,Math.min(100,Math.round(Number(v)||0)))}
+    function scoreLabel(v){return v>=85?"Excellent":v>=70?"Healthy":v>=50?"Needs attention":"At risk"}
+    function addSmartRow(container,icon,title,detail,severity="info",actionText="",action=null){if(!container)return;const row=document.createElement("div"),iw=document.createElement("span"),copy=document.createElement("div"),strong=document.createElement("strong"),small=document.createElement("small"),side=document.createElement("span");row.className="smart-row";iw.className="smart-icon";iw.innerHTML='<i data-lucide="'+escapeHtml(icon)+'"></i>';strong.textContent=title;small.textContent=detail;copy.append(strong,small);side.className="smart-severity "+severity;side.textContent=actionText||severity;if(action){side.style.cursor="pointer";side.addEventListener("click",action)}row.append(iw,copy,side);container.appendChild(row)}
+    function renderAttention(){if(!el.attentionList)return;el.attentionList.replaceChildren();const items=[],stale=state.repositories.filter(r=>!r.archived&&repoAgeDays(r)>=90),failedRuns=state.engineering.workflows.filter(r=>["failure","timed_out","cancelled","action_required"].includes(r.conclusion)),failedDeployments=state.engineering.deployments.filter(r=>["failure","error"].includes(r.state));if(failedDeployments.length)items.push(["cloud-cog","Deployment failures",failedDeployments.length+" failed deployment statuses detected.","warn","open",()=>document.getElementById("deliveryList")?.scrollIntoView({behavior:"smooth",block:"center"})]);if(failedRuns.length)items.push(["triangle-alert","CI needs attention",failedRuns.length+" recent workflow runs did not succeed.","warn","open",()=>document.getElementById("deliveryList")?.scrollIntoView({behavior:"smooth",block:"center"})]);if(stale.length)items.push(["clock-3","Stale repositories",stale.length+" repositories have not been updated for 90+ days.","warn","open",()=>showView("repositories")]);if(!state.releases.length&&state.repositories.length)items.push(["package","No release signal","No releases loaded from the most recently updated repositories.","info","open",()=>showView("releases")]);if(!items.length&&(state.repositories.length||totalCalendar()))items.push(["circle-check","No obvious blockers","Loaded signals look stable. Keep an eye on the next sync.","good","stable"]);if(!items.length)items.push(["sparkles","Waiting for data","Load a GitHub profile or process a local Git log to generate project intelligence.","info","info"]);if(el.attentionMeta)el.attentionMeta.textContent=items.length+" signals";items.slice(0,8).forEach(i=>addSmartRow(el.attentionList,...i));refreshIcons()}
+    function renderDelivery(){if(!el.deliveryList)return;el.deliveryList.replaceChildren();const d=[...state.engineering.deployments].sort((a,b)=>String(b.updated_at||b.created_at||"").localeCompare(String(a.updated_at||a.created_at||""))),w=[...state.engineering.workflows].sort((a,b)=>String(b.updated_at||b.created_at||"").localeCompare(String(a.updated_at||a.created_at||"")));if(!d.length&&!w.length)addSmartRow(el.deliveryList,"rocket","No delivery telemetry","Use authenticated repository access or load public repositories to inspect available signals.","info");d.slice(0,5).forEach(x=>addSmartRow(el.deliveryList,x.state==="success"?"circle-check":"cloud-cog",x.repo+" · "+(x.environment||"deployment"),(x.state||"unknown")+" · "+(x.ref||x.sha?.slice(0,7)||"unknown ref"),x.state==="success"?"good":["failure","error"].includes(x.state)?"warn":"info","deploy"));w.slice(0,5).forEach(x=>addSmartRow(el.deliveryList,x.conclusion==="success"?"check":"workflow",x.repo+" · "+(x.name||"GitHub Actions"),(x.status||"unknown")+(x.conclusion?" · "+x.conclusion:"")+" · "+(x.head_branch||"default branch"),x.conclusion==="success"?"good":x.conclusion?"warn":"info","CI"));if(el.deliveryMeta)el.deliveryMeta.textContent=state.engineering.checkedAt?d.length+" deployments · "+w.length+" CI runs":"waiting for telemetry";refreshIcons()}
+    function renderSecurity(){if(!el.securityList)return;el.securityList.replaceChildren();const r=state.repositories.slice(0,8);if(!r.length){addSmartRow(el.securityList,"shield-check","No repositories loaded","Security posture will be derived from repository metadata after loading data.","info");return}const a=r.filter(x=>x.archived).length,dis=r.filter(x=>x.disabled).length,p=r.filter(x=>x.private).length,adv=r.filter(x=>x.security_and_analysis?.advanced_security?.status==="enabled").length,sec=r.filter(x=>x.security_and_analysis?.secret_scanning?.status==="enabled").length;addSmartRow(el.securityList,"shield-check","Repository access",p+" private repositories represented in loaded metadata.","info");addSmartRow(el.securityList,"lock-keyhole","Advanced Security",adv+"/"+r.length+" sampled repositories report Advanced Security enabled. Public metadata may omit this field.",adv?"good":"info");addSmartRow(el.securityList,"scan-eye","Secret scanning",sec+"/"+r.length+" sampled repositories report secret scanning enabled. This is not an alert scan.",sec?"good":"info");if(a)addSmartRow(el.securityList,"archive","Archived repositories",a+" sampled repositories are archived.","warn");if(dis)addSmartRow(el.securityList,"ban","Disabled repositories",dis+" sampled repositories are disabled.","warn");addSmartRow(el.securityList,"shield-alert","Alert coverage","Anvil does not claim vulnerability or secret-alert status without the required GitHub permission/data.","info");if(el.securityMeta)el.securityMeta.textContent=r.length+" repositories sampled";refreshIcons()}
+    function renderInsights(health,delivery,maintenance){if(!el.insightList)return;el.insightList.replaceChildren();const i=[],recent=[...state.activity].sort((a,b)=>String(b.timestamp||b.date).localeCompare(String(a.timestamp||a.date))),stale=state.repositories.filter(r=>!r.archived&&repoAgeDays(r)>=90).length,failed=state.engineering.workflows.filter(r=>["failure","timed_out"].includes(r.conclusion)).length;if(state.repositories.length){const active=state.repositories.filter(r=>!r.archived&&repoAgeDays(r)<30).length;i.push(["activity","Activity signal",active+"/"+state.repositories.length+" repositories updated within 30 days.","Evidence: repository update timestamps.","info"])}if(failed)i.push(["triangle-alert","CI reliability",failed+" recent workflow runs failed or timed out.","Evidence: GitHub Actions workflow runs.","warn"]);if(stale)i.push(["wrench","Maintenance drag",stale+" repositories are stale for 90+ days.","Evidence: repository update timestamps.","warn"]);if(state.releases.length)i.push(["package-check","Release cadence",state.releases.length+" releases currently loaded.","Evidence: GitHub Releases API.","good"]);if(recent.length)i.push(["history","Latest movement",recent[0].message||"Recent activity detected.","Evidence: latest loaded activity event.","info"]);i.push(["gauge","Workspace health",health+"/100 overall health · delivery "+delivery+"/100 · maintenance "+maintenance+"/100.","Action: inspect attention when a component drops below 70.","info"]);i.slice(0,8).forEach(x=>addSmartRow(el.insightList,...x));refreshIcons()}
+    function renderProjectSpaces(){if(!el.workspaceStrip)return;el.workspaceStrip.replaceChildren();if(!state.projectSpaces.length){const s=document.createElement("span");s.className="smart-detail";s.textContent="No saved spaces yet.";el.workspaceStrip.appendChild(s);return}state.projectSpaces.forEach(space=>{const b=document.createElement("button");b.type="button";b.className="workspace-chip"+(space.key===workspaceKey()?" active":"");b.textContent=(space.username||"Local Git")+" · "+space.year;b.addEventListener("click",()=>{el.username.value=space.username||"";el.year.value=String(space.year);setSource(space.source==="local"?"local":"github");if(space.source==="local")showView("git");else{showView("dashboard");loadGithub()}});el.workspaceStrip.appendChild(b)})}
+    function workspaceKey(){return(state.username||"local")+":"+state.year+":"+state.source}
+    function loadProjectSpaces(){try{const p=JSON.parse(localStorage.getItem("anvil.project-spaces.v1")||"[]");state.projectSpaces=Array.isArray(p)?p.slice(0,12):[]}catch{state.projectSpaces=[]}}
+    function saveProjectSpaces(){try{localStorage.setItem("anvil.project-spaces.v1",JSON.stringify(state.projectSpaces.slice(0,12)))}catch{}}
+    function saveCurrentWorkspace(){const k=workspaceKey();state.projectSpaces=[{key:k,username:state.username,year:state.year,source:state.source,savedAt:Date.now()},...state.projectSpaces.filter(x=>x.key!==k)].slice(0,12);saveProjectSpaces();renderProjectSpaces();status("Project space saved locally. No token was stored.","success")}
+    function clearProjectSpaces(){state.projectSpaces=[];saveProjectSpaces();renderProjectSpaces();status("Saved project spaces cleared.","success")}
+    async function loadEngineeringSignals(requestId=state.requestId){if(requestId!==state.requestId||state.source!=="github"||!state.repositories.length)return;const candidates=state.repositories.slice(0,5),d=[],w=[];for(const repo of candidates){if(requestId!==state.requestId)return;const base=CONFIG.githubApi+"/repos/"+encodeURIComponent(repo.full_name),pair=await Promise.all([fetchOptional(base+"/deployments?per_page=5","deployments"),fetchOptional(base+"/actions/runs?per_page=8","workflow runs")]);if(pair[0].ok&&Array.isArray(pair[0].data))pair[0].data.forEach(x=>d.push({...x,repo:repo.full_name,state:x.state||x.status||"unknown"}));if(pair[1].ok&&Array.isArray(pair[1].data?.workflow_runs))pair[1].data.workflow_runs.forEach(x=>w.push({...x,repo:repo.full_name}));}state.engineering.deployments=d;state.engineering.workflows=w;state.engineering.checkedAt=Date.now();renderSmartWorkspace()}
+    function renderSmartWorkspace(){const r=state.repositories.filter(Boolean),commits=currentCommits(),total=totalCalendar(),stale=r.filter(x=>!x.archived&&repoAgeDays(x)>=90).length,archived=r.filter(x=>x.archived).length,failedW=state.engineering.workflows.filter(x=>["failure","timed_out","cancelled","action_required"].includes(x.conclusion)).length,goodW=state.engineering.workflows.filter(x=>x.conclusion==="success").length,d=state.engineering.deployments,failedD=d.filter(x=>["failure","error"].includes(x.state)).length,goodD=d.filter(x=>x.state==="success").length,mRaw=Number(String(el.intelMomentum?.textContent||"0").replace("%",""))||0,mScore=clampScore(50+mRaw/2),delivery=clampScore(65+Math.min(20,goodD*4+goodW*2)-Math.min(35,failedD*12+failedW*8)),maintenance=clampScore(100-stale*12-archived*3),quality=state.source==="local"?(state.localCommits.length?90:20):clampScore((state.profile?25:0)+(r.length?25:0)+(state.activity.length?25:0)+(state.calendar.size?25:0)),health=clampScore((mScore+delivery+maintenance+quality)/4);if(el.pulseScore)el.pulseScore.textContent=r.length||total||commits.length?health+"/100":"—";if(el.pulseScoreBar)el.pulseScoreBar.style.width=health+"%";if(el.pulseHealth)el.pulseHealth.textContent=r.length||total||commits.length?scoreLabel(health):"Waiting for data";if(el.pulseScoreDetail)el.pulseScoreDetail.textContent=r.length||total||commits.length?scoreLabel(health)+" based on momentum, delivery, maintenance and data quality.":"Load data to score the workspace.";if(el.pulseDelivery)el.pulseDelivery.textContent=state.engineering.checkedAt?delivery+"/100":"—";if(el.pulseDeliveryDetail)el.pulseDeliveryDetail.textContent=state.engineering.checkedAt?goodD+" successful deployments · "+failedD+" failed · "+failedW+" failed CI runs.":"Engineering signals have not been checked.";if(el.pulseMaintenance)el.pulseMaintenance.textContent=r.length?maintenance+"/100":"—";if(el.pulseMaintenanceDetail)el.pulseMaintenanceDetail.textContent=r.length?stale+" stale repositories · "+archived+" archived.":"Repository metadata required.";if(el.pulseQuality)el.pulseQuality.textContent=r.length||total||commits.length?quality+"%":"—";if(el.pulseQualityDetail)el.pulseQualityDetail.textContent=state.source==="local"?number(state.localCommits.length)+" parsed local commits.":r.length+" repositories · "+state.activity.length+" events · calendar "+(state.calendar.size?"loaded":"missing")+".";renderAttention();renderInsights(health,delivery,maintenance);renderDelivery();renderSecurity();renderProjectSpaces()}
+    function renderRoute(route){document.body.dataset.route=route;el.routeView.hidden=false;$$(".view").forEach(s=>s.classList.add("hidden"));el.sourcePanel.hidden=true;el.profilePanel.hidden=true;el.statsPanel.hidden=true;if(route==="audit"){el.pageTitle.textContent="Audit";el.pageSubtitle.textContent="Static, runtime and data-integrity checks.";el.routeKicker.textContent="ANVIL / AUDIT";el.routeTitle.textContent="Workspace audit";el.routeCopy.textContent="Checks the live document and loaded runtime state.";runAudit()}else{el.pageTitle.textContent="Debug";el.pageSubtitle.textContent="Runtime state, diagnostics and recent failures.";el.routeKicker.textContent="ANVIL / DEBUG";el.routeTitle.textContent="Debug console";el.routeCopy.textContent="Runtime state, request telemetry and captured failures.";renderDebug()}window.scrollTo({top:0,behavior:"auto"});refreshIcons()}
+    function clearRoute(){delete document.body.dataset.route;if(el.routeView)el.routeView.hidden=true}
+    function runAudit(){const checks=[],add=(n,o,d)=>checks.push({n,o,d}),ids=["pageTitle","commandButton","themeButton","activityFeed","repoTable","timeline","releases","commandModal","routeView"],missing=ids.filter(id=>!document.getElementById(id));add("DOM anchors",!missing.length,missing.length?"Missing: "+missing.join(", "):ids.length+" required anchors present.");add("Navigation",el.nav.length===8&&!document.querySelector('.nav-button[data-action="search"]'),el.nav.length+" icon-only destinations; duplicate Search rail entry is absent.");add("Current tab",Boolean(document.querySelector(".nav-button[aria-current='page']")),"aria-current is exposed.");add("Button types",[...document.querySelectorAll("button")].every(b=>b.getAttribute("type")),"Every button declares type.");add("Inline handlers",![...document.querySelectorAll("[onload],[onclick],[onerror],[onchange],[onsubmit]")].length===0,"No inline on* handlers.");add("javascript URLs",[...document.querySelectorAll("[href],[src]")].every(n=>!String(n.getAttribute("href")||n.getAttribute("src")||"").trim().toLowerCase().startsWith("javascript:")),"No javascript: URLs.");add("New-tab links",[...document.querySelectorAll('a[target="_blank"]')].every(a=>a.rel.toLowerCase().split(/\s+/).includes("noopener")),"noopener is present.");add("Runtime errors",state.debug.errors.length===0,state.debug.errors.length+" captured runtime errors.");const fail=checks.filter(x=>!x.o),score=clampScore((checks.length-fail.length)/checks.length*100);el.routeBody.innerHTML='<div class="smart-grid" style="margin-bottom:12px"><article class="smart-card"><div class="smart-label">Audit score</div><div class="smart-value">'+score+'/100</div><div class="smart-detail">'+(fail.length?fail.length+" failing check(s)":"All checks passed.")+'</div></article><article class="smart-card"><div class="smart-label">Checks</div><div class="smart-value">'+checks.length+'</div><div class="smart-detail">Static and runtime integrity.</div></article><article class="smart-card"><div class="smart-label">Dataset</div><div class="smart-value">'+(state.repositories.length||state.localCommits.length||totalCalendar()?"Loaded":"Empty")+'</div><div class="smart-detail">'+state.source+" source"+'</div></article><article class="smart-card"><div class="smart-label">Errors</div><div class="smart-value">'+state.debug.errors.length+'</div><div class="smart-detail">Captured this session.</div></article></div><section class="panel"><div class="panel-header"><span class="panel-title">Checks</span></div><div class="panel-body smart-list" id="auditChecks"></div></section>';const list=document.getElementById("auditChecks");checks.forEach(x=>addSmartRow(list,x.o?"circle-check":"circle-alert",x.n,x.d,x.o?"good":"warn",x.o?"pass":"fail"));refreshIcons()}
+    function renderDebug(){const summary={route:location.pathname,view:state.currentView,source:state.source,username:state.username||null,year:state.year,repositories:state.repositories.length,activity:state.activity.length,releases:state.releases.length,deployments:state.engineering.deployments.length,workflowRuns:state.engineering.workflows.length,requestId:state.requestId,lastAnalytics:state.analytics.lastCalculated||null,lastEngineeringCheck:state.engineering.checkedAt||null};el.routeBody.innerHTML='<div class="debug-grid"><article class="smart-card"><div class="smart-label">Runtime</div><div class="audit-code">'+escapeHtml(JSON.stringify(summary,null,2))+'</div></article><article class="smart-card"><div class="smart-label">Errors</div><div class="audit-code">'+escapeHtml(JSON.stringify(state.debug.errors.slice(-10),null,2))+'</div></article><article class="smart-card"><div class="smart-label">Warnings</div><div class="audit-code">'+escapeHtml(JSON.stringify(state.debug.warnings.slice(-10),null,2))+'</div></article></div><section class="panel" style="margin-top:12px"><div class="panel-header"><span class="panel-title">Actions</span></div><div class="panel-body"><div class="smart-actions"><button class="button button-secondary" id="debugRunAudit" type="button"><i data-lucide="shield-check"></i>Run audit</button><button class="button button-secondary" id="debugRefresh" type="button"><i data-lucide="refresh-cw"></i>Refresh telemetry</button><button class="button button-secondary" id="debugClear" type="button"><i data-lucide="eraser"></i>Clear captured errors</button></div></div></section>';document.getElementById("debugRunAudit")?.addEventListener("click",runAudit);document.getElementById("debugRefresh")?.addEventListener("click",()=>{renderDebug();if(state.username&&state.source==="github")loadEngineeringSignals(state.requestId).catch(e=>rememberDebug("warning",e))});document.getElementById("debugClear")?.addEventListener("click",()=>{state.debug.errors=[];state.debug.warnings=[];renderDebug()});refreshIcons()}
+    function handleSpecialRoute(){const path=window.location.pathname.replace(/\/+$/,"")||"/";if(path==="/audit"||path==="/debug"){renderRoute(path.slice(1));return true}clearRoute();return false}
+    function installSmartDiagnostics(){window.addEventListener("error",e=>rememberDebug("error",e.error||new Error(e.message||"Unhandled error")));window.addEventListener("unhandledrejection",e=>rememberDebug("error",e.reason||new Error("Unhandled promise rejection")))}
+
     /* ============================================================
        URL STATE
     ============================================================ */
@@ -7641,16 +7690,12 @@ git log --pretty=format:"%ad|%s" --date=short'
     }
 
     function runCommand(command) {
-      if (command === "theme") {
-        toggleTheme();
-        return;
-      }
-
-      if (command === "demo") {
-        runDemo();
-        return;
-      }
-
+      closeCommand();
+      if(command==="theme"){toggleTheme();return}
+      if(command==="demo"){runDemo();return}
+      if(command==="audit"||command==="debug"){location.assign("/"+command);return}
+      if(command==="insights"){showView("dashboard");document.getElementById("insightList")?.scrollIntoView({behavior:"smooth",block:"start"});return}
+      if(command==="delivery"){showView("dashboard");document.getElementById("deliveryList")?.scrollIntoView({behavior:"smooth",block:"start"});return}
       showView(command);
     }
 
@@ -7730,6 +7775,8 @@ git log --pretty=format:"%ad|%s" --date=short'
     el.aboutDemo.addEventListener("click", runDemo);
 
     el.processGitButton.addEventListener("click", processGitLog);
+    el.saveWorkspace?.addEventListener("click", saveCurrentWorkspace);
+    el.clearWorkspaces?.addEventListener("click", clearProjectSpaces);
 
     el.token.addEventListener("input", () => {
       state.token = el.token.value.trim();
@@ -7954,10 +8001,12 @@ git log --pretty=format:"%ad|%s" --date=short'
       el.year.value = String(state.year);
 
       loadPreferences();
+      loadProjectSpaces();
       applyRail();
       loadUrlState();
       loadToken();
       initializeCookieBanner();
+      installSmartDiagnostics();
 
       applyTheme();
       setSource("github");
@@ -7966,6 +8015,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
       updateLabels();
       showView(state.currentView);
+      renderSmartWorkspace();
       renderCalendar();
       renderRepositories();
       renderActivity();
@@ -7982,12 +8032,13 @@ git log --pretty=format:"%ad|%s" --date=short'
       updateRailBadges();
       handleGithubAuthResult();
       refreshGithubApp();
+      const specialRoute = handleSpecialRoute();
 
       refreshIcons();
 
       const params = new URLSearchParams(window.location.search);
 
-      if (params.get("user") && validUsername(params.get("user"))) {
+      if (!specialRoute && params.get("user") && validUsername(params.get("user"))) {
         loadGithub();
       }
     }
