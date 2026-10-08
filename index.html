@@ -7,11 +7,37 @@
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
   <meta name="theme-color" content="#0d1117">
-  <meta
-    name="description"
-    content="Anvil — developer activity, Git history and project analytics."
-  >
-  <title>Anvil — Developer Activity</title>
+  <meta name="color-scheme" content="dark light">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="description" content="Anvil is a privacy-conscious developer workspace for GitHub activity, repositories, Git history, releases, reports and project intelligence.">
+  <meta name="keywords" content="developer analytics, GitHub activity, GitHub dashboard, developer workspace, Git history, repository analytics, project intelligence">
+  <meta name="author" content="Anvil">
+  <link rel="canonical" href="https://anvil.is-local.host/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Anvil">
+  <meta property="og:title" content="Anvil — Developer Activity Workspace">
+  <meta property="og:description" content="A native-feeling developer workspace for GitHub activity, repositories, Git history, releases and project intelligence.">
+  <meta property="og:url" content="https://anvil.is-local.host/">
+  <meta property="og:image" content="https://anvil.is-local.host/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Anvil — Developer Activity Workspace">
+  <meta name="twitter:description" content="Developer activity, Git history and project intelligence in one focused workspace.">
+  <meta name="twitter:image" content="https://anvil.is-local.host/icon.svg">
+  <title>Anvil — Developer Activity Workspace</title>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"WebApplication","@id":"https://anvil.is-local.host/#app","name":"Anvil","url":"https://anvil.is-local.host/","description":"A developer workspace for GitHub activity, repositories, Git history, releases and project intelligence.","applicationCategory":"DeveloperApplication","operatingSystem":"Any"},
+      {"@type":"Organization","@id":"https://anvil.is-local.host/#organization","name":"Anvil","url":"https://anvil.is-local.host/","logo":"https://anvil.is-local.host/icon.svg","sameAs":["https://github.com/acetheticsx/Anvil"]},
+      {"@type":"WebSite","@id":"https://anvil.is-local.host/#website","url":"https://anvil.is-local.host/","name":"Anvil","description":"Developer activity and project intelligence workspace."}
+    ]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2914,6 +2940,49 @@
       .sidebar-footer { display: none; }
     }
 
+    /* Native app shell + trust layer */
+    body { padding-bottom: 20px; }
+    .layout { display: block; }
+    .sidebar { position: fixed; z-index: 400; top: 14px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100vw - 24px); min-height: 0; height: 52px; display: flex; flex-direction: row; align-items: center; border: 1px solid var(--border); border-radius: 18px; background: color-mix(in srgb, var(--surface) 92%, transparent); box-shadow: 0 14px 42px rgba(0,0,0,.24), 0 0 0 1px color-mix(in srgb, var(--border) 60%, transparent); backdrop-filter: blur(18px) saturate(1.2); overflow: hidden; }
+    .brand { flex: 0 0 auto; min-height: 50px; padding: 7px 12px; border: 0; border-right: 1px solid var(--border); }
+    .brand-mark { width: 34px; height: 34px; border: 0; background: transparent; }
+    .brand-mark img { width: 27px; height: 27px; display: block; }
+    .brand-name, .brand-caption { display: none; }
+    .nav { display: flex; flex-direction: row; align-items: center; gap: 3px; padding: 5px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-section { display: none; }
+    .nav-button { width: auto; min-height: 40px; flex: 0 0 auto; justify-content: center; gap: 7px; padding: 8px 10px; border: 0; border-radius: 12px; color: var(--muted); background: transparent; white-space: nowrap; }
+    .nav-button svg { width: 16px; height: 16px; }
+    .nav-button .nav-label { display: none; font-size: .78rem; font-weight: 650; letter-spacing: -.01em; }
+    .nav-button.active { background: var(--nav-active-bg); color: var(--text); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent); }
+    .nav-button.active .nav-label { display: inline; }
+    .nav-button[data-action="search"] .nav-label { display: none; }
+    .nav-shortcut { display: none; }
+    .sidebar-footer { flex: 0 0 auto; display: block; padding: 0 8px 0 2px; border: 0; }
+    .connection-status { width: 10px; height: 10px; padding: 0; border-radius: 50%; background: var(--surface-2); }
+    .connection-status .status-dot { width: 7px; height: 7px; }
+    .connection-status #connectionText { display: none; }
+    .main { width: min(1100px, 100%); margin-inline: auto; padding-top: 88px; }
+    .github-connected-summary { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-deep); }
+    .github-connected-summary[hidden] { display: none; }
+    .github-connected-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+    .github-connected-copy strong { display: block; font-size: .78rem; }
+    .github-connected-copy span { display: block; margin-top: 2px; color: var(--muted); font-size: .65rem; }
+    .github-connected-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+    .site-footer { width: min(1100px, 100%); margin: 26px auto 0; padding: 16px 2px 6px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--subtle); font-size: .68rem; }
+    .site-footer-brand, .site-footer-links { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+    .site-footer-brand img { opacity: .85; }
+    .site-footer-brand strong { color: var(--text); }
+    .site-footer-links a { color: var(--muted); text-decoration: none; }
+    .site-footer-links a:hover { color: var(--text); text-decoration: underline; }
+    .about-faq { display: grid; gap: 8px; margin-top: 4px; padding-top: 4px; }
+    .about-faq h2 { font-size: .82rem; font-weight: 650; }
+    .about-faq details { padding: 10px 11px; border: 1px solid var(--border-muted); border-radius: 8px; background: var(--bg-deep); }
+    .about-faq summary { cursor: pointer; color: var(--text); font-size: .72rem; font-weight: 600; }
+    .about-faq p { margin-top: 7px; color: var(--muted); font-size: .68rem; line-height: 1.6; }
+    @media (max-width: 900px) { .sidebar { top: 10px; max-width: calc(100vw - 16px); height: 50px; } .brand { padding-inline: 8px; } .main { padding-top: 76px; } .nav-button { min-height: 38px; } }
+    @media (max-width: 620px) { .brand { display: none; } .sidebar { width: calc(100vw - 16px); } .nav { width: 100%; justify-content: flex-start; } .nav-button.active .nav-label { display: inline; } .github-connected-summary { grid-template-columns: auto minmax(0,1fr); } .github-connected-actions { grid-column: 1 / -1; justify-content: flex-start; } .site-footer { align-items: flex-start; flex-direction: column; } }
+
   </style>
 </head>
 
@@ -2931,7 +3000,7 @@
 
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">
-            <i data-lucide="anvil"></i>
+            <img src="/icon.svg" alt="" width="27" height="27">
           </div>
 
           <div>
@@ -2946,52 +3015,52 @@
 
           <button class="nav-button active" data-view="dashboard" type="button">
             <i data-lucide="layout-dashboard"></i>
-            Dashboard
+            <span class="nav-label">Dashboard</span>
           </button>
 
           <button class="nav-button" data-view="activity" type="button">
             <i data-lucide="activity"></i>
-            Activity
+            <span class="nav-label">Activity</span>
           </button>
 
           <button class="nav-button" data-view="repositories" type="button">
             <i data-lucide="folder-git-2"></i>
-            Repositories
+            <span class="nav-label">Repositories</span>
           </button>
 
           <button class="nav-button" data-view="timeline" type="button">
             <i data-lucide="calendar-clock"></i>
-            Timeline
+            <span class="nav-label">Timeline</span>
           </button>
 
           <div class="nav-section">Development</div>
 
           <button class="nav-button" data-view="git" type="button">
             <i data-lucide="git-branch"></i>
-            Git
+            <span class="nav-label">Git</span>
           </button>
 
           <button class="nav-button" data-view="releases" type="button">
             <i data-lucide="package"></i>
-            Releases
+            <span class="nav-label">Releases</span>
           </button>
 
           <button class="nav-button" data-view="reports" type="button">
             <i data-lucide="file-bar-chart"></i>
-            Reports
+            <span class="nav-label">Reports</span>
           </button>
 
           <div class="nav-section">System</div>
 
           <button class="nav-button" data-action="search" type="button">
             <i data-lucide="search"></i>
-            Search
-            <span style="margin-left:auto" class="kbd">/</span>
+            <span class="nav-label">Search</span>
+            <span class="nav-shortcut kbd">/</span>
           </button>
 
           <button class="nav-button" data-view="about" type="button">
             <i data-lucide="info"></i>
-            About
+            <span class="nav-label">About</span>
           </button>
 
         </nav>
@@ -3137,6 +3206,8 @@
                 </div>
 
               </form>
+
+              <div class="github-connected-summary" id="githubConnectedSummary" hidden aria-live="polite"></div>
 
               <div class="github-app-card" aria-live="polite">
                 <div class="github-app-copy">
@@ -3901,10 +3972,26 @@ git log --pretty=format:"%ad|%s" --date=short'
 
                   </div>
 
+                  <section class="about-faq" aria-labelledby="faqTitle">
+                    <h2 id="faqTitle">Anvil in plain language</h2>
+                    <details open>
+                      <summary>What is Anvil?</summary>
+                      <p>Anvil is a developer workspace that turns GitHub activity, repositories, releases and Git history into a focused view of project health and development activity.</p>
+                    </details>
+                    <details>
+                      <summary>What happens when I connect GitHub?</summary>
+                      <p>Anvil uses a server-side GitHub App session. The OAuth access token stays on the server and is not exposed to browser JavaScript. When connected, Anvil automatically loads the authorized GitHub account into the workspace.</p>
+                    </details>
+                    <details>
+                      <summary>Does Anvil use analytics or advertising cookies?</summary>
+                      <p>No. Anvil does not use advertising or analytics cookies. Authentication uses strictly necessary session cookies, while local preferences and an optional personal access token use browser storage as described in the privacy and cookie policies.</p>
+                    </details>
+                  </section>
+
                   <p class="about-text">
                     Built with vanilla JavaScript, the GitHub REST API and
-                    the open contributions API. No frameworks, no analytics,
-                    no cookies.
+                    the open contributions API. Anvil is designed to keep the
+                    interface fast, understandable and privacy-conscious.
                   </p>
 
                 </div>
@@ -3920,6 +4007,18 @@ git log --pretty=format:"%ad|%s" --date=short'
       </main>
 
     </div>
+
+    <footer class="site-footer" aria-label="Site information">
+      <div class="site-footer-brand"><img src="/icon.svg" alt="" width="20" height="20"> <strong>Anvil</strong> <span>Developer workspace</span></div>
+      <nav class="site-footer-links" aria-label="Legal and security">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/cookies.html">Cookies</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/security.html">Security</a>
+        <a href="https://github.com/acetheticsx/Anvil" target="_blank" rel="noopener noreferrer">Source</a>
+      </nav>
+      <span>© 2026 Anvil</span>
+    </footer>
 
   </div>
 
@@ -4098,6 +4197,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       githubAppConnected: false,
       githubAppUser: null,
       githubAppData: null,
+      githubAppAutoLoadedFor: new Set(),
       calendar: new Map(),
       previousYearTotal: null,
       repositories: [],
@@ -4156,6 +4256,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       clearToken: $("#clearToken"),
 
       connectGithubApp: $("#connectGithubApp"),
+      githubConnectedSummary: $("#githubConnectedSummary"),
       refreshGithubApp: $("#refreshGithubApp"),
       disconnectGithubApp: $("#disconnectGithubApp"),
       githubAppBadge: $("#githubAppBadge"),
@@ -5015,6 +5116,41 @@ git log --pretty=format:"%ad|%s" --date=short'
       refreshIcons();
     }
 
+    function renderConnectedAccountSummary(data) {
+      if (!el.githubConnectedSummary) return;
+      if (!data?.user?.login) {
+        el.githubConnectedSummary.hidden = true;
+        el.githubConnectedSummary.replaceChildren();
+        return;
+      }
+      const user = data.user;
+      const fragment = document.createDocumentFragment();
+      const avatar = document.createElement("img");
+      avatar.className = "github-connected-avatar";
+      avatar.width = 42; avatar.height = 42; avatar.alt = "";
+      avatar.src = safeHref(user.avatar_url) || "/icon.svg";
+      const copy = document.createElement("div");
+      copy.className = "github-connected-copy";
+      const title = document.createElement("strong");
+      title.textContent = user.name || ("@" + user.login);
+      const meta = document.createElement("span");
+      meta.textContent = "@" + user.login + " · " + number(data.repositories?.count ?? state.repositories.length) + " repos · " + number(data.stars?.count || 0) + " starred";
+      copy.append(title, meta);
+      const actions = document.createElement("div");
+      actions.className = "github-connected-actions";
+      const badge = document.createElement("span");
+      badge.className = "health-pill"; badge.textContent = "Live account";
+      const sync = document.createElement("button");
+      sync.type = "button"; sync.className = "button button-secondary";
+      sync.innerHTML = '<i data-lucide="refresh-cw"></i> Sync data';
+      sync.addEventListener("click", () => { state.githubAppAutoLoadedFor = new Set(); refreshGithubApp(); });
+      actions.append(badge, sync);
+      fragment.append(avatar, copy, actions);
+      el.githubConnectedSummary.replaceChildren(fragment);
+      el.githubConnectedSummary.hidden = false;
+      refreshIcons();
+    }
+
     function renderGithubAppData(data) {
       state.githubAppData = data || null;      el.githubIntelMeta.textContent = data
         ? `@${data.user?.login || state.username || "github"} · synced ${data.syncedAt ? formatRelativeTime(data.syncedAt) : "now"}`
@@ -5065,7 +5201,6 @@ git log --pretty=format:"%ad|%s" --date=short'
       clean.searchParams.delete("github_auth");
       clean.searchParams.delete("reason");
       window.history.replaceState({}, "", clean.pathname + clean.search + clean.hash);
-      refreshGithubApp();
     }
 
     async function refreshGithubApp() {
@@ -5080,12 +5215,29 @@ git log --pretty=format:"%ad|%s" --date=short'
         state.githubAppUser = data.user || null;
         renderGithubAppState();
         renderGithubAppData(data);
-        if (data.user?.login && !el.username.value) el.username.value = data.user.login;
+
+        if (data.user?.login) {
+          const login = String(data.user.login).trim();
+          el.username.value = login;
+          state.username = login;
+          savePreferences();
+          renderConnectedAccountSummary(data);
+
+          if (state.source === "github" && state.githubAppConnected) {
+            const loadKey = login + ":" + state.year;
+            if (!state.githubAppAutoLoadedFor.has(loadKey)) {
+              state.githubAppAutoLoadedFor.add(loadKey);
+              loadGithub();
+            }
+          }
+        }
       } catch (error) {
         state.githubAppConnected = false;
         state.githubAppUser = null;
+        state.githubAppAutoLoadedFor = new Set();
         renderGithubAppState();
         renderGithubAppData(null);
+        renderConnectedAccountSummary(null);
         if (error?.message && error.message !== "not connected") {
           status(`GitHub App check failed: ${error.message}`, "warning");
         }
@@ -6836,7 +6988,9 @@ git log --pretty=format:"%ad|%s" --date=short'
       renderPortfolioIntelligence();
       renderGithubAppState();
       renderGithubAppData(null);
+      renderConnectedAccountSummary(null);
       handleGithubAuthResult();
+      refreshGithubApp();
 
       refreshIcons();
 

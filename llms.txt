@@ -1,0 +1,22 @@
+# Anvil
+
+> Developer activity and project intelligence workspace.
+
+## What it does
+Anvil helps developers inspect GitHub activity, contribution history, repositories, releases, Git history, reports, and project intelligence from one native-feeling workspace.
+
+## Authentication
+Anvil supports a GitHub App connection. OAuth sessions are handled server-side. The browser receives a secure session cookie rather than the GitHub OAuth access token.
+
+## Privacy
+Anvil does not use advertising or analytics cookies. Authentication cookies are strictly necessary for the GitHub App session. Browser preferences are stored locally. An optional personal access token is stored only in session storage when the user chooses to remember it for the current browser session.
+
+## Public pages
+- https://anvil.is-local.host/
+- https://anvil.is-local.host/privacy.html
+- https://anvil.is-local.host/cookies.html
+- https://anvil.is-local.host/terms.html
+- https://anvil.is-local.host/security.html
+
+## Source
+https://github.com/acetheticsx/Anvil

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title>Anvil</title>
+  <g fill="none" stroke="#111827" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M72 150h350c-7 61-42 111-101 139-28 13-58 19-91 19H136c-18 0-32-14-32-32V150Z"/>
+    <path d="M104 163H57c8 43 31 71 79 82"/>
+    <path d="M167 308v86"/>
+    <path d="M341 308v86"/>
+    <rect x="111" y="394" width="286" height="68" rx="32"/>
+  </g>
+  <style>@media (prefers-color-scheme: dark){g{stroke:#f0f6fc}}</style>
+</svg>
