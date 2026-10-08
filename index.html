@@ -5134,7 +5134,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       const title = document.createElement("strong");
       title.textContent = user.name || ("@" + user.login);
       const meta = document.createElement("span");
-      meta.textContent = "@" + user.login + " · " + number(data.repositories?.count ?? state.repositories.length) + " repos · " + number(data.stars?.count || 0) + " starred";
+      meta.textContent = "@" + user.login + " · " + number(state.repositories.length) + " repos · " + number(data.stars?.count || 0) + " starred";
       copy.append(title, meta);
       const actions = document.createElement("div");
       actions.className = "github-connected-actions";
@@ -5491,6 +5491,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
         renderProfile(profile);
         renderRepositories();
+        if (state.githubAppConnected) renderConnectedAccountSummary(state.githubAppData);
         renderActivity();
         renderTimeline();
         renderCalendar();
