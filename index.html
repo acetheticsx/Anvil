@@ -2983,6 +2983,265 @@
     @media (max-width: 900px) { .sidebar { top: 10px; max-width: calc(100vw - 16px); height: 50px; } .brand { padding-inline: 8px; } .main { padding-top: 76px; } .nav-button { min-height: 38px; } }
     @media (max-width: 620px) { .brand { display: none; } .sidebar { width: calc(100vw - 16px); } .nav { width: 100%; justify-content: flex-start; } .nav-button.active .nav-label { display: inline; } .github-connected-summary { grid-template-columns: auto minmax(0,1fr); } .github-connected-actions { grid-column: 1 / -1; justify-content: flex-start; } .site-footer { align-items: flex-start; flex-direction: column; } }
 
+
+
+    /* GitHub/Primer-inspired desktop side rail */
+    .layout {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      align-items: start;
+      gap: 22px;
+      width: min(1380px, 100%);
+      margin-inline: auto;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 16px;
+      left: auto;
+      transform: none;
+      width: 72px;
+      height: calc(100vh - 32px);
+      max-width: none;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 8px;
+      border-radius: 16px;
+      overflow: visible;
+    }
+
+    .brand {
+      width: 54px;
+      height: 48px;
+      min-height: 48px;
+      padding: 7px;
+      margin: 0 auto 8px;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 10px;
+      justify-content: center;
+    }
+
+    .nav {
+      width: 100%;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 3px;
+      padding: 4px 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-section { display: none; }
+
+    .nav-button {
+      position: relative;
+      width: 54px;
+      min-height: 42px;
+      margin-inline: auto;
+      padding: 9px;
+      border-radius: 10px;
+      gap: 8px;
+      justify-content: center;
+      color: var(--muted);
+    }
+
+    .nav-button:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .nav-button.active {
+      justify-content: flex-start;
+      width: 100%;
+      color: var(--text);
+      background: var(--nav-active-bg);
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+
+    .nav-button.active .nav-label {
+      display: inline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav-button.active::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .nav-button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .nav-shortcut { display: none; }
+
+    .sidebar-footer {
+      display: flex;
+      justify-content: center;
+      padding: 8px 0 2px;
+      border: 0;
+    }
+
+    .connection-status {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+    }
+
+    .connection-status .status-dot { width: 7px; height: 7px; }
+    .connection-status #connectionText { display: none; }
+
+    .main {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0;
+      padding-top: 4px;
+    }
+
+    .site-footer {
+      width: min(1380px, 100%);
+      margin: 18px auto 0;
+      padding-left: 94px;
+    }
+
+    .cookie-banner {
+      position: fixed;
+      z-index: 900;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: min(760px, calc(100vw - 28px));
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--surface) 96%, transparent);
+      box-shadow: 0 18px 55px rgba(0,0,0,.35);
+      backdrop-filter: blur(18px) saturate(1.15);
+    }
+
+    .cookie-banner[hidden] { display: none; }
+    .cookie-banner-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--accent);
+      background: var(--surface-2);
+    }
+
+    .cookie-banner-copy strong {
+      display: block;
+      color: var(--text);
+      font-size: .76rem;
+    }
+
+    .cookie-banner-copy p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: .66rem;
+      line-height: 1.45;
+    }
+
+    .cookie-banner-copy a {
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .cookie-banner-dismiss {
+      min-width: 68px;
+      min-height: 36px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        display: block;
+        width: 100%;
+      }
+
+      .sidebar {
+        position: fixed;
+        z-index: 400;
+        top: auto;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(680px, calc(100vw - 16px));
+        height: 58px;
+        max-width: calc(100vw - 16px);
+        flex-direction: row;
+        padding: 5px;
+        border-radius: 16px;
+      }
+
+      .brand {
+        display: none;
+      }
+
+      .nav {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 3px;
+        padding: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      .nav-button,
+      .nav-button.active {
+        width: auto;
+        min-width: 44px;
+        min-height: 46px;
+        margin: 0;
+        padding: 7px 9px;
+        justify-content: center;
+      }
+
+      .nav-button.active .nav-label {
+        display: inline;
+        max-width: 90px;
+      }
+
+      .sidebar-footer { display: none; }
+      .main { padding: 0 0 78px; }
+      .site-footer { padding-left: 0; }
+    }
+
+    @media (max-width: 620px) {
+      .cookie-banner {
+        bottom: 78px;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .cookie-banner-dismiss {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
+
   </style>
 </head>
 
@@ -3118,7 +3377,7 @@
              SOURCE PANEL
         ======================================================= -->
 
-        <section class="panel">
+        <section class="panel" id="sourcePanel">
 
           <div class="panel-header">
             <span class="panel-title">Choose a data source</span>
@@ -3382,7 +3641,7 @@ git log --pretty=format:"%ad|%s" --date=short'
              STATS
         ======================================================= -->
 
-        <section class="stats-grid" style="margin-top:14px">
+        <section class="stats-grid" id="statsPanel" style="margin-top:14px">
 
           <article class="stat-card">
             <div class="stat-label" id="totalLabel">Contributions</div>
@@ -4026,6 +4285,15 @@ git log --pretty=format:"%ad|%s" --date=short'
        COMMAND PALETTE
   =========================================================== -->
 
+  <section class="cookie-banner" id="cookieBanner" hidden aria-label="Cookie information" role="region">
+    <div class="cookie-banner-icon" aria-hidden="true"><i data-lucide="shield-check"></i></div>
+    <div class="cookie-banner-copy">
+      <strong>Cookies, without the circus.</strong>
+      <p>Anvil uses only strictly necessary cookies for GitHub authentication and OAuth security. No analytics or advertising cookies are used. <a href="/cookies.html">Read the cookie policy</a>.</p>
+    </div>
+    <button class="button button-primary cookie-banner-dismiss" id="cookieBannerDismiss" type="button">Got it</button>
+  </section>
+
   <div class="modal-backdrop" id="commandModal" hidden>
 
     <section
@@ -4274,6 +4542,10 @@ git log --pretty=format:"%ad|%s" --date=short'
       status: $("#status"),
       sourceMeta: $("#sourceMeta"),
       connectionText: $("#connectionText"),
+      sourcePanel: $("#sourcePanel"),
+      statsPanel: $("#statsPanel"),
+      cookieBanner: $("#cookieBanner"),
+      cookieBannerDismiss: $("#cookieBannerDismiss"),
 
       profilePanel: $("#profilePanel"),
       avatar: $("#avatar"),
@@ -4720,6 +4992,11 @@ git log --pretty=format:"%ad|%s" --date=short'
 
       el.pageTitle.textContent = viewMeta[view][0];
       el.pageSubtitle.textContent = viewMeta[view][1];
+
+      const dashboardContext = view === "dashboard";
+      el.sourcePanel.hidden = !dashboardContext;
+      el.profilePanel.hidden = !dashboardContext;
+      el.statsPanel.hidden = !dashboardContext;
 
       if (view === "releases") {
         loadReleases().catch(() => {});
@@ -6960,6 +7237,46 @@ git log --pretty=format:"%ad|%s" --date=short'
 
 
     /* ============================================================
+       COOKIE INFORMATION
+    ============================================================ */
+
+    const COOKIE_NOTICE_KEY = "anvil_cookie_notice_v1";
+
+    function initializeCookieBanner() {
+      if (!el.cookieBanner || !el.cookieBannerDismiss) return;
+
+      let acknowledged = false;
+      try {
+        acknowledged = localStorage.getItem(COOKIE_NOTICE_KEY) === "acknowledged";
+      } catch {
+        /* Storage can be disabled. The banner remains available. */
+      }
+
+      if (acknowledged) {
+        el.cookieBanner.hidden = true;
+        return;
+      }
+
+      el.cookieBanner.hidden = false;
+      refreshIcons();
+
+      el.cookieBannerDismiss.addEventListener("click", () => {
+        try {
+          localStorage.setItem(COOKIE_NOTICE_KEY, "acknowledged");
+        } catch {
+          /* The notice can still be dismissed if storage is unavailable. */
+        }
+
+        el.cookieBanner.hidden = true;
+
+        if (document.activeElement === el.cookieBannerDismiss) {
+          el.pageTitle.setAttribute("tabindex", "-1");
+          el.pageTitle.focus({ preventScroll: true });
+        }
+      }, { once: true });
+    }
+
+    /* ============================================================
        INITIALIZATION
     ============================================================ */
 
@@ -6970,6 +7287,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       loadPreferences();
       loadUrlState();
       loadToken();
+      initializeCookieBanner();
 
       applyTheme();
       setSource("github");
@@ -6977,6 +7295,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       state.calendar = emptyCalendar(state.year);
 
       updateLabels();
+      showView(state.currentView);
       renderCalendar();
       renderRepositories();
       renderActivity();
