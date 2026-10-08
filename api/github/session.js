@@ -6,9 +6,20 @@ async function countEndpoint(path, token) {
   const response = await githubFetch(path, token);
   if (!response.ok) return { count: 0, available: false };
   const data = await response.json();
-  if (Array.isArray(data)) return { count: data.length, available: true };
-  if (typeof data.total_count === 'number') return { count: data.total_count, available: true };
-  return { count: 0, available: false };
+  if (typeof data.total_count === 'number') {
+    return { count: data.total_count, available: true };
+  }
+  if (!Array.isArray(data)) return { count: 0, available: false };
+
+  const link = response.headers.get('link') || '';
+  const lastMatch = link.match(/<[^>]+[?&]page=(\d+)[^>]*>;\s*rel="last"/i);
+  if (lastMatch) {
+    const pages = Number(lastMatch[1]);
+    if (Number.isSafeInteger(pages) && pages >= 1) {
+      return { count: (pages - 1) * 100 + data.length, available: true };
+    }
+  }
+  return { count: data.length, available: true };
 }
 
 async function refreshAccessToken(session) {
