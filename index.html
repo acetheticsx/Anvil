@@ -3481,6 +3481,265 @@
       .site-footer { padding-left: 66px; }
     }
 
+
+    /* ============================================================
+       Anvil UI v3: compact right rail, stable desktop shell
+       ============================================================ */
+    .layout {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) 112px !important;
+      gap: 18px !important;
+      width: min(1420px, 100%) !important;
+      align-items: start !important;
+    }
+
+    .main {
+      grid-column: 1;
+      grid-row: 1;
+      width: 100% !important;
+      max-width: 1120px !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      min-width: 0;
+    }
+
+    .sidebar,
+    .sidebar[data-expanded="false"] {
+      grid-column: 2;
+      grid-row: 1;
+      position: sticky !important;
+      top: 16px !important;
+      right: auto !important;
+      left: auto !important;
+      transform: none !important;
+      width: 112px !important;
+      max-width: 112px !important;
+      height: calc(100vh - 32px) !important;
+      min-height: 0 !important;
+      padding: 8px !important;
+      border-radius: 14px !important;
+      background: color-mix(in srgb, var(--surface) 94%, transparent) !important;
+      box-shadow: 0 12px 34px rgba(0,0,0,.16), 0 0 0 1px color-mix(in srgb, var(--border) 60%, transparent) !important;
+      backdrop-filter: blur(16px) saturate(1.08);
+      overflow: hidden !important;
+      transition: width .22s cubic-bezier(.2,.8,.2,1), background .2s ease, border-color .2s ease;
+    }
+
+    .brand {
+      width: 100% !important;
+      height: 42px !important;
+      min-height: 42px !important;
+      margin: 0 0 7px !important;
+      padding: 4px 5px !important;
+      border: 0 !important;
+      justify-content: center !important;
+      gap: 6px !important;
+    }
+
+    .brand-mark { width: 34px !important; height: 34px !important; flex-basis: 34px !important; }
+    .brand-copy, .rail-version, .rail-workspace { display: none !important; }
+
+    .nav {
+      gap: 3px !important;
+      padding: 2px 0 !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+
+    .nav-section { display: none !important; }
+
+    .nav-button,
+    .nav-button.active {
+      width: 94px !important;
+      min-width: 94px !important;
+      min-height: 42px !important;
+      margin: 0 auto !important;
+      padding: 8px 7px !important;
+      border-radius: 9px !important;
+      justify-content: flex-start !important;
+      gap: 7px !important;
+      overflow: hidden !important;
+    }
+
+    .nav-button:not(.active) {
+      width: 48px !important;
+      min-width: 48px !important;
+      justify-content: center !important;
+      padding: 8px !important;
+    }
+
+    .nav-button .nav-label {
+      display: none !important;
+      max-width: 0 !important;
+      opacity: 0 !important;
+      transform: translateX(-5px) !important;
+      font-size: .61rem !important;
+      font-weight: 650 !important;
+    }
+
+    .nav-button.active .nav-label {
+      display: inline !important;
+      max-width: 65px !important;
+      opacity: 1 !important;
+      transform: translateX(0) !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .nav-button svg {
+      width: 17px !important;
+      height: 17px !important;
+      flex: 0 0 17px !important;
+      transition: transform .28s cubic-bezier(.2,.8,.2,1), opacity .18s ease, color .2s ease, fill .2s ease, stroke-width .2s ease;
+    }
+
+    .nav-button.active svg {
+      color: var(--accent) !important;
+      fill: currentColor !important;
+      stroke-width: 2.55 !important;
+      transform: scale(1.05);
+    }
+
+    .nav-button.nav-icon-switch svg { animation: anvilNavIconSwitch .34s cubic-bezier(.2,.8,.2,1); }
+    @keyframes anvilNavIconSwitch {
+      0% { opacity: .35; transform: translateX(-4px) scale(.82) rotate(-8deg); }
+      55% { opacity: 1; transform: translateX(2px) scale(1.12) rotate(3deg); }
+      100% { opacity: 1; transform: translateX(0) scale(1.05) rotate(0); }
+    }
+
+    .nav-badge {
+      position: absolute !important;
+      top: 3px !important;
+      right: 3px !important;
+      min-width: 14px !important;
+      height: 14px !important;
+      padding: 0 3px !important;
+      font-size: .46rem !important;
+    }
+
+    .sidebar-footer { display: none !important; }
+
+    .rail-actions {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 3px !important;
+      padding: 7px 0 2px !important;
+    }
+
+    .rail-action { min-height: 30px !important; }
+
+    .site-footer {
+      width: min(1420px, 100%) !important;
+      margin: 20px auto 0 !important;
+      padding: 0 130px 4px 0 !important;
+      color: var(--subtle);
+      font-size: .65rem;
+    }
+
+    .site-footer-inner {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+      align-items: center;
+      gap: 12px;
+      min-height: 54px;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+
+    .site-footer-brand, .site-footer-meta, .site-footer-links {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .site-footer-brand > span:last-child { display: grid; gap: 0; }
+    .site-footer-brand strong { color: var(--text); font-size: .68rem; line-height: 1.1; }
+    .site-footer-brand small { color: var(--subtle); font-size: .57rem; }
+    .site-footer-mark {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border-muted);
+      border-radius: 7px;
+      background: var(--bg-deep);
+    }
+    .site-footer-mark img { display: block; opacity: .9; }
+    .site-footer-meta { justify-content: center; color: var(--muted); white-space: nowrap; }
+    .site-footer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 7px;
+      border: 1px solid var(--ok-border);
+      border-radius: 999px;
+      background: var(--ok-bg);
+      color: var(--ok-text);
+    }
+    .site-footer-status svg { width: 12px; height: 12px; }
+    .site-footer-version { color: var(--subtle); font-variant-numeric: tabular-nums; }
+    .site-footer-links { justify-content: flex-end; }
+    .site-footer-links a { color: var(--muted); text-decoration: none; text-underline-offset: 3px; }
+    .site-footer-links a:hover, .site-footer-links a:focus-visible { color: var(--text); text-decoration: underline; }
+    .site-footer-copy { display: none; }
+
+    .about-connection-card { margin-top: 2px !important; background: var(--bg-deep) !important; }
+
+    .source-tab.source-tab-switch svg { animation: anvilTabIconSwitch .3s cubic-bezier(.2,.8,.2,1); }
+    @keyframes anvilTabIconSwitch {
+      0% { opacity: .45; transform: translateY(3px) scale(.86); }
+      55% { opacity: 1; transform: translateY(-1px) scale(1.08); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { display: block !important; width: 100% !important; }
+      .main { width: 100% !important; max-width: none !important; padding: 0 72px 0 0 !important; }
+      .sidebar, .sidebar[data-expanded="false"] {
+        position: fixed !important;
+        top: 8px !important;
+        right: 7px !important;
+        bottom: 8px !important;
+        left: auto !important;
+        width: 56px !important;
+        max-width: 56px !important;
+        height: auto !important;
+        padding: 6px 3px !important;
+        border-radius: 12px !important;
+      }
+      .brand, .rail-workspace, .rail-actions, .sidebar-footer { display: none !important; }
+      .nav { width: 100% !important; flex-direction: column !important; align-items: stretch !important; gap: 4px !important; overflow-y: auto !important; }
+      .nav-button, .nav-button.active, .nav-button:not(.active) {
+        width: 46px !important; min-width: 46px !important; min-height: 44px !important; margin: 0 auto !important; padding: 8px !important; justify-content: center !important;
+      }
+      .nav-button .nav-label, .nav-button.active .nav-label { display: none !important; }
+      .nav-button:hover::after {
+        content: attr(data-tooltip);
+        position: absolute; right: calc(100% + 9px); left: auto; top: 50%; z-index: 1200; transform: translateY(-50%);
+        padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--tooltip-bg); color: var(--tooltip-text); box-shadow: var(--shadow); font-size: .65rem; white-space: nowrap; pointer-events: none;
+      }
+      .nav-badge { top: 2px !important; right: 2px !important; }
+      .site-footer { width: 100% !important; padding: 0 72px 4px 0 !important; }
+      .site-footer-inner { grid-template-columns: 1fr; gap: 8px; }
+      .site-footer-meta, .site-footer-links { justify-content: flex-start; }
+    }
+
+    @media (max-width: 560px) {
+      .main { padding-right: 64px !important; }
+      .sidebar, .sidebar[data-expanded="false"] { right: 5px !important; width: 52px !important; max-width: 52px !important; }
+      .nav-button, .nav-button.active, .nav-button:not(.active) { width: 44px !important; min-width: 44px !important; min-height: 42px !important; }
+      .site-footer { padding-right: 64px !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-button, .nav-button svg, .source-tab svg { transition: none !important; animation: none !important; }
+    }
+
 </style>
 </head>
 
@@ -3664,19 +3923,6 @@
               </form>
 
               <div class="github-connected-summary" id="githubConnectedSummary" hidden aria-live="polite"></div>
-
-              <div class="github-app-card" aria-live="polite">
-                <div class="github-app-copy">
-                  <strong>GitHub connection</strong>
-                  <span id="githubAppDescription">Connect once for server-side GitHub App access. Your OAuth token never reaches the browser.</span>
-                </div>
-                <div class="github-app-actions">
-                  <span class="github-app-badge" id="githubAppBadge"><i data-lucide="shield"></i> App auth not connected</span>
-                  <button class="button button-primary" id="connectGithubApp" type="button"><i data-lucide="github"></i>Connect GitHub</button>
-                  <button class="button button-secondary" id="refreshGithubApp" type="button" hidden><i data-lucide="refresh-cw"></i>Sync</button>
-                  <button class="button button-danger" id="disconnectGithubApp" type="button" hidden>Disconnect</button>
-                </div>
-              </div>
 
               <details class="advanced" id="tokenDetails">
 
@@ -4386,6 +4632,22 @@ git log --pretty=format:"%ad|%s" --date=short'
                   </div>
 
                   <div class="about-section">
+                    <div class="about-section-heading"><span>GitHub connection</span><small>Server-side OAuth, account access and session controls</small></div>
+                    <div class="github-app-card about-connection-card" aria-live="polite">
+                <div class="github-app-copy">
+                  <strong>GitHub connection</strong>
+                  <span id="githubAppDescription">Connect once for server-side GitHub App access. Your OAuth token never reaches the browser.</span>
+                </div>
+                <div class="github-app-actions">
+                  <span class="github-app-badge" id="githubAppBadge"><i data-lucide="shield"></i> App auth not connected</span>
+                  <button class="button button-primary" id="connectGithubApp" type="button"><i data-lucide="github"></i>Connect GitHub</button>
+                  <button class="button button-secondary" id="refreshGithubApp" type="button" hidden><i data-lucide="refresh-cw"></i>Sync</button>
+                  <button class="button button-danger" id="disconnectGithubApp" type="button" hidden>Disconnect</button>
+                </div>
+              </div>
+                  </div>
+
+                  <div class="about-section">
                     <div class="about-section-heading"><span>How it is built</span><small>Small surface area, ordinary web technologies</small></div>
                     <div class="about-tech"><span>Vanilla JavaScript</span><span>GitHub REST API</span><span>Contributions API</span><span>Serverless API routes</span><span>Responsive HTML/CSS</span><span>Vercel deployment</span></div>
                   </div>
@@ -4421,15 +4683,24 @@ git log --pretty=format:"%ad|%s" --date=short'
     </div>
 
     <footer class="site-footer" aria-label="Site information">
-      <div class="site-footer-brand"><img src="/icon.svg" alt="" width="20" height="20"> <strong>Anvil</strong> <span>Developer workspace</span></div>
-      <nav class="site-footer-links" aria-label="Legal and security">
-        <a href="/privacy.html">Privacy</a>
-        <a href="/cookies.html">Cookies</a>
-        <a href="/terms.html">Terms</a>
-        <a href="/security.html">Security</a>
-        <a href="https://github.com/acetheticsx/Anvil" target="_blank" rel="noopener noreferrer">Source</a>
-      </nav>
-      <span>© 2026 Anvil</span>
+      <div class="site-footer-inner">
+        <div class="site-footer-brand">
+          <span class="site-footer-mark"><img src="/icon.svg" alt="" width="18" height="18"></span>
+          <span><strong>Anvil</strong><small>Developer activity workspace</small></span>
+        </div>
+        <div class="site-footer-meta">
+          <span class="site-footer-status"><i data-lucide="shield-check" aria-hidden="true"></i> Privacy-conscious by design</span>
+          <span class="site-footer-version">v1.1.0</span>
+        </div>
+        <nav class="site-footer-links" aria-label="Legal and project links">
+          <a href="/privacy.html">Privacy</a>
+          <a href="/cookies.html">Cookies</a>
+          <a href="/terms.html">Terms</a>
+          <a href="/security.html">Security</a>
+          <a href="https://github.com/acetheticsx/Anvil" target="_blank" rel="noopener noreferrer">Source</a>
+        </nav>
+        <span class="site-footer-copy">© 2026 Anvil</span>
+      </div>
     </footer>
 
   </div>
@@ -5156,8 +5427,14 @@ git log --pretty=format:"%ad|%s" --date=short'
       el.nav.forEach((button) => {
         const active = button.dataset.view === view;
         button.classList.toggle("active", active);
-        if (active) button.setAttribute("aria-current", "page");
-        else button.removeAttribute("aria-current");
+        button.classList.remove("nav-icon-switch");
+        if (active) {
+          button.setAttribute("aria-current", "page");
+          void button.offsetWidth;
+          button.classList.add("nav-icon-switch");
+        } else {
+          button.removeAttribute("aria-current");
+        }
       });
 
       $$(".view").forEach((section) => {
@@ -5210,6 +5487,13 @@ git log --pretty=format:"%ad|%s" --date=short'
 
       el.githubTab.classList.toggle("active", github);
       el.localTab.classList.toggle("active", !github);
+
+      [el.githubTab, el.localTab].forEach((tab) => tab?.classList.remove("source-tab-switch"));
+      const activeTab = github ? el.githubTab : el.localTab;
+      if (activeTab) {
+        void activeTab.offsetWidth;
+        activeTab.classList.add("source-tab-switch");
+      }
 
       el.githubTab.setAttribute("aria-selected", String(github));
       el.localTab.setAttribute("aria-selected", String(!github));
