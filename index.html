@@ -5017,6 +5017,34 @@ git log --pretty=format:"%ad|%s" --date=short'
       return `${Math.floor(hours / 24)}d ago`;
     }
 
+    function handleGithubAuthResult() {
+      const params = new URLSearchParams(window.location.search);
+      const auth = params.get("github_auth");
+      const reason = params.get("reason");
+      if (!auth) return;
+
+      if (auth === "connected") {
+        status("GitHub connected successfully.", "success");
+      } else if (auth === "cancelled") {
+        status("GitHub authorization was cancelled.", "warning");
+      } else if (auth === "error") {
+        const messages = {
+          incorrect_client_credentials: "GitHub App credentials are invalid. Check the production Vercel secrets.",
+          redirect_uri_mismatch: "GitHub callback URL does not match the GitHub App settings.",
+          bad_verification_code: "GitHub authorization code was rejected. Start the connection again.",
+          github_user_http_401: "GitHub rejected the user token.",
+          token_exchange_failed: "GitHub token exchange failed. Check the App credentials and callback URL."
+        };
+        status(messages[reason] || ("GitHub connection failed: " + (reason || "unknown_error")), "error");
+      }
+
+      const clean = new URL(window.location.href);
+      clean.searchParams.delete("github_auth");
+      clean.searchParams.delete("reason");
+      window.history.replaceState({}, "", clean.pathname + clean.search + clean.hash);
+      refreshGithubApp();
+    }
+
     async function refreshGithubApp() {
       try {
         const response = await fetch(CONFIG.githubApp.sessionPath, {
@@ -6778,7 +6806,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       renderPortfolioIntelligence();
       renderGithubAppState();
       renderGithubAppData(null);
-      refreshGithubApp();
+      handleGithubAuthResult();
 
       refreshIcons();
 

@@ -2,62 +2,75 @@
 
 const { requiredEnv, consumeOAuthState, setSession, safeReturnTo } = require('./_auth');
 
+function redirectWithStatus(res, returnTo, params) {
+  const target = safeReturnTo(returnTo);
+  const url = new URL(target, 'https://anvil.local');
+  for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
+  return res.redirect(302, url.pathname + url.search + url.hash);
+}
+
 module.exports = async function callback(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).send('Method not allowed');
   }
 
+  const state = String(req.query?.state || '');
+  const code = String(req.query?.code || '');
+  const error = String(req.query?.error || '');
+  const oauthState = consumeOAuthState(req, res, state);
+
+  if (!oauthState) return res.redirect(302, '/?github_auth=error&reason=invalid_state');
+  if (error) return redirectWithStatus(res, oauthState.returnTo, { github_auth: error === 'access_denied' ? 'cancelled' : 'error', reason: error });
+  if (!code) return redirectWithStatus(res, oauthState.returnTo, { github_auth: 'error', reason: 'missing_code' });
+
   try {
-    const state = String(req.query?.state || '');
-    const code = String(req.query?.code || '');
-    const oauthState = consumeOAuthState(req, res, state);
-
-    if (!oauthState || !code) {
-      return res.redirect(302, '/?github_auth=error&reason=invalid_state');
-    }
-
-    if (req.query?.error) {
-      const returnTo = safeReturnTo(oauthState.returnTo);
-      return res.redirect(302, `${returnTo}${returnTo.includes('?') ? '&' : '?'}github_auth=cancelled`);
-    }
-
     const clientId = requiredEnv('GITHUB_APP_CLIENT_ID');
     const clientSecret = requiredEnv('GITHUB_APP_CLIENT_SECRET');
     const redirectUri = requiredEnv('GITHUB_APP_REDIRECT_URI');
 
-    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-        redirect_uri: redirectUri
-      })
+    const params = new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      code,
+      redirect_uri: redirectUri
     });
 
-    const tokenData = await tokenResponse.json();
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token?' + params.toString(), {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'X-GitHub-Api-Version': '2022-11-28' }
+    });
+    const tokenData = await tokenResponse.json().catch(() => ({}));
+
     if (!tokenResponse.ok || !tokenData.access_token) {
-      throw new Error('GitHub OAuth token exchange failed');
+      return redirectWithStatus(res, oauthState.returnTo, {
+        github_auth: 'error',
+        reason: tokenData.error || ('token_exchange_http_' + tokenResponse.status)
+      });
     }
 
     const userResponse = await fetch('https://api.github.com/user', {
       headers: {
         Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${tokenData.access_token}`,
-        'X-GitHub-Api-Version': '2022-11-28'
+        Authorization: 'Bearer ' + tokenData.access_token,
+        'X-GitHub-Api-Version': '2026-03-10'
       }
     });
 
-    if (!userResponse.ok) throw new Error('Unable to verify the GitHub account');
+    if (!userResponse.ok) {
+      return redirectWithStatus(res, oauthState.returnTo, {
+        github_auth: 'error',
+        reason: 'github_user_http_' + userResponse.status
+      });
+    }
+
     const user = await userResponse.json();
+    const expiresIn = Number(tokenData.expires_in);
+    const refreshExpiresIn = Number(tokenData.refresh_token_expires_in);
 
     setSession(res, {
       accessToken: tokenData.access_token,
+      refreshToken: tokenData.refresh_token || null,
       user: {
         id: user.id,
         login: user.login,
@@ -65,12 +78,12 @@ module.exports = async function callback(req, res) {
         avatarUrl: user.avatar_url || ''
       },
       createdAt: Date.now(),
-      expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000
+      expiresAt: Number.isFinite(expiresIn) && expiresIn > 0 ? Date.now() + expiresIn * 1000 : null,
+      refreshExpiresAt: Number.isFinite(refreshExpiresIn) && refreshExpiresIn > 0 ? Date.now() + refreshExpiresIn * 1000 : null
     });
 
-    const returnTo = safeReturnTo(oauthState.returnTo);
-    return res.redirect(302, `${returnTo}${returnTo.includes('?') ? '&' : '?'}github_auth=connected`);
-  } catch (error) {
-    return res.redirect(302, `/?github_auth=error&reason=${encodeURIComponent(error.message || 'oauth_failed')}`);
+    return redirectWithStatus(res, oauthState.returnTo, { github_auth: 'connected' });
+  } catch {
+    return redirectWithStatus(res, oauthState.returnTo, { github_auth: 'error', reason: 'token_exchange_failed' });
   }
 };
