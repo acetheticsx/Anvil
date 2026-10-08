@@ -95,6 +95,8 @@
       --glow: rgba(56, 139, 253, .08);
       --nav-active-bg: rgba(56, 139, 253, .12);
       --on-primary: #ffffff;
+      --selection-bg: rgba(56, 139, 253, .42);
+      --selection-text: #ffffff;
 
       --ok-text: #7ee787;
       --ok-bg: rgba(46, 160, 67, .07);
@@ -163,6 +165,8 @@
       --glow: rgba(9, 105, 218, .06);
       --nav-active-bg: rgba(9, 105, 218, .1);
       --on-primary: #ffffff;
+      --selection-bg: rgba(9, 105, 218, .22);
+      --selection-text: #1f2328;
 
       --ok-text: #1a7f37;
       --ok-bg: rgba(26, 127, 55, .08);
@@ -213,8 +217,42 @@
       font: inherit;
     }
 
-    button {
+    ::selection {
+      background: var(--selection-bg);
+      color: var(--selection-text);
+    }
+
+    ::-moz-selection {
+      background: var(--selection-bg);
+      color: var(--selection-text);
+    }
+
+    button,
+    a,
+    .nav-button,
+    .source-tab,
+    .icon-button {
       -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    .nav-button,
+    .source-tab,
+    .icon-button,
+    .brand,
+    .sidebar,
+    .topbar {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    input,
+    textarea,
+    select,
+    [contenteditable="true"],
+    .selectable {
+      -webkit-user-select: text;
+      user-select: text;
     }
 
     button:focus-visible,
@@ -243,8 +281,8 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 220px minmax(0, 1fr);
-      gap: 18px;
+      grid-template-columns: 176px minmax(0, 1fr);
+      gap: 14px;
       align-items: start;
     }
 
@@ -257,19 +295,21 @@
       top: 18px;
       display: flex;
       flex-direction: column;
+      width: 176px;
       min-height: calc(100vh - 36px);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       background: var(--panel-bg);
       backdrop-filter: blur(10px);
       overflow: hidden;
+      z-index: 20;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 16px;
+      padding: 13px 12px;
       border-bottom: 1px solid var(--border-muted);
     }
 
@@ -303,34 +343,40 @@
     .nav {
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      padding: 12px 8px;
+      gap: 4px;
+      padding: 10px 7px;
       overflow-y: auto;
+      scrollbar-width: thin;
     }
 
     .nav-section {
-      padding: 12px 9px 5px;
-      color: var(--subtle);
-      font: 600 .6rem var(--font);
-      letter-spacing: .08em;
-      text-transform: uppercase;
+      height: 5px;
+      padding: 0;
+      margin: 2px 4px;
+      color: transparent;
+      font-size: 0;
+      overflow: hidden;
     }
 
     .nav-button {
+      position: relative;
       display: flex;
       align-items: center;
-      gap: 9px;
+      justify-content: center;
+      gap: 8px;
       width: 100%;
-      min-height: 36px;
-      padding: 7px 10px;
+      min-height: 40px;
+      padding: 9px 8px;
       border: 0;
-      border-radius: 6px;
+      border-radius: 9px;
       background: transparent;
       color: var(--muted);
       cursor: pointer;
-      font-size: .76rem;
-      font-weight: 550;
+      font-size: .72rem;
+      font-weight: 600;
       text-align: left;
+      overflow: hidden;
+      transition: background .18s ease, color .18s ease, padding .24s cubic-bezier(.2,.8,.2,1);
     }
 
     .nav-button:hover {
@@ -338,18 +384,57 @@
       color: var(--text);
     }
 
+    .nav-button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
     .nav-button.active {
+      justify-content: flex-start;
+      padding-inline: 9px;
       background: var(--nav-active-bg);
       color: var(--text);
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+
+    .nav-button svg {
+      flex: 0 0 17px;
+      width: 17px;
+      height: 17px;
+      transition: transform .26s cubic-bezier(.2,.8,.2,1), fill .22s ease, stroke-width .22s ease, color .2s ease;
     }
 
     .nav-button.active svg {
       color: var(--accent);
+      fill: currentColor;
+      stroke-width: 2.35;
+      transform: scale(1.04);
     }
 
-    .nav-button svg {
-      width: 15px;
-      height: 15px;
+    .nav-label {
+      min-width: 0;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      transform: translateX(-6px);
+      transition: opacity .18s ease, max-width .24s cubic-bezier(.2,.8,.2,1), transform .24s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .nav-button.active .nav-label {
+      max-width: 112px;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .nav-shortcut {
+      margin-left: auto;
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+
+    .nav-button.active .nav-shortcut {
+      opacity: 1;
     }
 
     .sidebar-footer {
@@ -1525,6 +1610,37 @@
 
     .hidden {
       display: none !important;
+    }
+
+    .view.view-cascade-enter {
+      display: block;
+      animation: anvilCascadeIn .28s cubic-bezier(.2,.8,.2,1) both;
+      transform-origin: 18px 18px;
+    }
+
+    @keyframes anvilCascadeIn {
+      from {
+        opacity: 0;
+        transform: translate3d(14px, 8px, 0) scale(.992);
+        filter: blur(1px);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-button,
+      .nav-button svg,
+      .nav-label {
+        transition: none !important;
+      }
+
+      .view.view-cascade-enter {
+        animation: none;
+      }
     }
 
     .spinner {
@@ -4947,11 +5063,14 @@ git log --pretty=format:"%ad|%s" --date=short'
         );
       });
 
-      $$(".view").forEach((section) => {
-        section.classList.toggle(
-          "hidden",
-          section.id !== `view-${view}`
-        );
+      $(".view").forEach((section) => {
+        const active = section.id === "view-" + view;
+        section.classList.toggle("hidden", !active);
+        section.classList.remove("view-cascade-enter");
+        if (active) {
+          void section.offsetWidth;
+          section.classList.add("view-cascade-enter");
+        }
       });
 
       el.pageTitle.textContent = viewMeta[view][0];
