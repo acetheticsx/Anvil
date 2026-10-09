@@ -4187,6 +4187,10 @@ body { padding-bottom: 52px !important; }
     .sidebar[data-expanded="false"] .sidebar-footer { padding-inline:0 !important; }
     .sidebar[data-expanded="false"] .nav-button:hover::after { content:attr(data-tooltip); position:absolute; right:calc(100% + 10px); top:50%; z-index:1200; transform:translateY(-50%); padding:6px 8px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:var(--text); white-space:nowrap; font-size:12px; box-shadow:0 5px 18px #0002; }
     .repo-clickable-row { cursor:pointer; } .repo-clickable-row:hover { background:var(--surface-2); } .repo-clickable-row:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; } .repo-clickable-row a { position:relative; z-index:1; }
+    @media(min-width:901px) {
+      .sidebar[data-expanded="true"] { top:0 !important; right:0 !important; bottom:0 !important; width:224px !important; height:100dvh !important; max-width:224px !important; border-radius:0 !important; }
+      .layout:has(.sidebar[data-expanded="true"]) .main { margin-right:224px !important; }
+    }
     @media(max-width:900px) {
       .sidebar,.sidebar[data-expanded="false"] { position:fixed !important; top:0 !important; right:0 !important; width:58px !important; max-width:58px !important; min-height:100dvh !important; height:100dvh !important; padding:8px 3px !important; }
       .sidebar .brand-copy,.sidebar .rail-workspace,.sidebar .nav-section,.sidebar .nav-label,.sidebar .nav-shortcut,.sidebar .nav-badge,.sidebar .connection-copy,.sidebar .connection-status > svg { width:0 !important; max-width:0 !important; opacity:0 !important; overflow:hidden !important; }
@@ -4231,6 +4235,12 @@ body { padding-bottom: 52px !important; }
     }
     @media(max-width:420px) { .cookie-banner { left:8px !important; right:64px !important; } .cookie-banner-icon { display:none !important; } }
 
+    /* Collapsed rail is a top-edge handle at every viewport size. */
+    .sidebar[data-expanded="false"] { position:fixed !important; z-index:1400 !important; top:calc(env(safe-area-inset-top,0px) + 8px) !important; right:0 !important; bottom:auto !important; left:auto !important; transform:none !important; width:44px !important; min-width:44px !important; max-width:44px !important; height:44px !important; min-height:44px !important; max-height:44px !important; padding:2px !important; border:1px solid var(--border) !important; border-right:0 !important; border-radius:12px 0 0 12px !important; overflow:hidden !important; background:var(--surface) !important; box-shadow:0 4px 18px #0003 !important; }
+    .sidebar[data-expanded="false"] .brand { display:flex !important; width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; margin:0 !important; padding:0 !important; border:0 !important; }
+    .sidebar[data-expanded="false"] .brand-mark { display:grid !important; width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; padding:0 !important; }
+    .sidebar[data-expanded="false"] .brand-copy,.sidebar[data-expanded="false"] .rail-workspace,.sidebar[data-expanded="false"] .nav,.sidebar[data-expanded="false"] .rail-actions,.sidebar[data-expanded="false"] .sidebar-footer { display:none !important; }
+    .layout:has(.sidebar[data-expanded="false"]) .main,.main { margin-right:0 !important; }
     /* Mobile navigation is a top-edge handle, not a floating panel over the page. */
     .share-url-fallback { position:fixed; z-index:2147483646; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom,0px)); display:grid; gap:10px; padding:14px; border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--text); box-shadow:0 12px 40px #0005; }
     .share-url-fallback label { font-weight:650; font-size:.9rem; }
@@ -8610,7 +8620,8 @@ git log --pretty=format:"%ad|%s" --date=short'
       el.year.value = String(state.year);
 
       loadPreferences();
-      if (window.matchMedia("(max-width: 900px)").matches) state.railExpanded = false;
+      // Start tucked away on every viewport; the handle is the sole way to open navigation.
+      state.railExpanded = false;
       loadProjectSpaces();
       applyRail();
       loadUrlState();
