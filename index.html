@@ -4050,27 +4050,29 @@ body { padding-bottom: 52px !important; }
       .main { padding-right:198px !important; }
       .site-footer { padding-right:198px !important; }
       .stats-grid { grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:16px !important; }
-      .stat-card { min-height:164px !important; padding:26px !important; display:flex; flex-direction:column; justify-content:center; }
-      .stat-label { font-size:.86rem !important; }
-      .stat-value { margin-top:10px !important; font-size:2.25rem !important; line-height:1.2 !important; }
-      .stat-detail { margin-top:9px !important; font-size:.78rem !important; }
+      /* Keep cards compact at rest; hover supplies the emphasis without reflowing the grid. */
+      .stat-card { min-height:0 !important; padding:14px !important; display:block !important; }
+      .stat-label { font-size:12px !important; }
+      .stat-value { margin-top:4px !important; font-size:24px !important; line-height:1.2 !important; }
+      .stat-detail { margin-top:4px !important; font-size:11px !important; }
       .intelligence-grid { gap:16px !important; }
-      .intel-card { min-height:172px !important; padding:24px !important; display:flex; flex-direction:column; justify-content:center; }
-      .intel-label { font-size:.76rem !important; }
-      .intel-value { margin-top:12px !important; font-size:1.7rem !important; }
-      .intel-detail { margin-top:9px !important; font-size:.82rem !important; }
-      .about-card { min-height:164px !important; padding:24px !important; }
-      .about-card strong { font-size:.95rem !important; }
-      .about-card span { font-size:.8rem !important; }
+      .intel-card { min-height:0 !important; padding:14px !important; display:block !important; }
+      .intel-label { font-size:10px !important; }
+      .intel-value { margin-top:4px !important; font-size:20px !important; }
+      .intel-detail { margin-top:4px !important; font-size:12px !important; }
+      .about-card { min-height:0 !important; padding:12px !important; }
+      .about-card strong { font-size:.73rem !important; }
+      .about-card span { font-size:.63rem !important; }
+      .stat-card, .intel-card, .about-card { position:relative; z-index:0; transform-origin:center; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease !important; }
+      .stat-card:hover, .intel-card:hover, .about-card:hover { z-index:2; transform:translateY(-3px) scale(1.035) !important; border-color:var(--accent) !important; box-shadow:0 10px 28px color-mix(in srgb, var(--accent) 16%, transparent) !important; }
       .profile-stat { min-width:94px !important; padding:12px 14px !important; }
     }
     @media (min-width:901px) and (max-width:1180px) {
       .sidebar { width:164px !important; max-width:164px !important; }
       .main { padding-right:178px !important; } .site-footer { padding-right:178px !important; }
-      .stats-grid { gap:12px !important; } .stat-card { padding:20px !important; min-height:150px !important; }
-      .stat-value { font-size:1.9rem !important; } .intel-card { padding:18px !important; min-height:158px !important; }
+      .stats-grid { gap:12px !important; }
     }
-    @media (prefers-reduced-motion:reduce) { .sidebar { transition:none !important; } }
+    @media (prefers-reduced-motion:reduce) { .sidebar, .stat-card, .intel-card, .about-card { transition:none !important; } .stat-card:hover, .intel-card:hover, .about-card:hover { transform:none !important; } }
 
   </style>
 </head>
