@@ -4201,6 +4201,26 @@ body { padding-bottom: 52px !important; }
       .main { padding-left:12px !important; }
       .site-footer { padding-right:12px !important; }
     }
+
+    /* Final responsive containment: reserve the fixed rail, prevent panels from painting beneath it. */
+    html, body { width:100%; max-width:100%; overflow-x:clip !important; }
+    .app, .layout, .main { min-width:0 !important; max-width:100% !important; box-sizing:border-box !important; }
+    .panel, .panel-header, .panel-body, .source-tabs, .form-grid, .input, .select, .textarea, .button { box-sizing:border-box !important; min-width:0; max-width:100%; }
+    .panel-header { flex-wrap:wrap !important; }
+    .panel-title, .panel-meta { min-width:0; max-width:100%; white-space:normal !important; overflow-wrap:anywhere; }
+    @media(max-width:900px) {
+      .app { width:100% !important; padding:0 0 40px !important; overflow-x:clip !important; }
+      .layout { display:block !important; width:100% !important; overflow-x:clip !important; }
+      .main, .layout:has(.sidebar[data-expanded="false"]) .main { display:block !important; width:auto !important; max-width:100% !important; min-width:0 !important; margin:0 58px 0 0 !important; padding:14px 12px 28px !important; box-sizing:border-box !important; overflow-x:clip !important; }
+      .sidebar { width:58px !important; max-width:58px !important; min-width:58px !important; }
+      .sidebar[data-expanded="false"] { width:44px !important; max-width:44px !important; min-width:44px !important; height:44px !important; min-height:44px !important; top:calc(50% - 22px) !important; bottom:auto !important; overflow:hidden !important; }
+      .panel-header { align-items:flex-start !important; gap:6px 10px !important; }
+      .panel-meta { text-align:left !important; }
+      .source-tabs { max-width:100% !important; overflow-x:auto !important; }
+      .source-tab { flex:0 0 auto; }
+      .input, .select, .textarea, .button { width:100%; }
+      .sidebar .nav-button svg { display:block !important; visibility:visible !important; opacity:1 !important; stroke:currentColor !important; fill:none !important; }
+    }
   </style>
 </head>
 
