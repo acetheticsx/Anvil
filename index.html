@@ -4187,6 +4187,20 @@ body { padding-bottom: 52px !important; }
     }
     @media(prefers-reduced-motion:reduce) { .layout,.sidebar,.sidebar * { transition:none !important; animation:none !important; scroll-behavior:auto !important; } }
 
+
+    /* Mobile rail regression fix: a collapsed rail is a small handle, not an empty full-height column. */
+    .sidebar .nav-button.active::before,.sidebar .nav-button.active::after { content:none !important; display:none !important; }
+    .sidebar .nav-button.active { outline:1px solid color-mix(in srgb,var(--accent) 50%,transparent) !important; outline-offset:-1px !important; }
+    @media(max-width:900px) {
+      .sidebar { width:58px !important; max-width:58px !important; height:100dvh !important; top:0 !important; bottom:0 !important; padding:8px 3px !important; border-left:1px solid var(--border) !important; border-radius:0 !important; }
+      .sidebar[data-expanded="false"] { width:44px !important; max-width:44px !important; min-width:44px !important; height:44px !important; min-height:44px !important; top:calc(50% - 22px) !important; bottom:auto !important; padding:1px !important; border:1px solid var(--border) !important; border-right:0 !important; border-radius:12px 0 0 12px !important; overflow:hidden !important; box-shadow:0 4px 18px rgba(0,0,0,.18) !important; }
+      .sidebar[data-expanded="false"] .brand { width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; margin:0 !important; padding:0 !important; border:0 !important; }
+      .sidebar[data-expanded="false"] .brand-mark { width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; }
+      .sidebar[data-expanded="false"] .nav,.sidebar[data-expanded="false"] .rail-actions,.sidebar[data-expanded="false"] .sidebar-footer { display:none !important; }
+      .layout:has(.sidebar[data-expanded="false"]) .main,.main { margin-right:0 !important; padding-right:12px !important; }
+      .main { padding-left:12px !important; }
+      .site-footer { padding-right:12px !important; }
+    }
   </style>
 </head>
 
