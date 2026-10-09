@@ -4188,61 +4188,40 @@ body { padding-bottom: 52px !important; }
     @media(prefers-reduced-motion:reduce) { .layout,.sidebar,.sidebar * { transition:none !important; animation:none !important; scroll-behavior:auto !important; } }
 
 
-    /* Final responsive containment: reserve the fixed rail, prevent panels from painting beneath it. */
-    html, body { width:100%; max-width:100%; overflow-x:clip !important; }
-    .app, .layout, .main { min-width:0 !important; max-width:100% !important; box-sizing:border-box !important; }
-    .panel, .panel-header, .panel-body, .source-tabs, .form-grid, .input, .select, .textarea, .button { box-sizing:border-box !important; min-width:0; max-width:100%; }
-    .panel-header { flex-wrap:wrap !important; }
-    .panel-title, .panel-meta { min-width:0; max-width:100%; white-space:normal !important; overflow-wrap:anywhere; }
+    /* Mobile rail regression fix: a collapsed rail is a small handle, not an empty full-height column. */
+    .sidebar .nav-button.active::before,.sidebar .nav-button.active::after { content:none !important; display:none !important; }
+    .sidebar .nav-button.active { outline:1px solid color-mix(in srgb,var(--accent) 50%,transparent) !important; outline-offset:-1px !important; }
     @media(max-width:900px) {
-      .app { width:100% !important; padding:0 0 40px !important; overflow-x:clip !important; }
-      .layout { display:block !important; width:100% !important; overflow-x:clip !important; }
-      .main, .layout:has(.sidebar[data-expanded="false"]) .main { display:block !important; width:auto !important; max-width:100% !important; min-width:0 !important; margin:0 58px 0 0 !important; padding:14px 12px 28px !important; box-sizing:border-box !important; overflow-x:clip !important; }
-      .sidebar { width:58px !important; max-width:58px !important; min-width:58px !important; }
-      .sidebar[data-expanded="false"] { width:44px !important; max-width:44px !important; min-width:44px !important; height:44px !important; min-height:44px !important; top:calc(50% - 22px) !important; bottom:auto !important; overflow:hidden !important; }
-      .panel-header { align-items:flex-start !important; gap:6px 10px !important; }
-      .panel-meta { text-align:left !important; }
-      .source-tabs { max-width:100% !important; overflow-x:auto !important; }
-      .source-tab { flex:0 0 auto; }
-      .input, .select, .textarea, .button { width:100%; }
-      .sidebar .nav-button svg { display:block !important; visibility:visible !important; opacity:1 !important; stroke:currentColor !important; fill:none !important; }
-    }
-  
-    /* Authoritative mobile layout: show navigation when expanded; collapse to a handle only. */
-    @media screen and (max-width:900px) {
-      .sidebar { position:fixed !important; inset:0 0 0 auto !important; display:flex !important; flex-direction:column !important; width:58px !important; min-width:58px !important; max-width:58px !important; height:100dvh !important; min-height:100dvh !important; padding:8px 3px !important; overflow:hidden !important; }
-      .sidebar .brand { display:flex !important; flex:0 0 48px !important; width:100% !important; height:48px !important; min-height:48px !important; justify-content:center !important; margin:0 auto 8px !important; padding:2px !important; }
-      .sidebar .brand-mark { display:grid !important; flex:0 0 42px !important; width:42px !important; height:42px !important; min-height:42px !important; }
-      .sidebar .brand-copy,.sidebar .rail-workspace,.sidebar .nav-section,.sidebar .nav-label,.sidebar .nav-shortcut,.sidebar .nav-badge,.sidebar .connection-copy { display:none !important; }
-      .sidebar .nav { display:flex !important; flex:1 1 auto !important; flex-direction:column !important; align-items:stretch !important; justify-content:flex-start !important; gap:5px !important; width:100% !important; min-height:0 !important; padding:6px 0 !important; overflow-x:hidden !important; overflow-y:auto !important; }
-      .sidebar .nav-button,.sidebar .nav-button.active,.sidebar .nav-button:not(.active) { display:flex !important; flex:0 0 44px !important; width:50px !important; min-width:50px !important; max-width:50px !important; min-height:44px !important; margin:0 auto !important; padding:8px !important; justify-content:center !important; }
-      .sidebar .nav-button svg { display:block !important; visibility:visible !important; opacity:1 !important; width:20px !important; height:20px !important; fill:none !important; stroke:currentColor !important; }
-      .sidebar .rail-actions { display:grid !important; grid-template-columns:1fr !important; gap:4px !important; padding:6px 0 !important; }
-      .sidebar .rail-action { display:grid !important; width:42px !important; min-height:38px !important; margin:0 auto !important; }
-      .sidebar .sidebar-footer { display:flex !important; flex:0 0 auto !important; margin-top:4px !important; padding:7px 0 0 !important; }
-      .sidebar[data-expanded="false"] { inset:calc(50% - 22px) 0 auto auto !important; display:flex !important; flex-direction:column !important; width:44px !important; min-width:44px !important; max-width:44px !important; height:44px !important; min-height:44px !important; padding:1px !important; border:1px solid var(--border) !important; border-right:0 !important; border-radius:12px 0 0 12px !important; overflow:hidden !important; }
-      .sidebar[data-expanded="false"] .brand { display:flex !important; flex:0 0 40px !important; width:40px !important; height:40px !important; min-height:40px !important; margin:0 !important; padding:0 !important; border:0 !important; }
-      .sidebar[data-expanded="false"] .brand-mark { width:40px !important; height:40px !important; min-height:40px !important; }
+      .sidebar { width:58px !important; max-width:58px !important; height:100dvh !important; top:0 !important; bottom:0 !important; padding:8px 3px !important; border-left:1px solid var(--border) !important; border-radius:0 !important; }
+      .sidebar[data-expanded="false"] { width:44px !important; max-width:44px !important; min-width:44px !important; height:44px !important; min-height:44px !important; top:calc(50% - 22px) !important; bottom:auto !important; padding:1px !important; border:1px solid var(--border) !important; border-right:0 !important; border-radius:12px 0 0 12px !important; overflow:hidden !important; box-shadow:0 4px 18px rgba(0,0,0,.18) !important; }
+      .sidebar[data-expanded="false"] .brand { width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; margin:0 !important; padding:0 !important; border:0 !important; }
+      .sidebar[data-expanded="false"] .brand-mark { width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; }
       .sidebar[data-expanded="false"] .nav,.sidebar[data-expanded="false"] .rail-actions,.sidebar[data-expanded="false"] .sidebar-footer { display:none !important; }
-      .main,.layout:has(.sidebar[data-expanded="false"]) .main { display:block !important; width:auto !important; min-width:0 !important; max-width:none !important; margin:0 58px 0 0 !important; padding:14px 12px 28px !important; box-sizing:border-box !important; overflow-x:clip !important; }
-      .panel,.panel-header,.panel-body,.source-tabs,.form-grid,.form-row,.field,.field-group { min-width:0 !important; max-width:100% !important; box-sizing:border-box !important; }
-      .panel { width:100% !important; }
-      .panel-header { display:flex !important; flex-direction:column !important; align-items:stretch !important; gap:6px !important; }
-      .panel-title,.panel-meta { display:block !important; width:100% !important; min-width:0 !important; max-width:100% !important; white-space:normal !important; overflow-wrap:anywhere !important; }
-      .panel-body { width:100% !important; overflow-x:clip !important; padding:14px !important; }
-      .panel-body > *, .panel-body input, .panel-body button, .panel-body select, .panel-body textarea { box-sizing:border-box !important; min-width:0 !important; max-width:100% !important; }
-      .panel-body input:not([type="checkbox"]):not([type="radio"]),.panel-body select,.panel-body textarea,.panel-body button { width:100% !important; }
-      .source-tabs { display:flex !important; width:100% !important; margin:0 0 12px !important; padding:0 !important; overflow-x:auto !important; }
-      .source-tab { flex:0 0 auto !important; width:auto !important; }
+      .layout:has(.sidebar[data-expanded="false"]) .main,.main { margin-right:0 !important; padding-right:12px !important; }
+      .main { padding-left:12px !important; }
       .site-footer { padding-right:12px !important; }
     }
-    @media screen and (max-width:560px) {
-      .sidebar { width:54px !important; min-width:54px !important; max-width:54px !important; }
-      .sidebar .nav-button,.sidebar .nav-button.active,.sidebar .nav-button:not(.active) { width:46px !important; min-width:46px !important; max-width:46px !important; }
-      .main,.layout:has(.sidebar[data-expanded="false"]) .main { margin-right:54px !important; padding-left:10px !important; padding-right:10px !important; }
-      .panel-body { padding:12px !important; }
-    }
 
+    /* Stable initial render: the rail must not depend on a pointer event to become usable. */
+    .sidebar .brand-mark::before,.sidebar .brand-mark::after { content:"" !important; display:block !important; position:absolute !important; left:13px !important; width:16px !important; height:2px !important; border-radius:2px !important; background:var(--text) !important; box-shadow:none !important; }
+    .sidebar .brand-mark::before { top:15px !important; }
+    .sidebar .brand-mark::after { top:25px !important; }
+    .sidebar[data-expanded="true"] .brand-mark::before { top:12px !important; left:15px !important; width:2px !important; height:18px !important; transform:none !important; }
+    .sidebar[data-expanded="true"] .brand-mark::after { top:12px !important; left:25px !important; width:2px !important; height:18px !important; transform:none !important; }
+    .sidebar[data-expanded="false"] .brand-mark::before { top:15px !important; left:12px !important; width:18px !important; height:2px !important; transform:none !important; }
+    .sidebar[data-expanded="false"] .brand-mark::after { top:25px !important; left:12px !important; width:18px !important; height:2px !important; transform:none !important; }
+    .sidebar .brand-mark { font-size:0 !important; }
+    .cookie-banner { bottom:calc(12px + env(safe-area-inset-bottom, 0px)) !important; max-height:calc(100dvh - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important; overflow:auto !important; }
+    .public-time-label { display:inline-block; margin-left:3px; color:var(--muted); font-size:.62rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+    .feed-meta time { font-variant-numeric:tabular-nums; }
+    @media(max-width:900px) {
+      .cookie-banner { left:10px !important; right:68px !important; bottom:calc(10px + env(safe-area-inset-bottom, 0px)) !important; transform:none !important; width:auto !important; max-width:none !important; grid-template-columns:auto minmax(0,1fr) !important; gap:8px !important; padding:10px !important; border-radius:12px !important; }
+      .cookie-banner-dismiss { grid-column:1 / -1; width:100%; min-height:40px; }
+      .cookie-banner-copy p { font-size:.72rem !important; }
+      .filter-bar { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+      .filter-bar > * { min-width:0 !important; width:100% !important; }
+    }
+    @media(max-width:420px) { .cookie-banner { left:8px !important; right:64px !important; } .cookie-banner-icon { display:none !important; } }
   </style>
 </head>
 
@@ -4813,6 +4792,12 @@ git log --pretty=format:"%ad|%s" --date=short'
                   <select class="input" id="activityType" aria-label="Activity type">
                     <option value="">All types</option>
                   </select>
+                  <select class="input" id="activityMonth" aria-label="Filter by month">
+                    <option value="">All months</option>
+                    <option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
+                  </select>
+                  <input class="input" id="activityFrom" type="date" aria-label="Activity from date">
+                  <input class="input" id="activityTo" type="date" aria-label="Activity to date">
                   <select class="input" id="activitySort" aria-label="Activity sort">
                     <option value="newest">Newest first</option>
                     <option value="oldest">Oldest first</option>
@@ -5416,6 +5401,9 @@ git log --pretty=format:"%ad|%s" --date=short'
       filters: {
         activitySearch: "",
         activityType: "",
+        activityMonth: "",
+        activityFrom: "",
+        activityTo: "",
         repoSearch: "",
         repoLanguage: "",
         repoSort: "updated",
@@ -5569,6 +5557,9 @@ git log --pretty=format:"%ad|%s" --date=short'
       intelRadar: $("#intelRadar"),
       activitySearch: $("#activitySearch"),
       activityType: $("#activityType"),
+      activityMonth: $("#activityMonth"),
+      activityFrom: $("#activityFrom"),
+      activityTo: $("#activityTo"),
       repoSearch: $("#repoSearch"),
       repoLanguage: $("#repoLanguage"),
       repoSort: $("#repoSort"),
@@ -5881,6 +5872,8 @@ git log --pretty=format:"%ad|%s" --date=short'
       const label = state.railExpanded ? "Collapse navigation" : "Expand navigation";
       el.railToggle?.setAttribute("aria-label", label);
       el.railToggle?.setAttribute("title", label);
+      el.railToggle?.setAttribute("aria-expanded", String(state.railExpanded));
+      el.railToggle?.setAttribute("data-state-icon", state.railExpanded ? "pause" : "menu");
     }
     function toggleRail() { state.railExpanded = !state.railExpanded; applyRail(); savePreferences(); }
     function updateRailBadges() {
@@ -7353,10 +7346,17 @@ git log --pretty=format:"%ad|%s" --date=short'
       const typeFilter = state.filters.activityType;
       const filtered = state.activity.filter((item) => {
         const haystack = `${item.message || ""} ${item.repo || ""} ${item.type || ""}`.toLowerCase();
-        return (!search || haystack.includes(search)) && (!typeFilter || item.type === typeFilter);
+        const date = String(item.date || "");
+        const month = date.length >= 7 ? date.slice(5, 7) : "";
+        return (!search || haystack.includes(search))
+          && (!typeFilter || item.type === typeFilter)
+          && (!state.filters.activityMonth || month === state.filters.activityMonth)
+          && (!state.filters.activityFrom || date >= state.filters.activityFrom)
+          && (!state.filters.activityTo || date <= state.filters.activityTo);
       });
 
-      el.feedCount.textContent = state.filters.activitySearch || state.filters.activityType
+      const hasActivityFilters = Boolean(state.filters.activitySearch || state.filters.activityType || state.filters.activityMonth || state.filters.activityFrom || state.filters.activityTo);
+      el.feedCount.textContent = hasActivityFilters
         ? `${number(filtered.length)} shown · ${number(state.activity.length)} total`
         : `${number(state.activity.length)} items`;
 
@@ -7387,8 +7387,12 @@ git log --pretty=format:"%ad|%s" --date=short'
         const meta = document.createElement("div");
         meta.className = "feed-meta";
 
-        const date = document.createElement("span");
-        date.textContent = item.date;
+        const date = document.createElement("time");
+        date.dateTime = item.timestamp || item.date;
+        date.textContent = item.timestamp && Number.isFinite(Date.parse(item.timestamp))
+          ? `${item.date} · ${new Date(item.timestamp).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })} (public)`
+          : item.date;
+        date.title = item.timestamp ? "Timestamp supplied by GitHub public event data" : "Date only; no public event time available";
         meta.appendChild(date);
 
         if (item.repo) {
@@ -7410,13 +7414,17 @@ git log --pretty=format:"%ad|%s" --date=short'
     function buildTimeline() {
       const items = [];
 
-      const push = (date, title, description) => {
+      const push = (date, title, description, timestamp = "") => {
         if (!date) return;
 
         const iso = String(date).slice(0, 10);
         if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+        const month = iso.slice(5, 7);
+        if (state.filters.activityMonth && month !== state.filters.activityMonth) return;
+        if (state.filters.activityFrom && iso < state.filters.activityFrom) return;
+        if (state.filters.activityTo && iso > state.filters.activityTo) return;
 
-        items.push({ date: iso, title, description: description || "" });
+        items.push({ date: iso, timestamp, title, description: description || "" });
       };
 
       if (state.profile?.created_at) {
@@ -7453,7 +7461,8 @@ git log --pretty=format:"%ad|%s" --date=short'
         push(
           item.date,
           item.type || "Activity",
-          `${item.repo ? item.repo + " · " : ""}${item.message}`
+          `${item.repo ? item.repo + " · " : ""}${item.message}`,
+          item.timestamp || ""
         );
       }
 
@@ -7496,7 +7505,7 @@ git log --pretty=format:"%ad|%s" --date=short'
         item.className = "timeline-item";
 
         item.innerHTML =
-          `<div class="timeline-date">${escapeHtml(event.date)}</div>` +
+          `<div class="timeline-date">${escapeHtml(event.date)}${event.timestamp && Number.isFinite(Date.parse(event.timestamp)) ? ` · ${escapeHtml(new Date(event.timestamp).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }))} <span class="public-time-label">public</span>` : ""}</div>` +
           `<div class="timeline-line"></div>` +
           `<div class="timeline-content">` +
             `<div class="timeline-title">${escapeHtml(event.title)}</div>` +
@@ -8214,7 +8223,7 @@ git log --pretty=format:"%ad|%s" --date=short'
         applyRail();
       }, 5000);
     }
-    ["pointerdown","pointermove","keydown","touchstart","wheel","focusin"].forEach(type => {
+    ["pointerdown","keydown","touchstart","wheel","focusin"].forEach(type => {
       document.addEventListener(type, event => {
         if (type === "pointerdown" && event.target?.closest?.("#railToggle") && el.sidebar?.dataset.expanded === "false") { window.clearTimeout(railIdleTimer); return; }
         revealRail();
@@ -8372,6 +8381,26 @@ git log --pretty=format:"%ad|%s" --date=short'
     el.activitySort.addEventListener("change", () => {
       state.filters.activitySort = el.activitySort.value;
       renderActivity();
+    });
+
+    [el.activityMonth, el.activityFrom, el.activityTo].forEach((control) => {
+      control?.addEventListener("change", () => {
+        state.filters.activityFrom = el.activityFrom?.value || "";
+        state.filters.activityTo = el.activityTo?.value || "";
+        if (state.filters.activityFrom && state.filters.activityTo && state.filters.activityFrom > state.filters.activityTo) {
+          const previousFrom = state.filters.activityFrom;
+          state.filters.activityFrom = state.filters.activityTo;
+          state.filters.activityTo = previousFrom;
+          if (el.activityFrom) el.activityFrom.value = state.filters.activityFrom;
+          if (el.activityTo) el.activityTo.value = state.filters.activityTo;
+        } else {
+          state.filters.activityFrom = el.activityFrom?.value || "";
+          state.filters.activityTo = el.activityTo?.value || "";
+        }
+        state.filters.activityMonth = el.activityMonth?.value || "";
+        renderActivity();
+        renderTimeline();
+      });
     });
 
     el.year.addEventListener("change", () => {
