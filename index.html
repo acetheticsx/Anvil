@@ -4151,9 +4151,41 @@ body { padding-bottom: 52px !important; }
     @media(prefers-reduced-motion:reduce) { .sidebar,.sidebar .brand-copy,.sidebar .rail-version,.sidebar .rail-workspace,.sidebar .nav-section,.sidebar .nav-label,.sidebar .nav-shortcut,.sidebar .nav-badge,.sidebar .connection-copy,.sidebar .connection-status > svg,.portfolio-repo-row,.portfolio-release-row { transition:none !important; } }
 
   
-    .sidebar[data-expanded="true"] { opacity:1 !important; transform:translateX(0) !important; }
-    .sidebar[data-expanded="false"] { opacity:.62 !important; transform:translateX(3px) !important; }
-    @media(max-width:900px) { .sidebar[data-expanded="false"] { width:42px !important; max-width:42px !important; opacity:.62 !important; transform:translateX(2px) !important; } .sidebar[data-expanded="false"] .nav-button,.sidebar[data-expanded="false"] .nav-button.active,.sidebar[data-expanded="false"] .nav-button:not(.active) { width:36px !important; min-width:36px !important; min-height:40px !important; } }
+    .sidebar[data-expanded="true"] { opacity:1 !important; transform:none !important; }
+    .sidebar[data-expanded="false"] { opacity:1 !important; transform:none !important; }
+
+  
+    /* Unified shell: dock the rail to the viewport and let content reclaim its width. */
+    body { padding-bottom:0 !important; }
+    .app { width:100% !important; max-width:none !important; margin:0 !important; padding:0 0 40px !important; }
+    .layout { display:block !important; min-height:100dvh; }
+    .sidebar { position:fixed !important; top:0 !important; right:0 !important; left:auto !important; z-index:800 !important; width:224px !important; max-width:224px !important; height:100dvh !important; min-height:100dvh !important; padding:10px !important; border:0 !important; border-left:1px solid var(--border) !important; border-radius:0 !important; transform:none !important; opacity:1 !important; overflow-x:hidden !important; overflow-y:auto !important; transition:width .26s cubic-bezier(.2,.8,.2,1),max-width .26s cubic-bezier(.2,.8,.2,1),padding .26s ease !important; }
+    .main { min-width:0 !important; width:auto !important; margin-right:224px !important; padding:18px clamp(14px,2vw,30px) 32px !important; transition:margin-right .26s cubic-bezier(.2,.8,.2,1) !important; }
+    .sidebar .brand-copy,.sidebar .rail-workspace,.sidebar .nav-section,.sidebar .nav-label,.sidebar .nav-shortcut,.sidebar .nav-badge,.sidebar .connection-copy,.sidebar .connection-status > svg { max-width:none !important; opacity:1 !important; overflow:visible !important; pointer-events:auto !important; }
+    .sidebar .nav { align-items:stretch !important; flex-direction:column !important; overflow:visible !important; }
+    .sidebar .nav-button,.sidebar .nav-button.active,.sidebar .nav-button:not(.active) { width:100% !important; min-width:0 !important; justify-content:flex-start !important; padding:10px 11px !important; gap:11px !important; white-space:nowrap !important; overflow:visible !important; }
+    .sidebar .nav-label { display:inline !important; max-width:none !important; width:auto !important; opacity:1 !important; transform:none !important; font-weight:500 !important; }
+    .sidebar .nav-shortcut { opacity:.65 !important; }
+    .sidebar .nav-button svg,.sidebar .nav-button.active svg,.sidebar .nav-button:not(.active) svg { fill:none !important; stroke:currentColor !important; stroke-width:1.8 !important; filter:none !important; transform:none !important; }
+    .sidebar .nav-button.active svg { color:var(--accent) !important; stroke-width:2 !important; }
+    .sidebar .nav-button.active { box-shadow:inset 3px 0 0 var(--accent) !important; }
+    .sidebar .rail-actions { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+    .sidebar[data-expanded="false"] { width:64px !important; max-width:64px !important; padding:10px 5px !important; }
+    .layout:has(.sidebar[data-expanded="false"]) .main { margin-right:64px !important; }
+    .sidebar[data-expanded="false"] .brand { justify-content:center !important; padding:10px 0 !important; }
+    .sidebar[data-expanded="false"] .brand-copy,.sidebar[data-expanded="false"] .rail-workspace,.sidebar[data-expanded="false"] .nav-section,.sidebar[data-expanded="false"] .nav-label,.sidebar[data-expanded="false"] .nav-shortcut,.sidebar[data-expanded="false"] .nav-badge,.sidebar[data-expanded="false"] .connection-copy,.sidebar[data-expanded="false"] .connection-status > svg { width:0 !important; max-width:0 !important; opacity:0 !important; overflow:hidden !important; pointer-events:none !important; }
+    .sidebar[data-expanded="false"] .nav-button,.sidebar[data-expanded="false"] .nav-button.active,.sidebar[data-expanded="false"] .nav-button:not(.active) { width:52px !important; min-width:52px !important; min-height:44px !important; justify-content:center !important; padding:10px !important; margin-inline:auto !important; }
+    .sidebar[data-expanded="false"] .rail-actions { grid-template-columns:1fr !important; }
+    .sidebar[data-expanded="false"] .sidebar-footer { padding-inline:0 !important; }
+    .sidebar[data-expanded="false"] .nav-button:hover::after { content:attr(data-tooltip); position:absolute; right:calc(100% + 10px); top:50%; z-index:1200; transform:translateY(-50%); padding:6px 8px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:var(--text); white-space:nowrap; font-size:12px; box-shadow:0 5px 18px #0002; }
+    .repo-clickable-row { cursor:pointer; } .repo-clickable-row:hover { background:var(--surface-2); } .repo-clickable-row:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; } .repo-clickable-row a { position:relative; z-index:1; }
+    @media(max-width:900px) {
+      .sidebar,.sidebar[data-expanded="false"] { position:fixed !important; top:0 !important; right:0 !important; width:58px !important; max-width:58px !important; min-height:100dvh !important; height:100dvh !important; padding:8px 3px !important; }
+      .sidebar .brand-copy,.sidebar .rail-workspace,.sidebar .nav-section,.sidebar .nav-label,.sidebar .nav-shortcut,.sidebar .nav-badge,.sidebar .connection-copy,.sidebar .connection-status > svg { width:0 !important; max-width:0 !important; opacity:0 !important; overflow:hidden !important; }
+      .sidebar .nav-button,.sidebar .nav-button.active,.sidebar .nav-button:not(.active) { width:48px !important; min-width:48px !important; justify-content:center !important; padding:10px 7px !important; }
+      .main { margin-right:58px !important; padding:14px 12px 28px !important; } .layout:has(.sidebar[data-expanded="false"]) .main { margin-right:58px !important; } .sidebar .rail-actions { grid-template-columns:1fr !important; }
+    }
+    @media(prefers-reduced-motion:reduce) { .layout,.sidebar,.sidebar * { transition:none !important; animation:none !important; scroll-behavior:auto !important; } }
 
   </style>
 </head>
@@ -4216,29 +4248,7 @@ body { padding-bottom: 52px !important; }
             </p>
           </div>
 
-          <div class="top-actions">
 
-            <button
-              class="icon-button"
-              id="commandButton"
-              type="button"
-              title="Command palette (/)"
-              aria-label="Open command palette"
-            >
-              <i data-lucide="command"></i>
-            </button>
-
-            <button
-              class="icon-button"
-              id="themeButton"
-              type="button"
-              title="Toggle theme"
-              aria-label="Toggle theme"
-            >
-              <i data-lucide="sun-moon"></i>
-            </button>
-
-          </div>
 
         </header>
 
@@ -5767,13 +5777,12 @@ git log --pretty=format:"%ad|%s" --date=short'
     function applyTheme() {
       document.documentElement.dataset.theme = state.theme;
 
-      if (el.themeButton) {
-        const icon = el.themeButton.querySelector("[data-lucide]");
-        if (icon) {
-          icon.setAttribute("data-lucide", state.theme === "dark" ? "sun" : "moon");
-        }
-        el.themeButton.title = state.theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
-        el.themeButton.setAttribute("aria-label", el.themeButton.title);
+      const themeControl = el.railTheme || el.themeButton;
+      if (themeControl) {
+        const icon = themeControl.querySelector("[data-lucide]");
+        if (icon) icon.setAttribute("data-lucide", state.theme === "dark" ? "sun" : "moon");
+        themeControl.title = state.theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
+        themeControl.setAttribute("aria-label", themeControl.title);
       }
 
       const meta = document.querySelector('meta[name="theme-color"]');
@@ -6423,17 +6432,19 @@ git log --pretty=format:"%ad|%s" --date=short'
         renderGithubAppData(data);
 
         if (data.user?.login) {
-          const login = String(data.user.login).trim();
-          el.username.value = login;
-          state.username = login;
-          savePreferences();
           renderConnectedAccountSummary(data);
-
-          if (state.source === "github" && state.githubAppConnected) {
-            const loadKey = login + ":" + state.year;
-            if (!state.githubAppAutoLoadedFor.has(loadKey)) {
-              state.githubAppAutoLoadedFor.add(loadKey);
-              loadGithub();
+          const sharedProfile = new URLSearchParams(window.location.search).has("user");
+          if (!sharedProfile) {
+            const login = String(data.user.login).trim();
+            el.username.value = login;
+            state.username = login;
+            savePreferences();
+            if (state.source === "github" && state.githubAppConnected) {
+              const loadKey = login + ":" + state.year;
+              if (!state.githubAppAutoLoadedFor.has(loadKey)) {
+                state.githubAppAutoLoadedFor.add(loadKey);
+                loadGithub();
+              }
             }
           }
         }
@@ -7217,6 +7228,15 @@ git log --pretty=format:"%ad|%s" --date=short'
 
       for (const repo of filtered.slice(0, 100)) {
         const row = document.createElement("tr");
+        const repositoryUrl = safeHref(repo.html_url);
+        if (repositoryUrl) {
+          row.classList.add("repo-clickable-row");
+          row.tabIndex = 0;
+          row.setAttribute("aria-label", `Open repository ${repo.full_name || repo.name || "on GitHub"}`);
+          const openRepository = () => window.open(repositoryUrl, "_blank", "noopener,noreferrer");
+          row.addEventListener("click", event => { if (!event.target.closest("a,button,input,select")) openRepository(); });
+          row.addEventListener("keydown", event => { if ((event.key === "Enter" || event.key === " ") && event.target === row) { event.preventDefault(); openRepository(); } });
+        }
 
         const name = document.createElement("td");
         name.className = "repo-name";
@@ -7817,13 +7837,19 @@ git log --pretty=format:"%ad|%s" --date=short'
     }
 
     async function copyShareUrl() {
-      const url = new URL(window.location.href);
-
-      if (state.username) {
-        url.searchParams.set("user", state.username);
+      if (!state.username || !validUsername(state.username)) {
+        status("Load a GitHub profile before sharing its portfolio.", "warning");
+        return;
       }
-
+      const url = new URL(window.location.href);
+      url.pathname = "/";
+      url.searchParams.set("user", state.username);
       url.searchParams.set("year", String(state.year));
+      url.searchParams.set("view", "dashboard");
+      url.searchParams.set("portfolio", "1");
+      url.searchParams.delete("github_auth");
+      url.searchParams.delete("reason");
+      url.hash = "";
 
       try {
         await navigator.clipboard.writeText(url.toString());
@@ -7893,11 +7919,16 @@ git log --pretty=format:"%ad|%s" --date=short'
     function clearRoute(){delete document.body.dataset.route;if(el.routeView)el.routeView.hidden=true}
     function runAudit(){
       const checks=[],add=(name,ok,detail)=>checks.push({name,ok:Boolean(ok),detail:String(detail||"")});
-      const ids=["pageTitle","commandButton","themeButton","activityFeed","repoTable","timeline","releases","commandModal","routeView"];
+      const ids=["pageTitle","railCommand","railTheme","railToggle","activityFeed","repoTable","timeline","releases","commandModal","routeView"];
       const missing=ids.filter(id=>!document.getElementById(id));
       add("DOM anchors",!missing.length,missing.length?"Missing: "+missing.join(", "):ids.length+" required anchors present.");
       add("Navigation",el.nav.length===8&&!document.querySelector('.nav-button[data-action="search"]'),el.nav.length+" destinations; duplicate Search rail entry is absent.");
       add("Current tab",Boolean(document.querySelector(".nav-button[aria-current='page']")),"A current navigation destination is marked.");
+      add("Sidebar-only controls",!document.getElementById("commandButton")&&!document.getElementById("themeButton")&&Boolean(document.getElementById("railCommand")&&document.getElementById("railTheme")),"Command and theme controls appear only in the sidebar.");
+      add("Repository row actions",document.querySelectorAll(".repo-clickable-row").length===0||[...document.querySelectorAll(".repo-clickable-row")].every(row=>row.tabIndex>=0&&row.getAttribute("aria-label")),"Repository rows expose keyboard focus and an accessible name.");
+      add("Sidebar controls",!document.getElementById("commandButton")&&!document.getElementById("themeButton")&&Boolean(document.getElementById("railCommand")&&document.getElementById("railTheme")),"Command palette and theme controls live in the sidebar only.");
+      add("Outline navigation icons",[...document.querySelectorAll(".nav-button svg")].every(icon=>getComputedStyle(icon).fill==="none"),"Navigation icons remain outlined when active or inactive.");
+      add("Share URL state",typeof URLSearchParams==="function"&&typeof copyShareUrl==="function","Portfolio links encode the profile, year and destination.");
       const buttons=[...document.querySelectorAll("button")];
       add("Button types",buttons.every(b=>b.getAttribute("type")),buttons.filter(b=>!b.getAttribute("type")).length+" button(s) missing an explicit type.");
       add("Accessible controls",buttons.every(b=>Boolean((b.getAttribute("aria-label")||"").trim()||(b.innerText||b.textContent||"").trim()||b.querySelector("svg[aria-label],img[alt]:not([alt=''])"))),"Buttons should expose a readable name.");
@@ -7957,6 +7988,8 @@ git log --pretty=format:"%ad|%s" --date=short'
         state.year = year;
         el.year.value = year;
       }
+      const requestedView = params.get("view");
+      if (requestedView && Object.prototype.hasOwnProperty.call(viewMeta, requestedView)) state.currentView = requestedView;
     }
 
     /* ============================================================
