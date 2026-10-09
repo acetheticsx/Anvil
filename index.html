@@ -7,6 +7,14 @@
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
   <meta name="theme-color" content="#0d1117">
+  <script>
+    (() => {
+      try {
+        const saved = localStorage.getItem("anvil.theme.v1");
+        if (saved === "dark" || saved === "light") document.documentElement.dataset.theme = saved;
+      } catch { /* Storage may be disabled; CSS default remains usable. */ }
+    })();
+  </script>
   <meta name="color-scheme" content="dark light">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
@@ -4222,6 +4230,34 @@ body { padding-bottom: 52px !important; }
       .filter-bar > * { min-width:0 !important; width:100% !important; }
     }
     @media(max-width:420px) { .cookie-banner { left:8px !important; right:64px !important; } .cookie-banner-icon { display:none !important; } }
+
+    /* Mobile navigation is a top-edge handle, not a floating panel over the page. */
+    .share-url-fallback { position:fixed; z-index:2147483646; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom,0px)); display:grid; gap:10px; padding:14px; border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--text); box-shadow:0 12px 40px #0005; }
+    .share-url-fallback label { font-weight:650; font-size:.9rem; }
+    .share-url-fallback input { width:100%; min-width:0; user-select:all; }
+    @media(max-width:900px) {
+      .sidebar,.sidebar[data-expanded="false"] { position:fixed !important; z-index:1400 !important; top:calc(env(safe-area-inset-top,0px) + 8px) !important; right:0 !important; bottom:auto !important; left:auto !important; transform:none !important; width:44px !important; min-width:44px !important; max-width:44px !important; height:44px !important; min-height:44px !important; max-height:44px !important; padding:2px !important; border:1px solid var(--border) !important; border-right:0 !important; border-radius:12px 0 0 12px !important; overflow:hidden !important; background:var(--surface) !important; box-shadow:0 4px 18px #0003 !important; transition:width .22s ease,height .22s ease,top .22s ease !important; }
+      .sidebar[data-expanded="false"] .brand { display:flex !important; width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; margin:0 !important; padding:0 !important; border:0 !important; }
+      .sidebar[data-expanded="false"] .brand-mark { display:grid !important; width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; padding:0 !important; }
+      .sidebar[data-expanded="false"] .brand-copy,.sidebar[data-expanded="false"] .rail-workspace,.sidebar[data-expanded="false"] .nav,.sidebar[data-expanded="false"] .rail-actions,.sidebar[data-expanded="false"] .sidebar-footer { display:none !important; }
+      .sidebar[data-expanded="true"] { top:calc(env(safe-area-inset-top,0px) + 8px) !important; right:0 !important; bottom:0 !important; width:min(300px,88vw) !important; min-width:0 !important; max-width:88vw !important; height:calc(100dvh - env(safe-area-inset-top,0px) - 8px) !important; max-height:calc(100dvh - env(safe-area-inset-top,0px) - 8px) !important; padding:10px !important; border:1px solid var(--border) !important; border-right:0 !important; border-radius:14px 0 0 14px !important; overflow-x:hidden !important; overflow-y:auto !important; box-shadow:0 12px 40px #0005 !important; }
+      .sidebar[data-expanded="true"] .brand { display:flex !important; width:100% !important; height:auto !important; min-height:44px !important; justify-content:flex-start !important; padding:2px 0 12px !important; }
+      .sidebar[data-expanded="true"] .brand-mark { flex:0 0 40px !important; width:40px !important; min-width:40px !important; height:40px !important; min-height:40px !important; }
+      .sidebar[data-expanded="true"] .brand-copy,.sidebar[data-expanded="true"] .rail-workspace,.sidebar[data-expanded="true"] .nav-section,.sidebar[data-expanded="true"] .nav-label,.sidebar[data-expanded="true"] .nav-shortcut,.sidebar[data-expanded="true"] .nav-badge,.sidebar[data-expanded="true"] .connection-copy { width:auto !important; max-width:none !important; opacity:1 !important; overflow:visible !important; pointer-events:auto !important; display:revert !important; }
+      .sidebar[data-expanded="true"] .nav { display:flex !important; flex-direction:column !important; align-items:stretch !important; overflow:visible !important; }
+      .sidebar[data-expanded="true"] .nav-button,.sidebar[data-expanded="true"] .nav-button.active,.sidebar[data-expanded="true"] .nav-button:not(.active) { width:100% !important; min-width:0 !important; min-height:44px !important; justify-content:flex-start !important; padding:10px 11px !important; }
+      .sidebar[data-expanded="true"] .rail-actions { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+      .sidebar[data-expanded="true"] .sidebar-footer { display:block !important; }
+      .main,.layout:has(.sidebar[data-expanded="false"]) .main { margin-right:0 !important; padding-right:12px !important; }
+      .sidebar .brand-mark img { display:none !important; }
+      .sidebar .brand-mark::before,.sidebar .brand-mark::after { background:var(--text) !important; }
+      .sidebar[data-expanded="true"] .brand-mark::before { top:11px !important; left:15px !important; width:2px !important; height:18px !important; }
+      .sidebar[data-expanded="true"] .brand-mark::after { top:11px !important; left:25px !important; width:2px !important; height:18px !important; }
+      .sidebar[data-expanded="false"] .brand-mark::before { top:14px !important; left:11px !important; width:18px !important; height:2px !important; }
+      .sidebar[data-expanded="false"] .brand-mark::after { top:24px !important; left:11px !important; width:18px !important; height:2px !important; }
+      .cookie-banner { left:10px !important; right:10px !important; bottom:calc(10px + env(safe-area-inset-bottom,0px)) !important; transform:none !important; width:auto !important; max-width:none !important; }
+    }
+    @media(prefers-reduced-motion:reduce) { .sidebar { transition:none !important; } }
   </style>
 </head>
 
@@ -5778,9 +5814,10 @@ git log --pretty=format:"%ad|%s" --date=short'
           el.year.value = saved.year;
         }
 
-        if (saved.theme === "dark" || saved.theme === "light") {
-          state.theme = saved.theme;
-        }
+        let storedTheme = null;
+        try { storedTheme = localStorage.getItem("anvil.theme.v1"); } catch { /* Fall back to legacy preferences. */ }
+        const theme = storedTheme === "dark" || storedTheme === "light" ? storedTheme : saved.theme;
+        if (theme === "dark" || theme === "light") state.theme = theme;
         if (typeof saved.railExpanded === "boolean") state.railExpanded = saved.railExpanded;
       } catch {
         /* Ignore malformed preferences. */
@@ -5823,6 +5860,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
     function applyTheme() {
       document.documentElement.dataset.theme = state.theme;
+      try { localStorage.setItem("anvil.theme.v1", state.theme); } catch { /* Keep the current session usable without storage. */ }
 
       const themeControl = el.railTheme || el.themeButton;
       if (themeControl) {
@@ -7902,31 +7940,60 @@ git log --pretty=format:"%ad|%s" --date=short'
     }
 
     async function copyShareUrl() {
-      if (!state.username || !validUsername(state.username)) {
-        status("Load a GitHub profile before sharing its portfolio.", "warning");
+      const username = String(state.username || el.username?.value || "").trim();
+      if (!validUsername(username)) {
+        status("Enter or load a valid GitHub profile before sharing.", "warning");
+        el.username?.focus();
         return;
       }
-      const url = new URL(window.location.href);
-      url.pathname = "/";
-      url.searchParams.set("user", state.username);
-      url.searchParams.set("year", String(state.year));
+      const year = Number(state.year || el.year?.value);
+      if (!validYear(year)) { status("Choose a valid year before sharing.", "error"); return; }
+      const url = new URL("/", window.location.origin);
+      url.searchParams.set("user", username);
+      url.searchParams.set("year", String(year));
       url.searchParams.set("view", "dashboard");
       url.searchParams.set("portfolio", "1");
-      url.searchParams.delete("github_auth");
-      url.searchParams.delete("reason");
-      url.hash = "";
-
+      const shareUrl = url.href;
+      let copied = false;
       try {
-        await navigator.clipboard.writeText(url.toString());
-        status("Share URL copied to clipboard.", "success");
-      } catch {
-        status(
-          "Clipboard access is unavailable. Copy the address bar instead.",
-          "error"
-        );
+        if (navigator.clipboard?.writeText && window.isSecureContext) {
+          await navigator.clipboard.writeText(shareUrl);
+          copied = true;
+        }
+      } catch { /* Use the legacy clipboard path below, common in embedded browsers. */ }
+      if (!copied) {
+        const field = document.createElement("textarea");
+        field.value = shareUrl;
+        field.setAttribute("readonly", "");
+        field.setAttribute("aria-label", "Share URL to copy");
+        field.style.cssText = "position:fixed;inset:auto auto 0 0;width:1px;height:1px;padding:0;opacity:.01;font-size:16px;z-index:2147483647";
+        document.body.appendChild(field);
+        field.focus({ preventScroll: true });
+        field.select();
+        try { copied = document.execCommand("copy"); } catch { copied = false; }
+        field.remove();
       }
+      if (copied) {
+        status("Share URL copied. It opens @" + username + " for " + year + ".", "success");
+        return;
+      }
+      // Never claim that a failed copy succeeded: show a selectable, focused URL.
+      let panel = document.getElementById("shareUrlFallback");
+      if (!panel) {
+        panel = document.createElement("div");
+        panel.id = "shareUrlFallback";
+        panel.className = "share-url-fallback";
+        panel.setAttribute("role", "dialog");
+        panel.setAttribute("aria-label", "Copy share URL");
+        const label = document.createElement("label"); label.htmlFor = "shareUrlFallbackInput"; label.textContent = "Copy this portfolio link";
+        const input = document.createElement("input"); input.id = "shareUrlFallbackInput"; input.type = "url"; input.readOnly = true; input.className = "input";
+        const close = document.createElement("button"); close.type = "button"; close.className = "button button-secondary"; close.textContent = "Close"; close.addEventListener("click", () => panel.remove());
+        panel.append(label, input, close); document.body.appendChild(panel);
+      }
+      panel.querySelector("input").value = shareUrl;
+      panel.querySelector("input").focus(); panel.querySelector("input").select();
+      status("Automatic clipboard copy was blocked. The share URL is selected for manual copying.", "warning");
     }
-
 
     /* SMART WORKSPACE */
     function rememberDebug(kind,error){const message=error?.message||String(error||"Unknown error");const target=kind==="error"?state.debug.errors:state.debug.warnings;target.push({message,at:new Date().toISOString()});if(target.length>25)target.splice(0,target.length-25)}
@@ -8208,28 +8275,27 @@ git log --pretty=format:"%ad|%s" --date=short'
     
     /* Auto-hide the edge rail after five seconds of inactivity. */
     let railIdleTimer = 0;
-    function revealRail() {
+    function scheduleRailCollapse() {
       if (!el.sidebar) return;
-      if (el.sidebar.dataset.expanded !== "true") {
-        state.railExpanded = true;
-        applyRail();
-      }
       window.clearTimeout(railIdleTimer);
       railIdleTimer = window.setTimeout(() => {
-        const focusInside = el.sidebar.contains(document.activeElement) && !!document.activeElement.matches(":focus-visible");
         const modalOpen = !!document.querySelector(".modal-backdrop:not([hidden]),.detail-sheet-backdrop:not([hidden]),dialog[open]");
-        if (focusInside || modalOpen || document.hidden) { revealRail(); return; }
+        const focusInside = el.sidebar.contains(document.activeElement);
+        if (modalOpen || focusInside || document.hidden) { scheduleRailCollapse(); return; }
         state.railExpanded = false;
         applyRail();
-      }, 5000);
+        savePreferences();
+      }, 8000);
     }
-    ["pointerdown","keydown","touchstart","wheel","focusin"].forEach(type => {
+    function revealRail() { scheduleRailCollapse(); }
+    // Page activity only resets the idle timer; opening is reserved for the rail handle.
+    ["pointerdown","keydown","touchstart","wheel"].forEach(type => {
       document.addEventListener(type, event => {
-        if (type === "pointerdown" && event.target?.closest?.("#railToggle") && el.sidebar?.dataset.expanded === "false") { window.clearTimeout(railIdleTimer); return; }
-        revealRail();
+        if (event.target?.closest?.("#railToggle")) return;
+        if (el.sidebar?.dataset.expanded === "true") scheduleRailCollapse();
       }, { passive: type !== "keydown" });
     });
-    document.addEventListener("visibilitychange", () => { if (!document.hidden) revealRail(); });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && el.sidebar?.dataset.expanded === "true") scheduleRailCollapse(); });
     el.railToggle?.addEventListener("click", () => {
       window.clearTimeout(railIdleTimer);
       if (el.sidebar?.dataset.expanded === "true") {
@@ -8544,6 +8610,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       el.year.value = String(state.year);
 
       loadPreferences();
+      if (window.matchMedia("(max-width: 900px)").matches) state.railExpanded = false;
       loadProjectSpaces();
       applyRail();
       loadUrlState();
