@@ -3999,7 +3999,7 @@ body { padding-bottom: 52px !important; }
 .sidebar[data-expanded="false"] .brand { border:0 !important; }
 .sidebar[data-expanded="false"] .brand-mark:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 .main { padding-top:4px !important; padding-right:78px !important; }
-.site-footer { position:fixed !important; z-index:700 !important; left:0 !important; right:0 !important; bottom:0 !important; width:100% !important; min-height:42px !important; margin:0 !important; padding:8px 76px 8px 16px !important; border-top:1px solid var(--border) !important; background:var(--surface) !important; box-shadow:none !important; backdrop-filter:none !important; }
+.site-footer { padding:16px 2px 10px !important; }
 @media(max-width:560px){ .sidebar { width:56px !important; max-width:56px !important; padding-inline:3px !important; } .sidebar .brand { width:48px !important; } .sidebar .nav-button,.sidebar .nav-button.active,.sidebar .nav-button:not(.active) { width:48px !important; min-width:48px !important; } .main { padding-right:66px !important; } .site-footer { padding-inline:10px 64px !important; font-size:.62rem !important; gap:6px !important; } }
 @media(prefers-reduced-motion:reduce){ .sidebar,.sidebar .brand-mark::before,.sidebar .brand-mark::after { transition:none !important; } }
 
@@ -4110,6 +4110,50 @@ body { padding-bottom: 52px !important; }
     .audit-code { max-height:360px; overflow:auto; }
     @media (prefers-reduced-motion:reduce) { #view-dashboard .stat-card:hover, #view-dashboard .intel-card:hover, #view-dashboard .about-card:hover { transform:none !important; } }
 
+
+  
+    /* Final interaction corrections: document-flow footer, fading rail and overlays above navigation. */
+    .site-footer { position:static !important; inset:auto !important; z-index:auto !important; width:min(1100px,100%) !important; min-height:0 !important; margin:26px auto 0 !important; padding:16px 2px 10px !important; border-top:0 !important; background:transparent !important; box-shadow:none !important; backdrop-filter:none !important; }
+    .modal-backdrop { z-index:2400 !important; isolation:isolate; }
+    .detail-sheet-backdrop { z-index:2500 !important; isolation:isolate; }
+    .tooltip,.nav-button:hover::after { z-index:2300 !important; }
+    .sidebar { transition:width .32s cubic-bezier(.2,.8,.2,1),max-width .32s cubic-bezier(.2,.8,.2,1),opacity .28s ease,transform .32s cubic-bezier(.2,.8,.2,1) !important; }
+    .sidebar[data-expanded="false"] { opacity:.88 !important; }
+    .sidebar .brand-copy,.sidebar .rail-version,.sidebar .rail-workspace,.sidebar .nav-section,.sidebar .nav-label,.sidebar .nav-shortcut,.sidebar .nav-badge,.sidebar .connection-copy,.sidebar .connection-status > svg { transition:opacity .2s ease,max-width .28s ease,padding .28s ease,margin .28s ease !important; }
+    .sidebar[data-expanded="false"] .brand-copy,.sidebar[data-expanded="false"] .rail-version,.sidebar[data-expanded="false"] .rail-workspace,.sidebar[data-expanded="false"] .nav-section,.sidebar[data-expanded="false"] .nav-label,.sidebar[data-expanded="false"] .nav-shortcut,.sidebar[data-expanded="false"] .nav-badge,.sidebar[data-expanded="false"] .connection-copy,.sidebar[data-expanded="false"] .connection-status > svg { opacity:0 !important; }
+    .dashboard-portfolio { order:-1; grid-column:1 / -1 !important; }
+    .portfolio-bento { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.9fr) minmax(0,.9fr); gap:12px; }
+    .portfolio-bento-section { min-width:0; padding:14px; border:1px solid var(--border-muted); border-radius:10px; background:var(--surface-2); }
+    .portfolio-section-heading { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; }
+    .portfolio-section-heading h3 { margin:4px 0 0; font-size:.9rem; font-weight:650; letter-spacing:-.02em; }
+    .button-small { min-height:28px !important; padding:5px 8px !important; font-size:.68rem !important; }
+    .portfolio-metric { font-size:1.8rem; line-height:1.1; font-weight:750; letter-spacing:-.05em; }
+    .portfolio-subtitle { margin:5px 0 12px; color:var(--muted); font-size:.72rem; }
+    .portfolio-count { display:inline-flex; align-items:center; justify-content:center; min-width:26px; min-height:26px; padding:0 7px; border:1px solid var(--border); border-radius:8px; font-size:.72rem; font-weight:650; }
+    .portfolio-repo-list,.portfolio-deploy-list,.portfolio-release-list { display:grid; gap:5px; min-width:0; }
+    .portfolio-repo-row,.portfolio-release-row { display:flex; align-items:center; gap:9px; min-width:0; padding:8px; border:1px solid transparent; border-radius:8px; color:var(--text); text-decoration:none; transition:background .16s ease,border-color .16s ease; }
+    .portfolio-repo-row:hover,.portfolio-release-row:hover { background:var(--panel); border-color:var(--border); }
+    .portfolio-repo-icon,.portfolio-release-icon { display:grid; place-items:center; flex:0 0 30px; width:30px; height:30px; border:1px solid var(--border); border-radius:8px; background:var(--panel); color:var(--accent); }
+    .portfolio-repo-icon svg,.portfolio-release-icon svg { width:15px; height:15px; }
+    .portfolio-repo-copy,.portfolio-release-copy,.portfolio-deploy-copy { display:grid; gap:3px; min-width:0; flex:1; }
+    .portfolio-repo-copy strong,.portfolio-release-copy strong,.portfolio-deploy-copy strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.74rem; font-weight:650; }
+    .portfolio-repo-copy small,.portfolio-release-copy small,.portfolio-deploy-copy small { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); font-size:.64rem; }
+    .portfolio-repo-stats { flex:none; color:var(--muted); font-size:.65rem; }
+    .portfolio-deploy-row { display:flex; align-items:center; gap:9px; padding:9px 4px; border-bottom:1px solid var(--border-muted); min-width:0; }
+    .portfolio-deploy-row:last-child { border-bottom:0; }
+    .portfolio-status-dot { flex:0 0 8px; width:8px; height:8px; border-radius:50%; background:var(--muted); }
+    .portfolio-status-dot.is-good { background:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 12%,transparent); }
+    .portfolio-status-dot.is-bad { background:var(--danger,#e05252); }
+    .portfolio-status-dot.is-neutral { background:var(--muted); }
+    .dashboard-portfolio .empty { padding:12px 4px; font-size:.72rem; }
+    @media(max-width:1180px) { .portfolio-bento { grid-template-columns:repeat(2,minmax(0,1fr)); } .portfolio-repositories { grid-column:1 / -1; } }
+    @media(max-width:680px) { .portfolio-bento { grid-template-columns:1fr; } .portfolio-repositories { grid-column:auto; } }
+    @media(prefers-reduced-motion:reduce) { .sidebar,.sidebar .brand-copy,.sidebar .rail-version,.sidebar .rail-workspace,.sidebar .nav-section,.sidebar .nav-label,.sidebar .nav-shortcut,.sidebar .nav-badge,.sidebar .connection-copy,.sidebar .connection-status > svg,.portfolio-repo-row,.portfolio-release-row { transition:none !important; } }
+
+  
+    .sidebar[data-expanded="true"] { opacity:1 !important; transform:translateX(0) !important; }
+    .sidebar[data-expanded="false"] { opacity:.62 !important; transform:translateX(3px) !important; }
+    @media(max-width:900px) { .sidebar[data-expanded="false"] { width:42px !important; max-width:42px !important; opacity:.62 !important; transform:translateX(2px) !important; } .sidebar[data-expanded="false"] .nav-button,.sidebar[data-expanded="false"] .nav-button.active,.sidebar[data-expanded="false"] .nav-button:not(.active) { width:36px !important; min-width:36px !important; min-height:40px !important; } }
 
   </style>
 </head>
@@ -4677,7 +4721,15 @@ git log --pretty=format:"%ad|%s" --date=short'
 
             <section class="panel" style="margin-top:14px" aria-labelledby="pulseTitle"><div class="panel-header"><span class="panel-title" id="pulseTitle">Overview</span><span class="health-pill" id="pulseHealth">—</span></div><div class="panel-body"><div class="smart-grid"><article class="smart-card"><div class="smart-label">Health</div><div class="smart-value" id="pulseScore">—</div><div class="smart-track"><span id="pulseScoreBar"></span></div><div class="smart-detail" id="pulseScoreDetail">Load data to score the workspace.</div></article><article class="smart-card"><div class="smart-label">Delivery</div><div class="smart-value" id="pulseDelivery">—</div><div class="smart-detail" id="pulseDeliveryDetail">Deployments and CI signals.</div></article><article class="smart-card"><div class="smart-label">Maintenance</div><div class="smart-value" id="pulseMaintenance">—</div><div class="smart-detail" id="pulseMaintenanceDetail">Repository attention signals.</div></article><article class="smart-card"><div class="smart-label">Data quality</div><div class="smart-value" id="pulseQuality">—</div><div class="smart-detail" id="pulseQualityDetail">Source coverage.</div></article></div></div></section><div class="two-column" style="margin-top:14px"><section class="panel"><div class="panel-header"><span class="panel-title">Queue</span><span class="panel-meta" id="attentionMeta">derived from loaded data</span></div><div class="panel-body"><div class="smart-list" id="attentionList"></div></div></section><section class="panel"><div class="panel-header"><span class="panel-title">Spaces</span><span class="panel-meta">local workspace memory</span></div><div class="panel-body"><div class="workspace-strip" id="workspaceStrip"></div><div class="smart-actions" style="margin-top:10px"><button class="button button-secondary" id="saveWorkspace" type="button"><i data-lucide="bookmark-plus"></i>Save current</button><button class="button button-secondary" id="clearWorkspaces" type="button"><i data-lucide="trash-2"></i>Clear saved</button></div><p class="hint" style="margin:9px 0 0"><i data-lucide="info"></i>Stored locally. Tokens are never saved here.</p></div></section></div><div class="two-column" style="margin-top:14px"><section class="panel"><div class="panel-header"><span class="panel-title">Delivery</span><span class="panel-meta" id="deliveryMeta">waiting for GitHub data</span></div><div class="panel-body"><div class="smart-list" id="deliveryList"></div></div></section><section class="panel"><div class="panel-header"><span class="panel-title">Security</span><span class="panel-meta" id="securityMeta">repository metadata</span></div><div class="panel-body"><div class="smart-list" id="securityList"></div></div></section></div><section class="panel" style="margin-top:14px"><div class="panel-header"><span class="panel-title">Insights</span><span class="panel-meta">derived from repository data</span></div><div class="panel-body"><div class="smart-list" id="insightList"></div></div></section><div class="two-column" style="margin-top:14px"><section class="panel"><div class="panel-header"><span class="panel-title">Work queue</span><span class="panel-meta" id="queueMeta">open items</span></div><div class="panel-body"><div class="smart-list" id="queueList"></div></div></section><section class="panel"><div class="panel-header"><span class="panel-title">Languages</span><span class="panel-meta" id="languageMeta">repository totals</span></div><div class="panel-body"><div class="smart-list" id="languageList"></div></div></section></div>
 
-          </section>
+                      <section class="panel dashboard-portfolio" aria-labelledby="dashboardPortfolioTitle">
+              <div class="panel-header"><span class="panel-title" id="dashboardPortfolioTitle">Portfolio at a glance</span><span class="panel-meta" id="dashboardPortfolioMeta">Live repository, delivery and release data</span></div>
+              <div class="panel-body"><div class="portfolio-bento">
+                <section class="portfolio-bento-section portfolio-repositories" aria-labelledby="dashboardReposTitle"><div class="portfolio-section-heading"><div><span class="smart-label">CODEBASE</span><h3 id="dashboardReposTitle">Repositories</h3></div><button class="button button-secondary button-small" id="dashboardAllRepos" type="button">All repos <i data-lucide="arrow-up-right"></i></button></div><div class="portfolio-metric" id="dashboardRepoMetric">—</div><div class="portfolio-subtitle" id="dashboardRepoSubtitle">Load GitHub data to inspect your projects.</div><div class="portfolio-repo-list" id="dashboardRepoList"><div class="empty">Repositories will appear here after data loads.</div></div></section>
+                <section class="portfolio-bento-section" aria-labelledby="dashboardDeployTitle"><div class="portfolio-section-heading"><div><span class="smart-label">DELIVERY</span><h3 id="dashboardDeployTitle">Deployments</h3></div><span class="portfolio-count" id="dashboardDeployCount">—</span></div><div class="portfolio-deploy-list" id="dashboardDeployList"><div class="empty">No deployment data loaded.</div></div></section>
+                <section class="portfolio-bento-section" aria-labelledby="dashboardReleaseTitle"><div class="portfolio-section-heading"><div><span class="smart-label">SHIPPING</span><h3 id="dashboardReleaseTitle">Latest releases</h3></div><button class="button button-secondary button-small" id="dashboardAllReleases" type="button">All releases <i data-lucide="arrow-up-right"></i></button></div><div class="portfolio-release-list" id="dashboardReleaseList"><div class="empty">Release data will appear here after repositories load.</div></div></section>
+              </div></div>
+            </section>
+</section>
 
           <!-- Activity -->
           <section class="view hidden" id="view-activity">
@@ -5629,6 +5681,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       renderIntelligence();
       renderPortfolioIntelligence();
       renderSmartWorkspace();
+      renderDashboardPortfolio();
     }
 
     /* ============================================================
@@ -6283,7 +6336,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       const title = document.createElement("strong");
       title.textContent = user.name || ("@" + user.login);
       const meta = document.createElement("span");
-      meta.textContent = "@" + user.login + " · " + number(state.repositories.length) + " repos · " + number(data.stars?.count || 0) + " starred";
+      meta.textContent = "@" + user.login + " · " + number(state.repositories.length) + " repos · " + (data.stars?.count == null ? "—" : number(data.stars.count)) + " starred";
       copy.append(title, meta);
       const actions = document.createElement("div");
       actions.className = "github-connected-actions";
@@ -6304,12 +6357,16 @@ git log --pretty=format:"%ad|%s" --date=short'
       state.githubAppData = data || null;      el.githubIntelMeta.textContent = data
         ? `@${data.user?.login || state.username || "github"} · synced ${data.syncedAt ? formatRelativeTime(data.syncedAt) : "now"}`
         : "App connection required";
-      el.githubStarCount.textContent = data ? number(data.stars?.count || 0) : "—";
-      el.githubGistCount.textContent = data ? number(data.gists?.count || 0) : "—";
-      el.githubIssueCount.textContent = data ? number(data.issues?.count || 0) : "—";
-      el.githubDiscussionCount.textContent = data
-        ? (data.discussions?.available ? number(data.discussions.count || 0) : "N/A")
-        : "—";
+      const metric = value => {
+        if (value === null || value === undefined || value === "") return "—";
+        if ((typeof value === "number" && Number.isFinite(value)) || (typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value)))) return number(Number(value));
+        if (typeof value === "object") { const count=value.count ?? value.total_count ?? value.totalCount ?? value.value; return count === null || count === undefined || count === "" ? "—" : metric(count); }
+        return "—";
+      };
+      el.githubStarCount.textContent = data ? metric(data.stars ?? data.starCount ?? data.stars_count ?? data.total_stars) : "—";
+      el.githubGistCount.textContent = data ? metric(data.gists ?? data.gistCount ?? data.gists_count ?? data.total_gists) : "—";
+      el.githubIssueCount.textContent = data ? metric(data.issues ?? data.issueCount ?? data.issues_count ?? data.total_issues) : "—";
+      el.githubDiscussionCount.textContent = data ? (data.discussions?.available === false ? "N/A" : metric(data.discussions ?? data.discussionCount ?? data.discussions_count ?? data.total_discussions)) : "—";
       animateVisibleCounts();
     }
 
@@ -6640,6 +6697,7 @@ git log --pretty=format:"%ad|%s" --date=short'
 
         renderProfile(profile);
         renderRepositories();
+        renderDashboardPortfolio();
         if (state.githubAppConnected) renderConnectedAccountSummary(state.githubAppData);
         renderActivity();
         renderTimeline();
@@ -7598,7 +7656,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       results.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
       state.releases = results.slice(0,40);
       state.releasesLoadedFor = cacheKey;
-      renderReleases(); renderTimeline(); renderPortfolioIntelligence();
+      renderReleases(); renderTimeline(); renderPortfolioIntelligence(); renderDashboardPortfolio();
     }
 
     function renderReleases() {
@@ -7808,10 +7866,27 @@ git log --pretty=format:"%ad|%s" --date=short'
         if(results[4].ok&&results[4].data&&typeof results[4].data==="object")Object.entries(results[4].data).forEach(([k,v])=>languages[k]=(languages[k]||0)+Number(v||0));
       }
       if(requestId!==state.requestId||state.source!=="github")return;
-      state.engineering.deployments=d;state.engineering.workflows=w;state.engineering.prs=prs;state.engineering.issues=issues;state.engineering.languages=languages;state.engineering.checkedAt=Date.now();renderSmartWorkspace();
+      state.engineering.deployments=d;state.engineering.workflows=w;state.engineering.prs=prs;state.engineering.issues=issues;state.engineering.languages=languages;state.engineering.checkedAt=Date.now();renderSmartWorkspace();renderDashboardPortfolio();
     }
     function renderQueue(){if(!el.queueList)return;el.queueList.replaceChildren();const prs=[...state.engineering.prs].sort((a,b)=>String(b.updated_at||"").localeCompare(String(a.updated_at||""))),issues=[...state.engineering.issues].sort((a,b)=>String(b.updated_at||"").localeCompare(String(a.updated_at||"")));if(!prs.length&&!issues.length)addSmartRow(el.queueList,"inbox","No open matters","No open pull requests or issues were found in the repositories examined.","info");prs.slice(0,5).forEach(x=>addSmartRow(el.queueList,"git-pull-request",(x.repo||"")+" · #"+x.number,x.title||"Open pull request","info","Open ↗",()=>{if(x.html_url)window.open(x.html_url,"_blank","noopener,noreferrer")}));issues.slice(0,5).forEach(x=>addSmartRow(el.queueList,"circle-dot",(x.repo||"")+" · #"+x.number,x.title||"Open issue","info","Open ↗",()=>{if(x.html_url)window.open(x.html_url,"_blank","noopener,noreferrer")}));if(el.queueMeta)el.queueMeta.textContent=prs.length+" PRs · "+issues.length+" issues";refreshIcons()}
     function renderLanguages(){if(!el.languageList)return;el.languageList.replaceChildren();const entries=Object.entries(state.engineering.languages).sort((a,b)=>b[1]-a[1]).slice(0,8);if(!entries.length)addSmartRow(el.languageList,"code-2","No language records","Load GitHub repository data, and the languages of your code shall be revealed.","info");const total=entries.reduce((n,x)=>n+x[1],0)||1;entries.forEach(([name,bytes])=>addSmartRow(el.languageList,"braces",name,Math.round(bytes/total*100)+"% of sampled code","info"));if(el.languageMeta)el.languageMeta.textContent=entries.length+" languages";refreshIcons()}
+
+    function renderDashboardPortfolio(){
+      const repoList=document.getElementById("dashboardRepoList"),deployList=document.getElementById("dashboardDeployList"),releaseList=document.getElementById("dashboardReleaseList");if(!repoList||!deployList||!releaseList)return;
+      const repos=[...state.repositories].filter(Boolean).sort((a,b)=>String(b.pushed_at||b.updated_at||"").localeCompare(String(a.pushed_at||a.updated_at||"")));
+      const repoMetric=document.getElementById("dashboardRepoMetric"),repoSubtitle=document.getElementById("dashboardRepoSubtitle"),portfolioMeta=document.getElementById("dashboardPortfolioMeta");
+      if(repoMetric)repoMetric.textContent=state.profile?number(state.profile.public_repos??repos.length):repos.length?number(repos.length):"—";
+      if(repoSubtitle)repoSubtitle.textContent=state.profile?`${number(repos.filter(r=>!r.archived).length)} active · ${number(repos.filter(r=>r.archived).length)} archived`:(repos.length?"Repositories from the current data source.":"Connect GitHub or load a profile to see repositories.");
+      if(portfolioMeta)portfolioMeta.textContent=state.source==="local"?"Local Git workspace":(state.username?`@${state.username} · updated ${new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}`:"Waiting for GitHub data");
+      repoList.replaceChildren();if(!repos.length){const empty=document.createElement("div");empty.className="empty";empty.textContent="No repositories loaded yet. Load a GitHub profile to populate this view.";repoList.append(empty)}
+      repos.slice(0,5).forEach(repo=>{const row=document.createElement("a");row.className="portfolio-repo-row";row.href=safeHref(repo.html_url)||"#view-repositories";if(row.href.startsWith("http")){row.target="_blank";row.rel="noopener noreferrer"}else row.addEventListener("click",e=>{e.preventDefault();showView("repositories")});const icon=document.createElement("span");icon.className="portfolio-repo-icon";icon.innerHTML='<i data-lucide="'+(repo.fork?"git-fork":"folder-git-2")+'"></i>';const copy=document.createElement("span");copy.className="portfolio-repo-copy";const title=document.createElement("strong");title.textContent=repo.name||repo.full_name||"Untitled repository";const detail=document.createElement("small");detail.textContent=[repo.language||"No language",repo.archived?"Archived":(repo.private?"Private":"Public")].join(" · ");copy.append(title,detail);const stats=document.createElement("span");stats.className="portfolio-repo-stats";stats.textContent="★ "+number(repo.stargazers_count||0);row.append(icon,copy,stats);repoList.append(row)});
+      const deploys=[...state.engineering.deployments].sort((a,b)=>String(b.updated_at||b.created_at||"").localeCompare(String(a.updated_at||a.created_at||""))).slice(0,4);deployList.replaceChildren();if(!deploys.length){const empty=document.createElement("div");empty.className="empty";empty.textContent=state.engineering.checkedAt?"No deployments found in the repositories checked.":"Waiting for deployment checks.";deployList.append(empty)}
+      deploys.forEach(item=>{const row=document.createElement("div");row.className="portfolio-deploy-row";const dot=document.createElement("span");dot.className="portfolio-status-dot "+(/success|active/i.test(item.state||item.status||"")?"is-good":/failure|error|inactive/i.test(item.state||item.status||"")?"is-bad":"is-neutral");const copy=document.createElement("span");copy.className="portfolio-deploy-copy";const name=document.createElement("strong");name.textContent=(item.repo||"Repository")+" · "+(item.environment||item.task||"Deploy");const detail=document.createElement("small");detail.textContent=[item.state||item.status||"unknown",item.ref||item.sha?.slice(0,7)||"ref unavailable",item.created_at?formatRelativeTime(item.created_at):""].filter(Boolean).join(" · ");copy.append(name,detail);row.append(dot,copy);deployList.append(row)});
+      const releases=[...state.releases].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).slice(0,4);releaseList.replaceChildren();if(!releases.length){const empty=document.createElement("div");empty.className="empty";empty.textContent=state.repositories.length?(state.releasesLoadedFor?"No releases found in the repositories checked.":"Checking repositories for releases…"):"Load a GitHub profile to discover releases.";releaseList.append(empty)}
+      releases.forEach(release=>{const row=document.createElement("a");row.className="portfolio-release-row";row.href=safeHref(release.url)||"#view-releases";if(row.href.startsWith("http")){row.target="_blank";row.rel="noopener noreferrer"}else row.addEventListener("click",e=>{e.preventDefault();showView("releases")});const icon=document.createElement("span");icon.className="portfolio-release-icon";icon.innerHTML='<i data-lucide="package-check"></i>';const copy=document.createElement("span");copy.className="portfolio-release-copy";const title=document.createElement("strong");title.textContent=release.name||release.tag||"Release";const detail=document.createElement("small");detail.textContent=[release.repo||"",release.tag||"",release.date?formatRelativeTime(release.date):""].filter(Boolean).join(" · ");copy.append(title,detail);row.append(icon,copy);releaseList.append(row)});
+      const deployCount=document.getElementById("dashboardDeployCount");if(deployCount)deployCount.textContent=state.engineering.checkedAt?number(state.engineering.deployments.length):"—";
+      const allReposButton=document.getElementById("dashboardAllRepos"),allReleasesButton=document.getElementById("dashboardAllReleases");if(allReposButton)allReposButton.onclick=()=>showView("repositories");if(allReleasesButton)allReleasesButton.onclick=()=>showView("releases");refreshIcons();
+    }
 
     function renderSmartWorkspace(){const r=state.repositories.filter(Boolean),commits=currentCommits(),total=totalCalendar(),stale=r.filter(x=>!x.archived&&repoAgeDays(x)>=90).length,archived=r.filter(x=>x.archived).length,failedW=state.engineering.workflows.filter(x=>["failure","timed_out","cancelled","action_required"].includes(x.conclusion)).length,goodW=state.engineering.workflows.filter(x=>x.conclusion==="success").length,d=state.engineering.deployments,failedD=d.filter(x=>["failure","error"].includes(x.state)).length,goodD=d.filter(x=>x.state==="success").length,mRaw=Number(String(el.intelMomentum?.textContent||"0").replace("%",""))||0,mScore=clampScore(50+mRaw/2),delivery=clampScore(65+Math.min(20,goodD*4+goodW*2)-Math.min(35,failedD*12+failedW*8)),maintenance=clampScore(100-stale*12-archived*3),quality=state.source==="local"?(state.localCommits.length?90:20):clampScore((state.profile?25:0)+(r.length?25:0)+(state.activity.length?25:0)+(state.calendar.size?25:0)),health=clampScore((mScore+delivery+maintenance+quality)/4);if(el.pulseScore)el.pulseScore.textContent=r.length||total||commits.length?health+"/100":"—";if(el.pulseScoreBar)el.pulseScoreBar.style.width=health+"%";if(el.pulseHealth)el.pulseHealth.textContent=r.length||total||commits.length?scoreLabel(health):"—";if(el.pulseScoreDetail)el.pulseScoreDetail.textContent=r.length||total||commits.length?scoreLabel(health)+" based on momentum, delivery, maintenance and data quality.":"Load data to score the workspace.";if(el.pulseDelivery)el.pulseDelivery.textContent=state.engineering.checkedAt?delivery+"/100":"—";if(el.pulseDeliveryDetail)el.pulseDeliveryDetail.textContent=state.engineering.checkedAt?goodD+" successful deployments · "+failedD+" failed · "+failedW+" failed CI runs.":"Engineering signals have not been checked.";if(el.pulseMaintenance)el.pulseMaintenance.textContent=r.length?maintenance+"/100":"—";if(el.pulseMaintenanceDetail)el.pulseMaintenanceDetail.textContent=r.length?stale+" stale repositories · "+archived+" archived.":"Repository metadata required.";if(el.pulseQuality)el.pulseQuality.textContent=r.length||total||commits.length?quality+"%":"—";if(el.pulseQualityDetail)el.pulseQualityDetail.textContent=state.source==="local"?number(state.localCommits.length)+" parsed local commits.":r.length+" repositories · "+state.activity.length+" events · calendar "+(state.calendar.size?"loaded":"missing")+".";renderAttention();renderInsights(health,delivery,maintenance);renderDelivery();renderSecurity();renderQueue();renderLanguages();renderProjectSpaces()}
     function renderRoute(route){document.body.dataset.route=route;el.routeView.hidden=false;$$(".view").forEach(s=>s.classList.add("hidden"));el.sourcePanel.hidden=true;el.profilePanel.hidden=true;el.statsPanel.hidden=true;if(route==="audit"){el.pageTitle.textContent="Audit";el.pageSubtitle.textContent="Static, runtime and data-integrity checks.";el.routeKicker.textContent="ANVIL / AUDIT";el.routeTitle.textContent="Workspace audit";el.routeCopy.textContent="Checks the live document and loaded runtime state.";runAudit()}else{el.pageTitle.textContent="Debug";el.pageSubtitle.textContent="Runtime state, diagnostics and recent failures.";el.routeKicker.textContent="ANVIL / DEBUG";el.routeTitle.textContent="Debug console";el.routeCopy.textContent="Runtime state, request telemetry and captured failures.";renderDebug()}window.scrollTo({top:0,behavior:"auto"});refreshIcons()}
@@ -8044,7 +8119,7 @@ git log --pretty=format:"%ad|%s" --date=short'
       window.clearTimeout(railIdleTimer);
       railIdleTimer = window.setTimeout(() => {
         const focusInside = el.sidebar.contains(document.activeElement) && !!document.activeElement.matches(":focus-visible");
-        const modalOpen = !!document.querySelector(".modal:not([hidden]),dialog[open]");
+        const modalOpen = !!document.querySelector(".modal-backdrop:not([hidden]),.detail-sheet-backdrop:not([hidden]),dialog[open]");
         if (focusInside || modalOpen || document.hidden) { revealRail(); return; }
         state.railExpanded = false;
         applyRail();
