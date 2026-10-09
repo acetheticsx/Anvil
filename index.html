@@ -42,7 +42,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   >
 
@@ -115,6 +115,7 @@
       --delta-down-text: #ff7b72;
       --delta-down-bg: rgba(248, 81, 73, .1);
 
+      --display-font: "Outfit", sans-serif;
       --font:
         "Instrument Sans",
         -apple-system,
@@ -3064,6 +3065,28 @@
       .sidebar-footer { display: none; }
     }
 
+    /* Typography: Outfit for hierarchy, Instrument Sans for reading. */
+    h1, h2, h3, h4, h5, h6,
+    .page-title, .panel-title, .modal-title, .route-title,
+    .stat-label, .intel-label, .about-card strong, .profile-stat strong,
+    .detail-sheet-title { font-family: var(--display-font); }
+    .stat-card, .intel-card, .about-card, .profile-stat { cursor: pointer; }
+    .stat-card:focus-visible, .intel-card:focus-visible, .about-card:focus-visible, .profile-stat:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .token-actions { display:flex; flex-wrap:wrap; gap:8px; margin: 9px 0 12px; }
+    .detail-sheet-backdrop { position:fixed; inset:0; z-index:650; display:flex; align-items:flex-end; justify-content:center; background:var(--overlay); backdrop-filter:blur(4px); }
+    .detail-sheet-backdrop[hidden] { display:none; }
+    .detail-sheet { width:min(680px,100%); max-height:min(72vh,680px); overflow:auto; padding:10px 20px max(22px,env(safe-area-inset-bottom)); border:1px solid var(--border); border-bottom:0; border-radius:18px 18px 0 0; background:var(--surface); box-shadow:0 -18px 60px rgba(0,0,0,.25); animation:detailSheetIn .18s ease-out; }
+    .detail-sheet-grip { width:34px; height:4px; margin:0 auto 16px; border-radius:99px; background:var(--muted); opacity:.55; }
+    .detail-sheet-header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+    .detail-sheet-eyebrow { color:var(--muted); font-size:.62rem; font-weight:700; letter-spacing:.12em; }
+    .detail-sheet-title { margin-top:3px; font-size:1.25rem; font-weight:600; }
+    .detail-sheet-content { display:grid; gap:10px; padding-top:16px; color:var(--muted); font-size:.9rem; }
+    .detail-sheet-summary { color:var(--text); font-size:1rem; font-weight:600; }
+    .detail-sheet-row { padding:10px 12px; border:1px solid var(--border-muted); border-radius:8px; background:var(--bg-deep); overflow-wrap:anywhere; }
+    @keyframes detailSheetIn { from { transform:translateY(16px); opacity:.65; } to { transform:translateY(0); opacity:1; } }
+    @media (max-width:560px) { .detail-sheet { max-height:80vh; padding-inline:16px; } }
+    @media (prefers-reduced-motion:reduce) { .detail-sheet { animation:none; } }
+
     /* Native app shell + trust layer */
     body { padding-bottom: 20px; }
     .layout { display: block; }
@@ -3980,7 +4003,25 @@ body { padding-bottom: 52px !important; }
 @media(max-width:560px){ .sidebar { width:56px !important; max-width:56px !important; padding-inline:3px !important; } .sidebar .brand { width:48px !important; } .sidebar .nav-button,.sidebar .nav-button.active,.sidebar .nav-button:not(.active) { width:48px !important; min-width:48px !important; } .main { padding-right:66px !important; } .site-footer { padding-inline:10px 64px !important; font-size:.62rem !important; gap:6px !important; } }
 @media(prefers-reduced-motion:reduce){ .sidebar,.sidebar .brand-mark::before,.sidebar .brand-mark::after { transition:none !important; } }
 
-</style>
+
+    /* Final type hierarchy: Outfit for headings/card labels, Instrument Sans for body. */
+    h1, h2, h3, h4, h5, h6, .page-title, .panel-title, .modal-title, .route-title, .stat-label, .intel-label, .about-card strong, .profile-stat strong, .detail-sheet-title { font-family: var(--display-font) !important; }
+    .token-actions { display:flex; flex-wrap:wrap; gap:8px; margin:9px 0 12px; }
+    .detail-sheet-backdrop { position:fixed; inset:0; z-index:650; display:flex; align-items:flex-end; justify-content:center; background:var(--overlay); backdrop-filter:blur(4px); }
+    .detail-sheet-backdrop[hidden] { display:none; }
+    .detail-sheet { width:min(680px,100%); max-height:min(72vh,680px); overflow:auto; padding:10px 20px max(22px,env(safe-area-inset-bottom)); border:1px solid var(--border); border-bottom:0; border-radius:18px 18px 0 0; background:var(--surface); box-shadow:0 -18px 60px rgba(0,0,0,.25); animation:detailSheetIn .18s ease-out; }
+    .detail-sheet-grip { width:34px; height:4px; margin:0 auto 16px; border-radius:99px; background:var(--muted); opacity:.55; }
+    .detail-sheet-header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+    .detail-sheet-eyebrow { color:var(--muted); font-size:.62rem; font-weight:700; letter-spacing:.12em; }
+    .detail-sheet-title { margin-top:3px; font-size:1.25rem; font-weight:600; }
+    .detail-sheet-content { display:grid; gap:10px; padding-top:16px; color:var(--muted); font-size:.9rem; }
+    .detail-sheet-summary { color:var(--text); font-size:1rem; font-weight:600; }
+    .detail-sheet-row { padding:10px 12px; border:1px solid var(--border-muted); border-radius:8px; background:var(--bg-deep); overflow-wrap:anywhere; }
+    @keyframes detailSheetIn { from { transform:translateY(16px); opacity:.65; } to { transform:translateY(0); opacity:1; } }
+    @media (max-width:560px) { .detail-sheet { max-height:80vh; padding-inline:16px; } }
+    @media (prefers-reduced-motion:reduce) { .detail-sheet { animation:none; } }
+
+  </style>
 </head>
 
 <body>
@@ -4002,7 +4043,6 @@ body { padding-bottom: 52px !important; }
         <div class="rail-workspace" aria-label="Current workspace">
           <span class="workspace-mark"><i data-lucide="layers-3"></i></span>
           <span class="workspace-copy"><strong>Workspace</strong><small id="railWorkspaceState">GitHub data</small></span>
-          <i class="workspace-chevron" data-lucide="chevrons-up-down"></i>
         </div>
         <nav class="nav" aria-label="Primary navigation">
           <div class="nav-section">Overview</div>
@@ -4181,19 +4221,21 @@ body { padding-bottom: 52px !important; }
 
                   <label class="checkbox">
                     <input type="checkbox" id="rememberToken">
-                    Remember on this device
+                    Remember for this session
                   </label>
 
-                  <div>
-                    <button
-                      class="button button-secondary"
-                      id="clearToken"
-                      type="button"
-                    >
+                  <div class="token-actions">
+                    <button class="button button-primary" id="saveToken" type="button">
+                      <i data-lucide="save"></i>
+                      Save token
+                    </button>
+                    <button class="button button-secondary" id="clearToken" type="button">
                       <i data-lucide="eraser"></i>
                       Clear token
                     </button>
                   </div>
+
+
 
                   <p class="hint" style="margin:0">
                     <i data-lucide="shield-check"></i>
@@ -4961,6 +5003,17 @@ git log --pretty=format:"%ad|%s" --date=short'
     <button class="button button-primary cookie-banner-dismiss" id="cookieBannerDismiss" type="button">Got it</button>
   </section>
 
+  <div class="detail-sheet-backdrop" id="detailSheetBackdrop" hidden>
+    <section class="detail-sheet" role="dialog" aria-modal="true" aria-labelledby="detailSheetTitle" aria-describedby="detailSheetCopy">
+      <div class="detail-sheet-grip" aria-hidden="true"></div>
+      <header class="detail-sheet-header">
+        <div><p class="detail-sheet-eyebrow">CARD DETAILS</p><h2 class="detail-sheet-title" id="detailSheetTitle">Details</h2></div>
+        <button class="icon-button" id="closeDetailSheet" type="button" aria-label="Close details"><i data-lucide="x"></i></button>
+      </header>
+      <div class="detail-sheet-content" id="detailSheetCopy"></div>
+    </section>
+  </div>
+
   <div class="modal-backdrop" id="commandModal" hidden>
 
     <section
@@ -5198,6 +5251,11 @@ git log --pretty=format:"%ad|%s" --date=short'
       token: $("#token"),
       rememberToken: $("#rememberToken"),
       clearToken: $("#clearToken"),
+      saveToken: $("#saveToken"),
+      detailSheetBackdrop: $("#detailSheetBackdrop"),
+      detailSheetTitle: $("#detailSheetTitle"),
+      detailSheetCopy: $("#detailSheetCopy"),
+      closeDetailSheet: $("#closeDetailSheet"),
 
       connectGithubApp: $("#connectGithubApp"),
       githubConnectedSummary: $("#githubConnectedSummary"),
@@ -7712,6 +7770,39 @@ git log --pretty=format:"%ad|%s" --date=short'
 
     let lastFocused = null;
 
+    let detailSheetReturnFocus = null;
+
+    function openDetailSheet(card) {
+      if (!card || !el.detailSheetBackdrop || !el.commandModal.hidden) return;
+      const label = card.querySelector(".stat-label, .intel-label, .about-card strong, .profile-stat span, .panel-title, h2, h3")?.textContent?.trim() || "Card details";
+      const parts = Array.from(card.querySelectorAll(".stat-value, .stat-detail, .intel-value, .intel-detail, .about-card span, .profile-stat strong, p, li"))
+        .map((node) => node.textContent.trim())
+        .filter(Boolean);
+      const allText = card.innerText.trim();
+      const summary = parts.length ? parts : allText.split("\n").map((line) => line.trim()).filter((line) => line && line !== label);
+      el.detailSheetTitle.textContent = label;
+      el.detailSheetCopy.replaceChildren();
+      if (!summary.length) summary.push("No additional detail is available yet. Load data to populate this card.");
+      summary.forEach((value, index) => {
+        const item = document.createElement(index === 0 ? "p" : "div");
+        item.className = index === 0 ? "detail-sheet-summary" : "detail-sheet-row";
+        item.textContent = value;
+        el.detailSheetCopy.append(item);
+      });
+      detailSheetReturnFocus = card;
+      el.detailSheetBackdrop.hidden = false;
+      document.body.classList.add("modal-open");
+      refreshIcons();
+      requestAnimationFrame(() => el.closeDetailSheet.focus());
+    }
+
+    function closeDetailSheet() {
+      if (!el.detailSheetBackdrop || el.detailSheetBackdrop.hidden) return;
+      el.detailSheetBackdrop.hidden = true;
+      document.body.classList.remove("modal-open");
+      if (detailSheetReturnFocus?.isConnected) detailSheetReturnFocus.focus({ preventScroll: true });
+    }
+
     function openCommand() {
       lastFocused = document.activeElement;
 
@@ -7876,6 +7967,44 @@ git log --pretty=format:"%ad|%s" --date=short'
     el.rememberToken.addEventListener("change", () => {
       state.rememberToken = el.rememberToken.checked;
       saveToken();
+    });
+
+    el.saveToken.addEventListener("click", () => {
+      state.token = el.token.value.trim();
+      if (!state.token) {
+        status("Paste a GitHub personal access token before saving.", "warn");
+        el.token.focus();
+        return;
+      }
+      state.rememberToken = true;
+      el.rememberToken.checked = true;
+      saveToken();
+      updateLabels();
+      status("Personal access token saved for this session.", "success");
+    });
+
+    el.closeDetailSheet.addEventListener("click", closeDetailSheet);
+    el.detailSheetBackdrop.addEventListener("click", (event) => {
+      if (event.target === el.detailSheetBackdrop) closeDetailSheet();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeDetailSheet();
+    });
+    document.addEventListener("click", (event) => {
+      const card = event.target.closest(".stat-card, .intel-card, .about-card, .profile-stat");
+      if (!card || event.target.closest("button, a, input, select, textarea, label")) return;
+      openDetailSheet(card);
+    });
+    document.querySelectorAll(".stat-card, .intel-card, .about-card, .profile-stat").forEach((card) => {
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-haspopup", "dialog");
+      card.setAttribute("aria-label", `View details: ${card.querySelector(".stat-label, .intel-label, .about-card strong, .profile-stat span")?.textContent?.trim() || "card"}`);
+      card.addEventListener("keydown", (event) => {
+        if (event.target !== card || (event.key !== "Enter" && event.key !== " ")) return;
+        event.preventDefault();
+        openDetailSheet(card);
+      });
     });
 
     el.clearToken.addEventListener("click", () => {
