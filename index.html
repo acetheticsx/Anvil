@@ -4050,25 +4050,25 @@ body { padding-bottom: 52px !important; }
       .main { padding-right:198px !important; }
       .site-footer { padding-right:198px !important; }
       .stats-grid { grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:16px !important; }
-      .stat-card { min-height:136px !important; padding:22px !important; display:flex; flex-direction:column; justify-content:center; }
-      .stat-label { font-size:.82rem !important; }
-      .stat-value { margin-top:8px !important; font-size:2rem !important; line-height:1.2 !important; }
-      .stat-detail { margin-top:7px !important; font-size:.75rem !important; }
-      .intelligence-grid { gap:14px !important; }
-      .intel-card { min-height:150px !important; padding:20px !important; display:flex; flex-direction:column; justify-content:center; }
-      .intel-label { font-size:.72rem !important; }
-      .intel-value { margin-top:10px !important; font-size:1.55rem !important; }
-      .intel-detail { margin-top:7px !important; font-size:.78rem !important; }
-      .about-card { min-height:150px !important; padding:20px !important; }
-      .about-card strong { font-size:.9rem !important; }
-      .about-card span { font-size:.76rem !important; }
+      .stat-card { min-height:164px !important; padding:26px !important; display:flex; flex-direction:column; justify-content:center; }
+      .stat-label { font-size:.86rem !important; }
+      .stat-value { margin-top:10px !important; font-size:2.25rem !important; line-height:1.2 !important; }
+      .stat-detail { margin-top:9px !important; font-size:.78rem !important; }
+      .intelligence-grid { gap:16px !important; }
+      .intel-card { min-height:172px !important; padding:24px !important; display:flex; flex-direction:column; justify-content:center; }
+      .intel-label { font-size:.76rem !important; }
+      .intel-value { margin-top:12px !important; font-size:1.7rem !important; }
+      .intel-detail { margin-top:9px !important; font-size:.82rem !important; }
+      .about-card { min-height:164px !important; padding:24px !important; }
+      .about-card strong { font-size:.95rem !important; }
+      .about-card span { font-size:.8rem !important; }
       .profile-stat { min-width:94px !important; padding:12px 14px !important; }
     }
     @media (min-width:901px) and (max-width:1180px) {
       .sidebar { width:164px !important; max-width:164px !important; }
       .main { padding-right:178px !important; } .site-footer { padding-right:178px !important; }
-      .stats-grid { gap:10px !important; } .stat-card { padding:16px !important; }
-      .stat-value { font-size:1.65rem !important; } .intel-card { padding:14px !important; }
+      .stats-grid { gap:12px !important; } .stat-card { padding:20px !important; min-height:150px !important; }
+      .stat-value { font-size:1.9rem !important; } .intel-card { padding:18px !important; min-height:158px !important; }
     }
     @media (prefers-reduced-motion:reduce) { .sidebar { transition:none !important; } }
 
@@ -4097,16 +4097,16 @@ body { padding-bottom: 52px !important; }
         </div>
         <nav class="nav" aria-label="Primary navigation">
           <div class="nav-section">Overview</div>
-          <button class="nav-button active" data-view="dashboard" type="button" aria-current="page" aria-label="Dashboard" data-tooltip="Dashboard"><i data-lucide="layout-dashboard"></i></button>
-          <button class="nav-button" data-view="activity" type="button" aria-label="Activity" data-tooltip="Activity"><i data-lucide="activity"></i></button>
-          <button class="nav-button" data-view="repositories" type="button" aria-label="Repositories" data-tooltip="Repositories"><i data-lucide="folder-git-2"></i></button>
-          <button class="nav-button" data-view="timeline" type="button" aria-label="Timeline" data-tooltip="Timeline"><i data-lucide="calendar-clock"></i></button>
+          <button class="nav-button active" data-view="dashboard" type="button" aria-current="page" aria-label="Dashboard" data-tooltip="Dashboard"><i data-lucide="layout-dashboard"></i><span class="nav-label">Dashboard</span></button>
+          <button class="nav-button" data-view="activity" type="button" aria-label="Activity" data-tooltip="Activity"><i data-lucide="activity"></i><span class="nav-label">Activity</span></button>
+          <button class="nav-button" data-view="repositories" type="button" aria-label="Repositories" data-tooltip="Repositories"><i data-lucide="folder-git-2"></i><span class="nav-label">Repositories</span></button>
+          <button class="nav-button" data-view="timeline" type="button" aria-label="Timeline" data-tooltip="Timeline"><i data-lucide="calendar-clock"></i><span class="nav-label">Timeline</span></button>
           <div class="nav-section">Engineering</div>
-          <button class="nav-button" data-view="git" type="button" aria-label="Git" data-tooltip="Git"><i data-lucide="git-branch"></i></button>
-          <button class="nav-button" data-view="releases" type="button" aria-label="Releases" data-tooltip="Releases"><i data-lucide="package"></i></button>
-          <button class="nav-button" data-view="reports" type="button" aria-label="Reports" data-tooltip="Reports"><i data-lucide="file-bar-chart"></i></button>
+          <button class="nav-button" data-view="git" type="button" aria-label="Git" data-tooltip="Git"><i data-lucide="git-branch"></i><span class="nav-label">Git</span></button>
+          <button class="nav-button" data-view="releases" type="button" aria-label="Releases" data-tooltip="Releases"><i data-lucide="package"></i><span class="nav-label">Releases</span></button>
+          <button class="nav-button" data-view="reports" type="button" aria-label="Reports" data-tooltip="Reports"><i data-lucide="file-bar-chart"></i><span class="nav-label">Reports</span></button>
           <div class="nav-section">Tools</div>
-          <button class="nav-button" data-view="about" type="button" aria-label="About" data-tooltip="About"><i data-lucide="info"></i></button>
+          <button class="nav-button" data-view="about" type="button" aria-label="About" data-tooltip="About"><i data-lucide="info"></i><span class="nav-label">About</span></button>
         </nav>
         <div class="rail-actions" aria-label="Quick actions">
           <button class="rail-action" id="railSync" type="button" aria-label="Sync GitHub data" title="Sync GitHub data"><i data-lucide="refresh-cw"></i></button>
