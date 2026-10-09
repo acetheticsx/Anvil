@@ -4021,6 +4021,57 @@ body { padding-bottom: 52px !important; }
     @media (max-width:560px) { .detail-sheet { max-height:80vh; padding-inline:16px; } }
     @media (prefers-reduced-motion:reduce) { .detail-sheet { animation:none; } }
 
+  
+    /* Desktop: wider, readable navigation and roomier dashboard cards. */
+    @media (min-width: 901px) {
+      .sidebar { width: 184px !important; max-width: 184px !important; padding: 12px 10px !important; }
+      .sidebar .brand { width: 100% !important; margin-bottom: 12px !important; }
+      .sidebar .brand-mark { flex: 0 0 42px !important; width: 42px !important; }
+      .sidebar .brand-mark img { display: block !important; width: 28px !important; height: 28px !important; }
+      .sidebar .brand-mark::before, .sidebar .brand-mark::after { display:none !important; }
+      .sidebar .nav { align-items:stretch !important; gap:6px !important; }
+      .sidebar .nav-button, .sidebar .nav-button.active, .sidebar .nav-button:not(.active) {
+        width:100% !important; min-width:0 !important; min-height:44px !important;
+        justify-content:flex-start !important; gap:11px !important; padding:9px 11px !important;
+        white-space:nowrap !important; overflow:visible !important;
+      }
+      .sidebar .nav-button .nav-label, .sidebar .nav-button.active .nav-label {
+        display:inline !important; overflow:visible !important; text-overflow:clip !important;
+        font-size:.82rem !important; font-weight:550 !important;
+      }
+      .sidebar .nav-button.active { box-shadow:inset 2px 0 0 var(--accent) !important; }
+      .sidebar .nav-button.active::before, .sidebar .nav-button.active::after { display:none !important; content:none !important; }
+      .sidebar .rail-actions { grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:3px !important; }
+      .sidebar .rail-action { width:42px !important; }
+      .sidebar[data-expanded="false"] { width:44px !important; max-width:44px !important; padding:1px !important; }
+      .sidebar[data-expanded="false"] .brand { width:40px !important; }
+      .sidebar[data-expanded="false"] .brand-mark img { display:none !important; }
+      .sidebar[data-expanded="false"] .brand-mark::before, .sidebar[data-expanded="false"] .brand-mark::after { display:block !important; }
+      .main { padding-right:198px !important; }
+      .site-footer { padding-right:198px !important; }
+      .stats-grid { grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:16px !important; }
+      .stat-card { min-height:136px !important; padding:22px !important; display:flex; flex-direction:column; justify-content:center; }
+      .stat-label { font-size:.82rem !important; }
+      .stat-value { margin-top:8px !important; font-size:2rem !important; line-height:1.2 !important; }
+      .stat-detail { margin-top:7px !important; font-size:.75rem !important; }
+      .intelligence-grid { gap:14px !important; }
+      .intel-card { min-height:150px !important; padding:20px !important; display:flex; flex-direction:column; justify-content:center; }
+      .intel-label { font-size:.72rem !important; }
+      .intel-value { margin-top:10px !important; font-size:1.55rem !important; }
+      .intel-detail { margin-top:7px !important; font-size:.78rem !important; }
+      .about-card { min-height:150px !important; padding:20px !important; }
+      .about-card strong { font-size:.9rem !important; }
+      .about-card span { font-size:.76rem !important; }
+      .profile-stat { min-width:94px !important; padding:12px 14px !important; }
+    }
+    @media (min-width:901px) and (max-width:1180px) {
+      .sidebar { width:164px !important; max-width:164px !important; }
+      .main { padding-right:178px !important; } .site-footer { padding-right:178px !important; }
+      .stats-grid { gap:10px !important; } .stat-card { padding:16px !important; }
+      .stat-value { font-size:1.65rem !important; } .intel-card { padding:14px !important; }
+    }
+    @media (prefers-reduced-motion:reduce) { .sidebar { transition:none !important; } }
+
   </style>
 </head>
 
